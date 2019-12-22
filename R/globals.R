@@ -1,0 +1,10 @@
+utils::globalVariables(c("missing_count", "variables", "unique_count", "types",
+                         "unique_rate", "variable", "split_flag", ".level",
+                         "relative", "train", "test", "abs_diff", "missing_percent",
+                         "train_misscount", "train_missrate", "test_missrate",
+                         "train_uniq", "test_uniq", "train_uniqcount", "test_uniqcount",
+                         "train_uniqrate", "test_uniqrate", "train_missing_nlevel",
+                         "test_missing_nlevel", "value", "temp", "metric",
+                         "train_mean", "test_mean", "train_sd", "test_sd",
+                         "train_z", "test_z", "pred", "sb", "prob", "actually",
+                         "setNames", "x", "y", ".", "coef_corr", "var1", "var2"))

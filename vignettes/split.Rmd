@@ -1,0 +1,274 @@
+---
+title: "Splitting the dataset"
+author: "Choonghyun Ryu"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Splitting the dataset}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r environment, echo = FALSE, message = FALSE, warning=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "")
+options(tibble.print_min = 6L, tibble.print_max = 6L, width = 80)
+
+library(alookr)
+```
+
+## Preface
+To develop a classification model, the original data must be divided into train data set and test data set. You should do the following:
+
+* Cleansing the dataset
+* **Split the data into a train set and a test set**
+    + **Split the data.frame or tbl_df into a train set and a test set**
+    + **Compare dataset**
+        + **Comparison of categorical variables**
+        + **Comparison of numeric variables**
+        + **Diagnosis of train set and test set**
+    + **Extract train/test dataset**  
+        + **Extract train set or test set**
+        + **Extract the data to fit the model**
+* Modeling and Evaluate, Predict
+
+The alookr package makes these steps fast and easy:
+
+## Data: Credit Card Default Data
+
+`Default` of `ISLR package` is a simulated data set containing information on ten thousand customers. The aim here is to predict which customers will default on their credit card debt.
+
+A data frame with 10000 observations on the following 4 variables.:
+
+* `default` : factor. A factor with levels No and Yes indicating whether the customer defaulted on their debt
+* `student`: factor. A factor with levels No and Yes indicating whether the customer is a student
+* `balance`: numeric. The average balance that the customer has remaining on their credit card after making their monthly payment
+* `income` : numeric. Income of customer
+
+```{r create_data}
+# Credit Card Default Data
+head(ISLR::Default)
+
+# structure of dataset
+str(ISLR::Default)
+
+# summary of dataset
+summary(ISLR::Default)
+```
+
+## Split dataset
+`split_by()` splits the data.frame or tbl_df into a training set and a test set.
+
+### Split dataset with `split_by()`
+The `split_df` class is created, which contains the split information and criteria to separate the training and the test set.
+
+```{r splits, message=FALSE}
+library(alookr)
+library(dplyr)
+
+# Generate data for the example
+sb <- ISLR::Default %>%
+  split_by(default, seed = 6534)
+
+sb
+```
+
+The attributes of the `split_df` class are as follows.:
+
+* split_seed : integer. random seed used for splitting
+* target : character. the name of the target variable
+* binary : logical. whether the target variable is binary class
+* minority : character. the name of the minority class
+* majority : character. the name of the majority class
+* minority_rate : numeric. the rate of the minority class
+* majority_rate : numeric. the rate of the majority class
+
+```{r attr}
+sb_attr <- attributes(sb)
+
+# The third attribute, row.names, is a vector that is very long and excluded from the output.
+sb_attr[-3]
+```
+
+`summary()` summarizes the information of two datasets splitted by `split_by()`.
+
+```{r summ}
+summary(sb)
+```
+
+
+## Compare dataset
+Train data and test data should be similar. If the two datasets are not similar, the performance of the predictive model may be reduced. 
+
+`alookr` provides a function to compare the similarity between train dataset and test dataset.
+
+If the two data sets are not similar, the train dataset and test dataset should be splitted again from the original data.
+
+### Comparison of categorical variables with `compare_category()`
+
+Compare the statistics of the categorical variables of the train set and test set included in the "split_df" class.
+
+```{r compare_category}
+sb %>%
+  compare_category()
+
+# compare variables that are character data types.
+sb %>%
+  compare_category(add_character = TRUE)
+
+# display marginal
+sb %>%
+  compare_category(margin = TRUE)
+
+# student variable only
+sb %>%
+  compare_category(student)
+
+sb %>%
+  compare_category(student, margin = TRUE)
+```
+
+compare_category() returns tbl_df, where the variables have the following.:
+
+* variable : character. categorical variable name
+* level : factor. level of categorical variables
+* train : numeric. the relative frequency of the level in the train set
+* test : numeric. the relative frequency of the level in the test set
+* abs_diff : numeric. the absolute value of the difference between two relative frequencies
+
+### Comparison of numeric variables with `compare_numeric()`
+
+Compare the statistics of the numerical variables of the train set and test set included in the "split_df" class.
+
+```{r compare_numeric}
+sb %>%
+  compare_numeric()
+
+# balance variable only
+sb %>%
+  compare_numeric(balance)
+```
+
+compare_numeric() returns tbl_df, where the variables have the following.:
+
+* variable : character. numeric variable name
+* train_mean : numeric. arithmetic mean of train set
+* test_mean : numeric. arithmetic mean of test set
+* train_sd : numeric. standard deviation of train set
+* test_sd : numeric. standard deviation of test set
+* train_z : numeric. the arithmetic mean of the train set divided by the standard deviation
+* test_z : numeric. the arithmetic mean of the test set divided by the standard deviation
+
+### Comparison plot with `compare_plot()`
+
+Plot compare information of the train set and test set included in the "split_df" class.
+
+```{r compare_plot, fig.height=5, fig.width=6, message=FALSE}
+# income variable only
+sb %>%
+  compare_plot("income")
+
+# all varibales
+sb %>%
+  compare_plot()
+```
+
+
+### Diagnosis of train set and test set with `compare_diag()`
+
+Diagnosis of similarity between datasets splitted by train set and set included in the "split_df" class.
+
+```{r create_dataset}
+defaults <- ISLR::Default
+defaults$id <- seq(NROW(defaults))
+
+set.seed(1)
+defaults[sample(seq(NROW(defaults)), 3), "student"] <- NA
+set.seed(2)
+defaults[sample(seq(NROW(defaults)), 10), "balance"] <- NA
+
+sb_2 <- defaults %>%
+  split_by(default)
+
+sb_2 %>%
+  compare_diag()
+
+sb_2 %>%
+  compare_diag(add_character = TRUE)
+
+sb_2 %>%
+  compare_diag(uniq_thres = 0.0005)
+```
+
+
+## Extract train/test dataset
+If you compare the train set with the test set and find that the two datasets are similar, extract the data from the split_df object.
+
+### Extract train set or test set with `extract_set()`
+
+Extract train set or test set from split_df class object.
+
+```{r extract_set}
+train <- sb %>%
+  extract_set(set = "train")
+
+test <- sb %>%
+  extract_set(set = "test")
+
+dim(train)
+
+dim(test)
+```
+
+### Extract the data to fit the model with `sampling_target()`
+In a target class, the ratio of the majority class to the minority class is not similar and the ratio of the minority class is very small, which is called the `imbalanced class`.
+
+If target variable is an imbalanced class, the characteristics of the majority class are actively reflected in the model. This model implies an error in predicting the minority class as the majority class. So we have to make the train dataset a balanced class.
+
+`sampling_target()` performs sampling on the train set of split_df to resolve the imbalanced class.
+
+```{r sampling_target}
+# under-sampling with random seed
+under <- sb %>%
+  sampling_target(seed = 1234L)
+
+under %>%
+  count(default)
+
+# under-sampling with random seed, and minority class frequency is 40%
+under40 <- sb %>%
+  sampling_target(seed = 1234L, perc = 40)
+
+under40 %>%
+  count(default)
+
+# over-sampling with random seed
+over <- sb %>%
+  sampling_target(method = "ubOver", seed = 1234L)
+
+over %>%
+  count(default)
+
+# over-sampling with random seed, and k = 10
+over10 <- sb %>%
+  sampling_target(method = "ubOver", seed = 1234L, k = 10)
+
+over10 %>%
+  count(default)
+
+# SMOTE with random seed
+smote <- sb %>%
+  sampling_target(method = "ubSMOTE", seed = 1234L)
+
+smote %>%
+  count(default)
+
+# SMOTE with random seed, and perc.under = 250
+smote250 <- sb %>%
+  sampling_target(method = "ubSMOTE", seed = 1234L, perc.under = 250)
+
+smote250 %>%
+  count(default)
+```
+
+The argument that specifies the sampling method in sampling_target () is method. "ubUnder" is under-sampling, and "ubOver" is over-sampling, "ubSMOTE" is SMOTE(Synthetic Minority Over-sampling TEchnique).
+

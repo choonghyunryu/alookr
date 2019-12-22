@@ -1,0 +1,192 @@
+---
+title: "Cleansing the dataset"
+author: "Choonghyun Ryu"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Cleansing the dataset}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r environment, echo = FALSE, message = FALSE, warning=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "")
+options(tibble.print_min = 4L, tibble.print_max = 4L, width = 80)
+
+library(alookr)
+```
+
+## Preface
+If you created a dataset to create a classification model, you must perform cleansing of the data.
+After you create the dataset, you should do the following:
+
+* **Cleansing the dataset**
+    + **Optional removal of variables including missing values**
+    + **Remove a variable with one unique number**
+    + **Remove categorical variables with a large number of levels**
+    + **Convert a character variable to a categorical variable**    
+* Split the data into a train set and a test set
+* Modeling and Evaluate, Predict
+
+The alookr package makes these steps fast and easy:
+
+## Data: create example dataset
+
+To illustrate basic use of the alookr package, create the `data_exam` with sample function. The `data_exam` dataset include 5 variables.
+
+variables are as follows.:
+
+* `id` : character
+* `year`: character
+* `count`: numeric
+* `alpha` : character
+* `flag` : character
+
+```{r create_data}
+# create sample dataset
+set.seed(123L)
+id <- sapply(1:1000, function(x)
+  paste(c(sample(letters, 5), x), collapse = ""))
+
+year <- "2018"
+
+set.seed(123L)
+count <- sample(1:10, size = 1000, replace = TRUE)
+
+set.seed(123L)
+alpha <- sample(letters, size = 1000, replace = TRUE)
+
+set.seed(123L)
+flag <- sample(c("Y", "N"), size = 1000, prob = c(0.1, 0.9), replace = TRUE)
+
+data_exam <- data.frame(id, year, count, alpha, flag, stringsAsFactors = FALSE)
+
+# structure of dataset
+str(data_exam)
+
+# summary of dataset
+summary(data_exam)
+```
+
+## Clean dataset
+`cleanse()` cleans up the dataset before fitting the classification model.
+
+The function of cleanse() is as follows.:
+
+* remove variables whose unique value is one
+* remove variables with high unique rate
+* converts character variables to factor
+* remove variables with missing value
+
+### Cleanse dataset with `cleanse()`
+For example, we can cleanse all variables in `data_exam`:
+
+```{r cleanse,}
+# cleansing dataset
+newDat <- cleanse(data_exam)
+
+# structure of cleansing dataset
+str(newDat)
+```
+
+* `remove variables whose unique value is one` : The year variable has only one value, "2018". Not needed when fitting the model. So it was removed.
+* `remove variables with high unique rate` : If the number of levels of categorical data is very large, it is not suitable for classification model. In this case, it is highly likely to be an identifier of the data. So, remove the categorical (or character) variable with a high value of the unique rate defined as "number of levels / number of observations". 
+    + The unique rate of the id variable with the number of levels of 1000 is 1. This variable is the object of the removal by identifier.
+    + The unique rate of the alpha variable is 0.026 and this variable is also removed.
+* `converts character variables to factor` : The character type flag variable is converted to a factor type.
+
+For example, we can not remove the categorical data that is removed by changing the threshold of the `unique rate`:
+
+```{r cleanse_2}
+# cleansing dataset
+newDat <- cleanse(data_exam, uniq_thres = 0.03)
+
+# structure of cleansing dataset
+str(newDat)
+```
+
+The `alpha` variable was not removed.
+
+If you do not want to apply a unique rate, you can set the value of the `uniq` argument to FALSE.:
+
+```{r cleanse_3}
+# cleansing dataset
+newDat <- cleanse(data_exam, uniq = FALSE)
+
+# structure of cleansing dataset
+str(newDat)
+```
+
+If you do not want to force type conversion of a character variable to factor, you can set the value of the `char` argument to FALSE.:
+
+```{r cleanse_4}
+# cleansing dataset
+newDat <- cleanse(data_exam, char = FALSE)
+
+# structure of cleansing dataset
+str(newDat)
+```
+
+If you want to remove a variable that contains missing values, specify the value of the `missing` argument as TRUE. The following example **removes the flag variable** that contains the missing value.
+
+```{r cleanse_5}
+data_exam$flag[1] <- NA 
+
+# cleansing dataset
+newDat <- cleanse(data_exam, missing = TRUE)
+
+# structure of cleansing dataset
+str(newDat)
+```
+
+
+## Diagnosis and removal of highly correlated variables
+
+In the linear model, there is a multicollinearity if there is a strong correlation between independent variables. So it is better to remove one variable from a pair of variables where the correlation exists.
+
+Even if it is not a linear model, removing one variable from a strongly correlated pair of variables can also reduce the overhead of the operation. It is also easy to interpret the model.
+
+### Cleanse dataset with `treatment_corr()`
+`treatment_corr()` diagnose pairs of highly correlated variables or remove on of them.
+
+`treatment_corr()` calculates correlation coefficient of pearson for numerical variable, and correlation coefficient of spearman for categorical variable.
+
+For example, we can diagnosis and removal of highly correlated variables:
+
+```{r treatment_corr}
+# numerical variable
+x1 <- 1:100
+set.seed(12L)
+x2 <- sample(1:3, size = 100, replace = TRUE) * x1 + rnorm(1)
+set.seed(1234L)
+x3 <- sample(1:2, size = 100, replace = TRUE) * x1 + rnorm(1)
+
+# categorical variable
+x4 <- factor(rep(letters[1:20], time = 5))
+set.seed(100L)
+x5 <- factor(rep(letters[1:20 + sample(1:6, size = 20, replace = TRUE)], time = 5))
+set.seed(200L)
+x6 <- factor(rep(letters[1:20 + sample(1:3, size = 20, replace = TRUE)], time = 5))
+set.seed(300L)
+x7 <- factor(sample(letters[1:5], size = 100, replace = TRUE))
+
+exam <- data.frame(x1, x2, x3, x4, x5, x6, x7)
+str(exam)
+head(exam)
+
+# default case
+exam_01 <- treatment_corr(exam)
+head(exam_01)
+
+# not removing variables
+treatment_corr(exam, treat = FALSE)
+
+# Set a threshold to detecting variables when correlation greater then 0.9
+treatment_corr(exam, corr_thres = 0.9, treat = FALSE)
+
+# not verbose mode
+exam_02 <- treatment_corr(exam, verbose = FALSE)
+head(exam_02)
+```
+
+* `remove variables whose unique value is one` : The year variable has only one value, "2018". Not needed when fitting the model. So it was removed.
