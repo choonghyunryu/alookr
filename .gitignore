@@ -1,0 +1,10 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+README.Rmd
+alookr.Rproj
+.Rbuildignore
+.DS_Store
+doc
+Meta

@@ -118,7 +118,7 @@ sampling_target <- function(.data, method = c("ubUnder", "ubOver", "ubSMOTE"),
   Y <- .data %>%
     filter(split_flag == "train") %>%
     ungroup() %>%
-    dplyr::select(target = target) %>%
+    dplyr::select(target = target_idx) %>%
     mutate(target = ifelse(target == minority, "1", "0") %>%
         factor(levels = c("1", "0"))) %>%
     pull()
