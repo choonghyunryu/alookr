@@ -517,6 +517,7 @@ run_performance <- function(model) {
 #' }
 #'
 #' @examples
+#' \donttest{
 #' library(dplyr)
 #'
 #' # Divide the train data set and the test data set.
@@ -545,8 +546,9 @@ run_performance <- function(model) {
 #' # Predict the model.
 #' pred <- run_predict(result, test)
 #'
-#' # Compare thr model performance
+#' # Compare the model performance
 #' compare_performance(pred)
+#'}
 #'
 #' @export
 #'
