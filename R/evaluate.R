@@ -468,8 +468,12 @@ run_performance <- function(model) {
     pmetric
   }
 
-  future::plan(future::multiprocess)
-
+  if (dlookr::get_os() == "windows") {
+    future::plan(future::sequential)
+  } else {
+    future::plan(future::multiprocess)
+  }
+  
   result <- purrr::map(seq(NROW(model)),
                        ~future::future(performance(attr(pred$predicted[[.x]], "pred_prob"),
                                                    attr(pred$predicted[[.x]], "actual"),

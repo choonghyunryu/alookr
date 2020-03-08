@@ -117,7 +117,11 @@ classifier_dispatch <- function(model = c("logistic", "rpart", "ctree", "randomF
 #' @export
 run_models <- function(.data, target, positive,
                        models = c("logistic", "rpart", "ctree", "randomForest", "ranger")) {
-  future::plan(future::multiprocess)
+  if (dlookr::get_os() == "windows") {
+    future::plan(future::sequential)
+  } else {
+    future::plan(future::multiprocess)
+  }
 
   result <- purrr::map(models, ~future::future(classifier_dispatch(.x, .data, target))) %>%
     tibble::tibble(step = "1.Fitted", model_id = models, target = target, positive = positive,
@@ -236,7 +240,11 @@ predictor <- function(model, .data, target, positive, cutoff = 0.5) {
 #' @importFrom stats density
 #' @export
 run_predict <- function(model, .data, cutoff = 0.5) {
-  future::plan(future::multiprocess)
+  if (dlookr::get_os() == "windows") {
+    future::plan(future::sequential)
+  } else {
+    future::plan(future::multiprocess)
+  }
 
   result <- purrr::map(seq(NROW(model)),
                        ~future::future(predictor(model$fitted_model[[.x]], .data,
