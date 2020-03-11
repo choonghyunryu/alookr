@@ -657,8 +657,8 @@ plot_performance <- function(model) {
     data_all <- rbind(data_all, data.frame(tmp[[i]], model_id = model_id[i]))
   }
 
-  colors <- RColorBrewer::brewer.pal(7, "Dark2")[1:7]
-  colors <- setNames(colors[1:nlevels(data_all$model_id)], levels(data_all$model_id))
+  color_palette <- RColorBrewer::brewer.pal(7, "Dark2")
+  color_palette <- setNames(color_palette[seq(model_id)], model_id)
 
   ggplot(data_all, aes(x = x, y = y, color = model_id)) +
     geom_line() +
@@ -666,6 +666,6 @@ plot_performance <- function(model) {
     ggtitle("ROC curve") +
     xlab("False Positive Ratio (1-Specificity)") +
     ylab("True Positive Ratio (Sensitivity)") +
-    scale_colour_manual(values=colors) +
+    scale_colour_manual(values = color_palette) +
     geom_abline(slope = 1, intercept = 0, lty = 2, colour = 'black')
 }
