@@ -13,6 +13,7 @@
 #' This function does the following.:
 #' Remove the variable with only one value. And remove variables that have a unique number of values relative to the number of observations for a character or categorical variable. In this case, it is a variable that corresponds to an identifier or an identifier. And converts the character to factor.
 #'
+#' @return An object of data.frame or train_df. and return value is an object of the same type as the .data argument.
 #' @examples
 #' # create sample dataset
 #' set.seed(123L)
@@ -210,6 +211,7 @@ cleanse.data.frame <- function(.data, uniq = TRUE, uniq_thres = 0.1, char = TRUE
 #' @param verbose logical. Set whether to echo information to the console at runtime.
 #' @details The correlation coefficient of pearson is obtained for continuous variables and the correlation coefficient of spearman for categorical variables.
 #'
+#' @return An object of data.frame or train_df. and return value is an object of the same type as the .data argument. However, several variables can be excluded by correlation between variables.
 #' @examples
 #' # numerical variable
 #' x1 <- 1:100

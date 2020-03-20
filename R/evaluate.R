@@ -8,6 +8,7 @@
 #' @details The Matthews Correlation Coefficient has a value between -1 and 1, and the closer to 1,
 #' the better the performance of the binary classification.
 #'
+#' @return numeric. The Matthews Correlation Coefficient.
 #' @examples
 #' # simulate actual data
 #' set.seed(123L)
@@ -603,6 +604,8 @@ compare_performance <- function(model) {
 #' @description plot_performance() visualizes a plot to ROC curve that separates model algorithm.
 #' @param model A model_df. results of predicted model that created by run_predict().
 #'
+#' @details The ROC curve is output for each model included in the model_df class object specified as a model argument.
+#' @return There is no return value. Only the plot is drawn.
 #' @examples
 #' library(dplyr)
 #'

@@ -1,6 +1,6 @@
 Package: alookr
 Type: Package
-Title: Tools for Binary Classification Modeling
+Title: Model Classifier for Binary Classification
 Version: 0.3.0
 Authors@R: c(
   person("Choonghyun", "Ryu",, "choonghyun.ryu@gmail.com", role = c("aut", "cre"))

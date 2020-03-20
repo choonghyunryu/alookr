@@ -32,6 +32,9 @@ cleanse(.data, ...)
 
 \item{...}{further arguments passed to or from other methods.}
 }
+\value{
+An object of data.frame or train_df. and return value is an object of the same type as the .data argument.
+}
 \description{
 The cleanse() cleanse the dataset for classification modeling
 }

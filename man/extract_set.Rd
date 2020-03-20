@@ -12,6 +12,9 @@ extract_set(x, set = c("train", "test"))
 \item{set}{character. Specifies whether the extracted data is a train set or a test set.
 You can use "train" or "test".}
 }
+\value{
+an object of class "tbl_df".
+}
 \description{
 Extract train set or test set from split_df class object
 }

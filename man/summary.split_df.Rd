@@ -11,6 +11,17 @@
 
 \item{...}{further arguments passed to or from other methods.}
 }
+\value{
+NULL is returned. 
+However, the split train set and test set information are displayed. The output information is as follows.:
+
+\itemize{
+\item Random seed
+\item Number of train sets and test sets
+\item Name of target variable
+\item Target variable minority class and majority class information (label and ratio)
+}
+}
 \description{
 summary method for "split_df" class.
 }

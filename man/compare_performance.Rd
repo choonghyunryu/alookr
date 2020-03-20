@@ -39,6 +39,7 @@ The performance metrics calculated are as follows.:
 compare_performance() compares the performance of a model with several model performance metrics.
 }
 \examples{
+\donttest{
 library(dplyr)
 
 # Divide the train data set and the test data set.
@@ -67,7 +68,8 @@ result <- run_models(.data = train, target = "Kyphosis", positive = "present")
 # Predict the model.
 pred <- run_predict(result, test)
 
-# Compare thr model performance
+# Compare the model performance
 compare_performance(pred)
+}
 
 }

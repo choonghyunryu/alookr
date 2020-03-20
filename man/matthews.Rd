@@ -13,6 +13,9 @@ matthews(predicted, y, positive)
 
 \item{positive}{level of positive class of binary classification}
 }
+\value{
+numeric. The Matthews Correlation Coefficient.
+}
 \description{
 compute the Matthews correlation coefficient with actual and predict values.
 }

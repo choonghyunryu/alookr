@@ -19,6 +19,9 @@ These arguments are automatically quoted and evaluated in a context where column
 represent column positions.
 They support unquoting and splicing.}
 }
+\value{
+There is no return value. Draw only the plot.
+}
 \description{
 Plot compare information of the train set and test set included
 in the "split_df" class.

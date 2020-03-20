@@ -15,6 +15,9 @@ treatment_corr(.data, corr_thres = 0.8, treat = TRUE, verbose = TRUE)
 
 \item{verbose}{logical. Set whether to echo information to the console at runtime.}
 }
+\value{
+An object of data.frame or train_df. and return value is an object of the same type as the .data argument. However, several variables can be excluded by correlation between variables.
+}
 \description{
 The treatment_corr() diagnose pairs of highly correlated variables or remove on of them.
 }

@@ -18,6 +18,9 @@ compare of categorical data. The default value is FALSE, which also not includes
 
 \item{...}{further arguments passed to or from other methods.}
 }
+\value{
+An object of class "split_df".
+}
 \description{
 Diagnosis of similarity between datasets splitted by train set and set included in the "split_df" class. and cleansing the "split_df" class
 }

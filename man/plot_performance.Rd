@@ -9,8 +9,14 @@ plot_performance(model)
 \arguments{
 \item{model}{A model_df. results of predicted model that created by run_predict().}
 }
+\value{
+There is no return value. Only the plot is drawn.
+}
 \description{
 plot_performance() visualizes a plot to ROC curve that separates model algorithm.
+}
+\details{
+The ROC curve is output for each model included in the model_df class object specified as a model argument.
 }
 \examples{
 library(dplyr)

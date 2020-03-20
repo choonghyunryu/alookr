@@ -105,6 +105,15 @@ split_by_impl <- function(.data, target, ratio, seed = NULL) {
 #' @details
 #' summary.split_df provides information on the number of two split data sets, minority class and majority class.
 #'
+#' @return NULL is returned. 
+#' However, the split train set and test set information are displayed. The output information is as follows.:
+#' 
+#' \itemize{
+#' \item Random seed
+#' \item Number of train sets and test sets
+#' \item Name of target variable
+#' \item Target variable minority class and majority class information (label and ratio)
+#' }
 #' @examples
 #' library(dplyr)
 #'
@@ -375,6 +384,7 @@ compare_category <- function(.data, ..., add_character = FALSE, margin = FALSE) 
 #' @details The numerical variables are density plots and the categorical variables are
 #' mosaic plots to compare the distribution of train sets and test sets.
 #'
+#' @return There is no return value. Draw only the plot.
 #' @examples
 #' library(dplyr)
 #'
@@ -653,6 +663,7 @@ cleanse <- function(.data, ...) {
 #' @details
 #' Remove the detected variables from the diagnosis using the compare_diag() function.
 #'
+#' @return An object of class "split_df".
 #' @examples
 #' library(dplyr)
 #'
@@ -701,6 +712,7 @@ cleanse.split_df <- function(.data, add_character = FALSE, uniq_thres = 0.9,
 #' @details
 #' Extract the train or test sets based on the parameters you defined when creating split_df with split_by().
 #'
+#' @return an object of class "tbl_df".
 #' @examples
 #' library(dplyr)
 #'
