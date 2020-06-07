@@ -51,7 +51,7 @@ summary(tmp)
 # list of categorical variables in the train set that contain missing levels
 nolevel_in_train <- sb %>%
   compare_target_category() %>% 
-  filter(train == 0) %>% 
+  filter(is.na(train)) %>% 
   select(variable) %>% 
   unique() %>% 
   pull
@@ -66,7 +66,7 @@ while (length(nolevel_in_train) > 0) {
 
   nolevel_in_train <- sb %>%
     compare_target_category() %>% 
-    filter(train == 0) %>% 
+    filter(is.na(train)) %>% 
     select(variable) %>% 
     unique() %>% 
     pull

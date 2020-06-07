@@ -93,6 +93,7 @@
 #'
 #' @importFrom tidyselect vars_select
 #' @importFrom rlang quos
+#' @importFrom tibble as_tibble
 #' @importFrom unbalanced ubUnder ubOver ubSMOTE ubOSS
 #' @export
 #'
@@ -204,7 +205,7 @@ sampling_target <- function(.data, method = c("ubUnder", "ubOver", "ubSMOTE"),
 
     result <- smpl %>%
       mutate_at(attr(.data, "target"), function(x) Y) %>%
-      as.tbl()
+      tibble::as_tibble()
 
     if (target_idx == 1) {
       result <- result %>%
