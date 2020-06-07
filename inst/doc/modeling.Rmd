@@ -140,7 +140,7 @@ In the following example, fortunately, there is no categorical variable that con
 ```{r split_check, warning=FALSE}
 # list of categorical variables in the train set that contain missing levels
 nolevel_in_train <- sb %>%
-  compare_category() %>% 
+  compare_target_category() %>% 
   filter(train == 0) %>% 
   select(variable) %>% 
   unique() %>% 
@@ -155,7 +155,7 @@ while (length(nolevel_in_train) > 0) {
     split_by(Class)
 
   nolevel_in_train <- sb %>%
-    compare_category() %>% 
+    compare_target_category() %>% 
     filter(train == 0) %>% 
     select(variable) %>% 
     unique() %>% 
@@ -260,9 +260,11 @@ test <- sb %>%
 ## Binary classification modeling with `run_models()`
 `run_models()` performs some representative binary classification modeling using `split_df` object created by `split_by()`.
 
+`run_models()` executes the process in parallel when fitting the model. However, it is not supported in MS-Windows operating system and RStudio environment.
+
 Currently supported algorithms are as follows.:
 
-* logistic : logistic regression using using `stats` package
+* logistic : logistic regression using `stats` package
 * rpart : Recursive Partitioning Trees using `rpart` package
 * ctree : Conditional Inference Trees using `party` package
 * randomForest :Classification with Random Forest using `randomForest` package
@@ -293,6 +295,8 @@ Evaluate the predictive performance of fitted models.
 
 `run_predict()` predict the test set using `model_df` class fitted by `run_models()`.
 
+`run_predict ()` is executed in parallel when predicting by model. However, it is not supported in MS-Windows operating system and RStudio environment.
+
 The `model_df` class object contains the following variables.:
 
 * step : character. The current stage in the classification modeling process.
@@ -312,6 +316,8 @@ pred
 ### Calculate the performance metric with `run_performance()`
 
 `run_performance()` calculate the performance metric of `model_df` class predicted by `run_predict()`.
+
+`run_performance ()` is performed in parallel when calculating the performance evaluation metrics However, it is not supported in MS-Windows operating system and RStudio environment.
 
 The `model_df` class object contains the following variables.:
 
@@ -389,7 +395,11 @@ plot_performance(pred)
 
 ### Tunning the cut-off
 
-Compare the statistics of the numerical variables of the train set and test set included in the "split_df" class.
+In general, if the prediction probability is greater than 0.5 in the binary classification model, it is predicted as `positive class`.
+In other words, 0.5 is used for the cut-off value.
+This applies to most model algorithms. However, in some cases, the performance can be tuned by changing the cut-off value.
+
+`plot_cutoff ()` visualizes a plot to select the cut-off value, and returns the cut-off value.
 
 ```{r cutoff, warning=FALSE, fig.height=4, fig.width=7}
 pred_best <- pred %>% 

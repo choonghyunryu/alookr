@@ -1,0 +1,15 @@
+alookr 0.3.2
+----------------------------------------------------------------
+
+* Renamed compare_category() to compare_target_category(). This is because it overlaps the function name of the dlookr package.
+* Renamed compare_numeric() to compare_target_numeric(). This is because it overlaps the function name of the dlookr package.
+* compare_target_category() modified from is.tibble(), as.tibble() to is_tibble(), as_tibble().
+* compare_diag() modified from is.tibble(), as.tibble() to is_tibble(), as_tibble().
+
+
+alookr 0.3.1
+----------------------------------------------------------------
+
+* Fixed explanation errors in `Cleansing the dataset` vignettes.
+* Fixed explanation errors in `Classification Modeling` vignettes.
+* Modified explanation errors in `Splitting the dataset` vignettes.

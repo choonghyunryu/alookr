@@ -164,7 +164,7 @@ summary.split_df <- function(object, ...) {
 #' Select the numeric variable you want to compare.
 #' You can treat variable names like they are positions.
 #' Positive values select variables; negative values to drop variables.
-#' If the first expression is negative, compare_numeric() will automatically
+#' If the first expression is negative, compare_target_numeric() will automatically
 #' start with all variables.
 #' These arguments are automatically quoted and evaluated in a context where column names
 #' represent column positions.
@@ -197,10 +197,10 @@ summary.split_df <- function(object, ...) {
 #'   split_by(default)
 #'
 #' sb %>%
-#'   compare_numeric()
+#'   compare_target_numeric()
 #'
 #' sb %>%
-#'   compare_numeric(balance)
+#'   compare_target_numeric(balance)
 #'
 #' @importFrom tidyselect vars_select
 #' @importFrom rlang quos
@@ -209,7 +209,7 @@ summary.split_df <- function(object, ...) {
 #' @importFrom stats sd
 #' @import dplyr
 #' @export
-compare_numeric <- function(.data, ...) {
+compare_target_numeric <- function(.data, ...) {
   vars <- tidyselect::vars_select(names(.data), ...)
   if (length(vars) == 0) vars <- names(.data)
 
@@ -268,7 +268,7 @@ compare_numeric <- function(.data, ...) {
 #' Select the categorical variable you want to compare.
 #' You can treat variable names like they are positions.
 #' Positive values select variables; negative values to drop variables.
-#' If the first expression is negative, compare_category() will automatically
+#' If the first expression is negative, compare_target_category() will automatically
 #' start with all variables.
 #' These arguments are automatically quoted and evaluated in a context where column names
 #' represent column positions.
@@ -298,19 +298,19 @@ compare_numeric <- function(.data, ...) {
 #'   split_by(default)
 #'
 #' sb %>%
-#'   compare_category()
+#'   compare_target_category()
 #'
 #' sb %>%
-#'   compare_category(add_character = TRUE)
+#'   compare_target_category(add_character = TRUE)
 #'
 #' sb %>%
-#'   compare_category(margin = TRUE)
+#'   compare_target_category(margin = TRUE)
 #'
 #' sb %>%
-#'   compare_category(student)
+#'   compare_target_category(student)
 #'
 #' sb %>%
-#'   compare_category(student, margin = TRUE)
+#'   compare_target_category(student, margin = TRUE)
 #'
 #' @importFrom tidyselect vars_select
 #' @importFrom rlang quos
@@ -319,7 +319,7 @@ compare_numeric <- function(.data, ...) {
 #' @importFrom methods is
 #' @import dplyr
 #' @export
-compare_category <- function(.data, ..., add_character = FALSE, margin = FALSE) {
+compare_target_category <- function(.data, ..., add_character = FALSE, margin = FALSE) {
   if(is(.data) != "split_df") {
     stop(".data is not split_df class")
   }
@@ -327,8 +327,8 @@ compare_category <- function(.data, ..., add_character = FALSE, margin = FALSE) 
   vars <- tidyselect::vars_select(names(.data), ...)
   if (length(vars) == 0) vars <- names(.data)
 
-  if (length(vars) == 1 & !tibble::is.tibble(.data))
-    .data <- tibble::as.tibble(.data)
+  if (length(vars) == 1 & !tibble::is_tibble(.data))
+    .data <- tibble::as_tibble(.data)
 
   vars <- setdiff(vars, "split_flag")
 
@@ -375,7 +375,7 @@ compare_category <- function(.data, ..., add_character = FALSE, margin = FALSE) 
 #' Select the variable you want to plotting.
 #' You can treat variable names like they are positions.
 #' Positive values select variables; negative values to drop variables.
-#' If the first expression is negative, compare_category() will automatically
+#' If the first expression is negative, compare_target_category() will automatically
 #' start with all variables.
 #' These arguments are automatically quoted and evaluated in a context where column names
 #' represent column positions.
@@ -527,8 +527,8 @@ compare_diag <- function(.data, add_character = FALSE, uniq_thres = 0.01,
 
   vars <- names(.data)
 
-  if (length(vars) == 1 & !tibble::is.tibble(.data))
-    .data <- tibble::as.tibble(.data)
+  if (length(vars) == 1 & !tibble::is_tibble(.data))
+    .data <- tibble::as_tibble(.data)
 
   suppressMessages(
     missing_value <- .data %>%
@@ -612,7 +612,7 @@ compare_diag <- function(.data, add_character = FALSE, uniq_thres = 0.01,
 
   suppressMessages(
     df <- missing_level <- .data %>%
-      compare_category(add_character = add_character)
+      compare_target_category(add_character = add_character)
   )
 
   if (!is.null(df)) {

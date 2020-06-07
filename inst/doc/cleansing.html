@@ -12,7 +12,7 @@
 
 <meta name="author" content="Choonghyun Ryu" />
 
-<meta name="date" content="2020-03-08" />
+<meta name="date" content="2020-06-07" />
 
 <title>Cleansing the dataset</title>
 
@@ -304,7 +304,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Cleansing the dataset</h1>
 <h4 class="author">Choonghyun Ryu</h4>
-<h4 class="date">2020-03-08</h4>
+<h4 class="date">2020-06-07</h4>
 
 
 
@@ -557,47 +557,52 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <span id="cb7-37"><a href="#cb7-37"></a>exam_<span class="dv">01</span> &lt;-<span class="st"> </span><span class="kw">treatment_corr</span>(exam)</span>
 <span id="cb7-38"><a href="#cb7-38"></a><span class="op">*</span><span class="st"> </span>remove variables whose strong <span class="kw">correlation</span> (pearson <span class="op">&gt;=</span><span class="st"> </span><span class="fl">0.8</span>)</span>
 <span id="cb7-39"><a href="#cb7-39"></a> <span class="op">-</span><span class="st"> </span>remove x1 <span class="op">:</span><span class="st"> </span>with <span class="kw">x3</span> (<span class="fl">0.8072</span>)</span>
-<span id="cb7-40"><a href="#cb7-40"></a><span class="op">*</span><span class="st"> </span>remove variables whose strong <span class="kw">correlation</span> (spearman <span class="op">&gt;=</span><span class="st"> </span><span class="fl">0.8</span>)</span>
-<span id="cb7-41"><a href="#cb7-41"></a> <span class="op">-</span><span class="st"> </span>remove x4 <span class="op">:</span><span class="st"> </span>with <span class="kw">x5</span> (<span class="fl">0.9823</span>)</span>
-<span id="cb7-42"><a href="#cb7-42"></a> <span class="op">-</span><span class="st"> </span>remove x4 <span class="op">:</span><span class="st"> </span>with <span class="kw">x6</span> (<span class="fl">0.9955</span>)</span>
-<span id="cb7-43"><a href="#cb7-43"></a> <span class="op">-</span><span class="st"> </span>remove x5 <span class="op">:</span><span class="st"> </span>with <span class="kw">x6</span> (<span class="fl">0.9853</span>)</span>
-<span id="cb7-44"><a href="#cb7-44"></a><span class="kw">head</span>(exam_<span class="dv">01</span>)</span>
-<span id="cb7-45"><a href="#cb7-45"></a>         x2         x3 x6 x7</span>
-<span id="cb7-46"><a href="#cb7-46"></a><span class="dv">1</span> <span class="fl">0.9573151</span> <span class="fl">-0.8060313</span>  c  e</span>
-<span id="cb7-47"><a href="#cb7-47"></a><span class="dv">2</span> <span class="fl">5.9573151</span>  <span class="fl">2.1939687</span>  d  d</span>
-<span id="cb7-48"><a href="#cb7-48"></a><span class="dv">3</span> <span class="fl">8.9573151</span>  <span class="fl">4.1939687</span>  e  e</span>
-<span id="cb7-49"><a href="#cb7-49"></a><span class="dv">4</span> <span class="fl">3.9573151</span>  <span class="fl">6.1939687</span>  g  d</span>
-<span id="cb7-50"><a href="#cb7-50"></a><span class="dv">5</span> <span class="fl">4.9573151</span>  <span class="fl">8.1939687</span>  h  d</span>
-<span id="cb7-51"><a href="#cb7-51"></a><span class="dv">6</span> <span class="fl">5.9573151</span> <span class="fl">10.1939687</span>  i  a</span>
-<span id="cb7-52"><a href="#cb7-52"></a></span>
-<span id="cb7-53"><a href="#cb7-53"></a><span class="co"># not removing variables</span></span>
-<span id="cb7-54"><a href="#cb7-54"></a><span class="kw">treatment_corr</span>(exam, <span class="dt">treat =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb7-55"><a href="#cb7-55"></a><span class="op">*</span><span class="st"> </span>remove variables whose strong <span class="kw">correlation</span> (pearson <span class="op">&gt;=</span><span class="st"> </span><span class="fl">0.8</span>)</span>
-<span id="cb7-56"><a href="#cb7-56"></a> <span class="op">-</span><span class="st"> </span>remove x1 <span class="op">:</span><span class="st"> </span>with <span class="kw">x3</span> (<span class="fl">0.8072</span>)</span>
-<span id="cb7-57"><a href="#cb7-57"></a><span class="op">*</span><span class="st"> </span>remove variables whose strong <span class="kw">correlation</span> (spearman <span class="op">&gt;=</span><span class="st"> </span><span class="fl">0.8</span>)</span>
-<span id="cb7-58"><a href="#cb7-58"></a> <span class="op">-</span><span class="st"> </span>remove x4 <span class="op">:</span><span class="st"> </span>with <span class="kw">x5</span> (<span class="fl">0.9823</span>)</span>
-<span id="cb7-59"><a href="#cb7-59"></a> <span class="op">-</span><span class="st"> </span>remove x4 <span class="op">:</span><span class="st"> </span>with <span class="kw">x6</span> (<span class="fl">0.9955</span>)</span>
-<span id="cb7-60"><a href="#cb7-60"></a> <span class="op">-</span><span class="st"> </span>remove x5 <span class="op">:</span><span class="st"> </span>with <span class="kw">x6</span> (<span class="fl">0.9853</span>)</span>
-<span id="cb7-61"><a href="#cb7-61"></a></span>
-<span id="cb7-62"><a href="#cb7-62"></a><span class="co"># Set a threshold to detecting variables when correlation greater then 0.9</span></span>
-<span id="cb7-63"><a href="#cb7-63"></a><span class="kw">treatment_corr</span>(exam, <span class="dt">corr_thres =</span> <span class="fl">0.9</span>, <span class="dt">treat =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb7-64"><a href="#cb7-64"></a><span class="op">*</span><span class="st"> </span>remove variables whose strong <span class="kw">correlation</span> (spearman <span class="op">&gt;=</span><span class="st"> </span><span class="fl">0.9</span>)</span>
-<span id="cb7-65"><a href="#cb7-65"></a> <span class="op">-</span><span class="st"> </span>remove x4 <span class="op">:</span><span class="st"> </span>with <span class="kw">x5</span> (<span class="fl">0.9823</span>)</span>
-<span id="cb7-66"><a href="#cb7-66"></a> <span class="op">-</span><span class="st"> </span>remove x4 <span class="op">:</span><span class="st"> </span>with <span class="kw">x6</span> (<span class="fl">0.9955</span>)</span>
-<span id="cb7-67"><a href="#cb7-67"></a> <span class="op">-</span><span class="st"> </span>remove x5 <span class="op">:</span><span class="st"> </span>with <span class="kw">x6</span> (<span class="fl">0.9853</span>)</span>
-<span id="cb7-68"><a href="#cb7-68"></a></span>
-<span id="cb7-69"><a href="#cb7-69"></a><span class="co"># not verbose mode</span></span>
-<span id="cb7-70"><a href="#cb7-70"></a>exam_<span class="dv">02</span> &lt;-<span class="st"> </span><span class="kw">treatment_corr</span>(exam, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb7-71"><a href="#cb7-71"></a><span class="kw">head</span>(exam_<span class="dv">02</span>)</span>
-<span id="cb7-72"><a href="#cb7-72"></a>         x2         x3 x6 x7</span>
-<span id="cb7-73"><a href="#cb7-73"></a><span class="dv">1</span> <span class="fl">0.9573151</span> <span class="fl">-0.8060313</span>  c  e</span>
-<span id="cb7-74"><a href="#cb7-74"></a><span class="dv">2</span> <span class="fl">5.9573151</span>  <span class="fl">2.1939687</span>  d  d</span>
-<span id="cb7-75"><a href="#cb7-75"></a><span class="dv">3</span> <span class="fl">8.9573151</span>  <span class="fl">4.1939687</span>  e  e</span>
-<span id="cb7-76"><a href="#cb7-76"></a><span class="dv">4</span> <span class="fl">3.9573151</span>  <span class="fl">6.1939687</span>  g  d</span>
-<span id="cb7-77"><a href="#cb7-77"></a><span class="dv">5</span> <span class="fl">4.9573151</span>  <span class="fl">8.1939687</span>  h  d</span>
-<span id="cb7-78"><a href="#cb7-78"></a><span class="dv">6</span> <span class="fl">5.9573151</span> <span class="fl">10.1939687</span>  i  a</span></code></pre></div>
+<span id="cb7-40"><a href="#cb7-40"></a>Warning<span class="op">:</span><span class="st"> `</span><span class="dt">as.tibble()</span><span class="st">`</span> is deprecated as of tibble <span class="dv">2</span>.<span class="dv">0</span>.<span class="fl">0.</span></span>
+<span id="cb7-41"><a href="#cb7-41"></a>Please use <span class="st">`</span><span class="dt">as_tibble()</span><span class="st">`</span> instead.</span>
+<span id="cb7-42"><a href="#cb7-42"></a>The signature and semantics have changed, see <span class="st">`</span><span class="dt">?as_tibble</span><span class="st">`</span>.</span>
+<span id="cb7-43"><a href="#cb7-43"></a>This warning is displayed once every <span class="dv">8</span> hours.</span>
+<span id="cb7-44"><a href="#cb7-44"></a>Call <span class="st">`</span><span class="dt">lifecycle::last_warnings()</span><span class="st">`</span> to see where this warning was generated.</span>
+<span id="cb7-45"><a href="#cb7-45"></a><span class="op">*</span><span class="st"> </span>remove variables whose strong <span class="kw">correlation</span> (spearman <span class="op">&gt;=</span><span class="st"> </span><span class="fl">0.8</span>)</span>
+<span id="cb7-46"><a href="#cb7-46"></a> <span class="op">-</span><span class="st"> </span>remove x4 <span class="op">:</span><span class="st"> </span>with <span class="kw">x5</span> (<span class="fl">0.9823</span>)</span>
+<span id="cb7-47"><a href="#cb7-47"></a> <span class="op">-</span><span class="st"> </span>remove x4 <span class="op">:</span><span class="st"> </span>with <span class="kw">x6</span> (<span class="fl">0.9955</span>)</span>
+<span id="cb7-48"><a href="#cb7-48"></a> <span class="op">-</span><span class="st"> </span>remove x5 <span class="op">:</span><span class="st"> </span>with <span class="kw">x6</span> (<span class="fl">0.9853</span>)</span>
+<span id="cb7-49"><a href="#cb7-49"></a><span class="kw">head</span>(exam_<span class="dv">01</span>)</span>
+<span id="cb7-50"><a href="#cb7-50"></a>         x2         x3 x6 x7</span>
+<span id="cb7-51"><a href="#cb7-51"></a><span class="dv">1</span> <span class="fl">0.9573151</span> <span class="fl">-0.8060313</span>  c  e</span>
+<span id="cb7-52"><a href="#cb7-52"></a><span class="dv">2</span> <span class="fl">5.9573151</span>  <span class="fl">2.1939687</span>  d  d</span>
+<span id="cb7-53"><a href="#cb7-53"></a><span class="dv">3</span> <span class="fl">8.9573151</span>  <span class="fl">4.1939687</span>  e  e</span>
+<span id="cb7-54"><a href="#cb7-54"></a><span class="dv">4</span> <span class="fl">3.9573151</span>  <span class="fl">6.1939687</span>  g  d</span>
+<span id="cb7-55"><a href="#cb7-55"></a><span class="dv">5</span> <span class="fl">4.9573151</span>  <span class="fl">8.1939687</span>  h  d</span>
+<span id="cb7-56"><a href="#cb7-56"></a><span class="dv">6</span> <span class="fl">5.9573151</span> <span class="fl">10.1939687</span>  i  a</span>
+<span id="cb7-57"><a href="#cb7-57"></a></span>
+<span id="cb7-58"><a href="#cb7-58"></a><span class="co"># not removing variables</span></span>
+<span id="cb7-59"><a href="#cb7-59"></a><span class="kw">treatment_corr</span>(exam, <span class="dt">treat =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb7-60"><a href="#cb7-60"></a><span class="op">*</span><span class="st"> </span>remove variables whose strong <span class="kw">correlation</span> (pearson <span class="op">&gt;=</span><span class="st"> </span><span class="fl">0.8</span>)</span>
+<span id="cb7-61"><a href="#cb7-61"></a> <span class="op">-</span><span class="st"> </span>remove x1 <span class="op">:</span><span class="st"> </span>with <span class="kw">x3</span> (<span class="fl">0.8072</span>)</span>
+<span id="cb7-62"><a href="#cb7-62"></a><span class="op">*</span><span class="st"> </span>remove variables whose strong <span class="kw">correlation</span> (spearman <span class="op">&gt;=</span><span class="st"> </span><span class="fl">0.8</span>)</span>
+<span id="cb7-63"><a href="#cb7-63"></a> <span class="op">-</span><span class="st"> </span>remove x4 <span class="op">:</span><span class="st"> </span>with <span class="kw">x5</span> (<span class="fl">0.9823</span>)</span>
+<span id="cb7-64"><a href="#cb7-64"></a> <span class="op">-</span><span class="st"> </span>remove x4 <span class="op">:</span><span class="st"> </span>with <span class="kw">x6</span> (<span class="fl">0.9955</span>)</span>
+<span id="cb7-65"><a href="#cb7-65"></a> <span class="op">-</span><span class="st"> </span>remove x5 <span class="op">:</span><span class="st"> </span>with <span class="kw">x6</span> (<span class="fl">0.9853</span>)</span>
+<span id="cb7-66"><a href="#cb7-66"></a></span>
+<span id="cb7-67"><a href="#cb7-67"></a><span class="co"># Set a threshold to detecting variables when correlation greater then 0.9</span></span>
+<span id="cb7-68"><a href="#cb7-68"></a><span class="kw">treatment_corr</span>(exam, <span class="dt">corr_thres =</span> <span class="fl">0.9</span>, <span class="dt">treat =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb7-69"><a href="#cb7-69"></a><span class="op">*</span><span class="st"> </span>remove variables whose strong <span class="kw">correlation</span> (spearman <span class="op">&gt;=</span><span class="st"> </span><span class="fl">0.9</span>)</span>
+<span id="cb7-70"><a href="#cb7-70"></a> <span class="op">-</span><span class="st"> </span>remove x4 <span class="op">:</span><span class="st"> </span>with <span class="kw">x5</span> (<span class="fl">0.9823</span>)</span>
+<span id="cb7-71"><a href="#cb7-71"></a> <span class="op">-</span><span class="st"> </span>remove x4 <span class="op">:</span><span class="st"> </span>with <span class="kw">x6</span> (<span class="fl">0.9955</span>)</span>
+<span id="cb7-72"><a href="#cb7-72"></a> <span class="op">-</span><span class="st"> </span>remove x5 <span class="op">:</span><span class="st"> </span>with <span class="kw">x6</span> (<span class="fl">0.9853</span>)</span>
+<span id="cb7-73"><a href="#cb7-73"></a></span>
+<span id="cb7-74"><a href="#cb7-74"></a><span class="co"># not verbose mode</span></span>
+<span id="cb7-75"><a href="#cb7-75"></a>exam_<span class="dv">02</span> &lt;-<span class="st"> </span><span class="kw">treatment_corr</span>(exam, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb7-76"><a href="#cb7-76"></a><span class="kw">head</span>(exam_<span class="dv">02</span>)</span>
+<span id="cb7-77"><a href="#cb7-77"></a>         x2         x3 x6 x7</span>
+<span id="cb7-78"><a href="#cb7-78"></a><span class="dv">1</span> <span class="fl">0.9573151</span> <span class="fl">-0.8060313</span>  c  e</span>
+<span id="cb7-79"><a href="#cb7-79"></a><span class="dv">2</span> <span class="fl">5.9573151</span>  <span class="fl">2.1939687</span>  d  d</span>
+<span id="cb7-80"><a href="#cb7-80"></a><span class="dv">3</span> <span class="fl">8.9573151</span>  <span class="fl">4.1939687</span>  e  e</span>
+<span id="cb7-81"><a href="#cb7-81"></a><span class="dv">4</span> <span class="fl">3.9573151</span>  <span class="fl">6.1939687</span>  g  d</span>
+<span id="cb7-82"><a href="#cb7-82"></a><span class="dv">5</span> <span class="fl">4.9573151</span>  <span class="fl">8.1939687</span>  h  d</span>
+<span id="cb7-83"><a href="#cb7-83"></a><span class="dv">6</span> <span class="fl">5.9573151</span> <span class="fl">10.1939687</span>  i  a</span></code></pre></div>
 <ul>
-<li><code>remove variables whose unique value is one</code> : The year variable has only one value, “2018”. Not needed when fitting the model. So it was removed.</li>
+<li><code>remove variables whose strong correlation</code> : x1, x4, x5 are removed.</li>
 </ul>
 </div>
 </div>

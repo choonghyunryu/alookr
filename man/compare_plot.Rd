@@ -13,7 +13,7 @@ compare_plot(.data, ...)
 Select the variable you want to plotting.
 You can treat variable names like they are positions.
 Positive values select variables; negative values to drop variables.
-If the first expression is negative, compare_category() will automatically
+If the first expression is negative, compare_target_category() will automatically
 start with all variables.
 These arguments are automatically quoted and evaluated in a context where column names
 represent column positions.

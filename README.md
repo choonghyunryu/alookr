@@ -359,6 +359,11 @@ head(exam)
 exam_01 <- treatment_corr(exam)
 #> * remove variables whose strong correlation (pearson >= 0.8)
 #>  - remove x1 : with x3 (0.8072)
+#> Warning: `as.tibble()` is deprecated as of tibble 2.0.0.
+#> Please use `as_tibble()` instead.
+#> The signature and semantics have changed, see `?as_tibble`.
+#> This warning is displayed once every 8 hours.
+#> Call `lifecycle::last_warnings()` to see where this warning was generated.
 #> * remove variables whose strong correlation (spearman >= 0.8)
 #>  - remove x4 : with x5 (0.9823)
 #>  - remove x4 : with x6 (0.9955)
@@ -400,8 +405,7 @@ head(exam_02)
 #> 6 5.9573151 10.1939687  i  a
 ```
 
-  - `remove variables whose unique value is one` : The year variable has
-    only one value, “2018”. Not needed when fitting the model. So it was
+  - `remove variables whose strong correlation` : x1, x4, x5 are
     removed.
 
 ## Split the data into a train set and a test set
@@ -503,22 +507,28 @@ The attributes of the `split_df` class are as follows.:
 <!-- end list -->
 
 ``` r
+attr_names <- names(attributes(sb))
+attr_names
+#>  [1] "names"         "row.names"     "groups"        "class"        
+#>  [5] "split_seed"    "target"        "binary"        "minority"     
+#>  [9] "majority"      "minority_rate" "majority_rate"
+
 sb_attr <- attributes(sb)
 
-# The third attribute, row.names, is a vector that is very long and excluded from the output.
-sb_attr[-3]
+# The third property, row.names, is excluded from the output because its length is very long.
+sb_attr[!attr_names %in% "row.names"]
 #> $names
 #> [1] "default"    "student"    "balance"    "income"     "split_flag"
 #> 
-#> $class
-#> [1] "split_df"   "grouped_df" "tbl_df"     "tbl"        "data.frame"
-#> 
 #> $groups
 #> # A tibble: 2 x 2
-#>   split_flag .rows        
-#>   <chr>      <list>       
-#> 1 test       <int [3,000]>
-#> 2 train      <int [7,000]>
+#>   split_flag       .rows
+#> * <chr>      <list<int>>
+#> 1 test           [3,000]
+#> 2 train          [7,000]
+#> 
+#> $class
+#> [1] "split_df"   "grouped_df" "tbl_df"     "tbl"        "data.frame"
 #> 
 #> $split_seed
 #> [1] 6534
@@ -571,14 +581,14 @@ dataset and test dataset.
 If the two data sets are not similar, the train dataset and test dataset
 should be splitted again from the original data.
 
-#### Comparison of categorical variables with `compare_category()`
+#### Comparison of categorical variables with `compare_target_category()`
 
 Compare the statistics of the categorical variables of the train set and
 test set included in the “split\_df” class.
 
 ``` r
 sb %>%
-  compare_category()
+  compare_target_category()
 #> # A tibble: 4 x 5
 #>   variable level train  test abs_diff
 #>   <chr>    <fct> <dbl> <dbl>    <dbl>
@@ -589,7 +599,7 @@ sb %>%
 
 # compare variables that are character data types.
 sb %>%
-  compare_category(add_character = TRUE)
+  compare_target_category(add_character = TRUE)
 #> # A tibble: 4 x 5
 #>   variable level train  test abs_diff
 #>   <chr>    <fct> <dbl> <dbl>    <dbl>
@@ -600,7 +610,7 @@ sb %>%
 
 # display marginal
 sb %>%
-  compare_category(margin = TRUE)
+  compare_target_category(margin = TRUE)
 #> # A tibble: 6 x 5
 #>   variable level    train   test abs_diff
 #>   <chr>    <fct>    <dbl>  <dbl>    <dbl>
@@ -613,7 +623,7 @@ sb %>%
 
 # student variable only
 sb %>%
-  compare_category(student)
+  compare_target_category(student)
 #> # A tibble: 2 x 5
 #>   variable level train  test abs_diff
 #>   <chr>    <fct> <dbl> <dbl>    <dbl>
@@ -621,7 +631,7 @@ sb %>%
 #> 2 student  Yes    30.0  28.2     1.77
 
 sb %>%
-  compare_category(student, margin = TRUE)
+  compare_target_category(student, margin = TRUE)
 #> # A tibble: 3 x 5
 #>   variable level   train  test abs_diff
 #>   <chr>    <fct>   <dbl> <dbl>    <dbl>
@@ -630,8 +640,8 @@ sb %>%
 #> 3 student  <Total> 100   100       3.54
 ```
 
-compare\_category() returns tbl\_df, where the variables have the
-following.:
+compare\_target\_category() returns tbl\_df, where the variables have
+the following.:
 
   - variable : character. categorical variable name
   - level : factor. level of categorical variables
@@ -641,14 +651,14 @@ following.:
   - abs\_diff : numeric. the absolute value of the difference between
     two relative frequencies
 
-#### Comparison of numeric variables with `compare_numeric()`
+#### Comparison of numeric variables with `compare_target_numeric()`
 
 Compare the statistics of the numerical variables of the train set and
 test set included in the “split\_df” class.
 
 ``` r
 sb %>%
-  compare_numeric()
+  compare_target_numeric()
 #> # A tibble: 2 x 7
 #>   variable train_mean test_mean train_sd test_sd train_z test_z
 #>   <chr>         <dbl>     <dbl>    <dbl>   <dbl>   <dbl>  <dbl>
@@ -657,14 +667,14 @@ sb %>%
 
 # balance variable only
 sb %>%
-  compare_numeric(balance)
+  compare_target_numeric(balance)
 #> # A tibble: 1 x 7
 #>   variable train_mean test_mean train_sd test_sd train_z test_z
 #>   <chr>         <dbl>     <dbl>    <dbl>   <dbl>   <dbl>  <dbl>
 #> 1 balance        836.      834.     487.    477.    1.72   1.75
 ```
 
-compare\_numeric() returns tbl\_df, where the variables have the
+compare\_target\_numeric() returns tbl\_df, where the variables have the
 following.:
 
   - variable : character. numeric variable name
@@ -878,6 +888,10 @@ under40 %>%
 # over-sampling with random seed
 over <- sb %>%
   sampling_target(method = "ubOver", seed = 1234L)
+#> Warning: `as.tbl()` is deprecated as of dplyr 1.0.0.
+#> Please use `tibble::as_tibble()` instead.
+#> This warning is displayed once every 8 hours.
+#> Call `lifecycle::last_warnings()` to see where this warning was generated.
 
 over %>%
   count(default)
@@ -1083,7 +1097,7 @@ that contains the missing levels in the train set.
 ``` r
 # list of categorical variables in the train set that contain missing levels
 nolevel_in_train <- sb %>%
-  compare_category() %>% 
+  compare_target_category() %>% 
   filter(train == 0) %>% 
   select(variable) %>% 
   unique() %>% 
@@ -1099,7 +1113,7 @@ while (length(nolevel_in_train) > 0) {
     split_by(Class)
 
   nolevel_in_train <- sb %>%
-    compare_category() %>% 
+    compare_target_category() %>% 
     filter(train == 0) %>% 
     select(variable) %>% 
     unique() %>% 
@@ -1263,9 +1277,13 @@ test <- sb %>%
 `run_models()` performs some representative binary classification
 modeling using `split_df` object created by `split_by()`.
 
+`run_models()` executes the process in parallel when fitting the model.
+However, it is not supported in MS-Windows operating system and RStudio
+environment.
+
 Currently supported algorithms are as follows.:
 
-  - logistic : logistic regression using using `stats` package
+  - logistic : logistic regression using `stats` package
   - rpart : Recursive Partitioning Trees using `rpart` package
   - ctree : Conditional Inference Trees using `party` package
   - randomForest :Classification with Random Forest using `randomForest`
@@ -1311,6 +1329,10 @@ Evaluate the predictive performance of fitted models.
 `run_predict()` predict the test set using `model_df` class fitted by
 `run_models()`.
 
+`run_predict ()` is executed in parallel when predicting by model.
+However, it is not supported in MS-Windows operating system and RStudio
+environment.
+
 The `model_df` class object contains the following variables.:
 
   - step : character. The current stage in the classification modeling
@@ -1344,6 +1366,10 @@ pred
 
 `run_performance()` calculate the performance metric of `model_df` class
 predicted by `run_predict()`.
+
+`run_performance ()` is performed in parallel when calculating the
+performance evaluation index. However, it is not supported in MS-Windows
+operating system and RStudio environment.
 
 The `model_df` class object contains the following variables.:
 
@@ -1432,17 +1458,17 @@ performance
 #> ZeroOneLoss    Accuracy   Precision      Recall Sensitivity Specificity 
 #>  0.02857143  0.97142857  0.95238095  0.97560976  0.97560976  0.96875000 
 #>    F1_Score Fbeta_Score     LogLoss         AUC        Gini       PRAUC 
-#>  0.96385542  0.96385542  0.10014639  0.99328316  0.98666159  0.70973083 
+#>  0.96385542  0.96385542  0.09943100  0.99328316  0.98647104  0.68540128 
 #>     LiftAUC     GainAUC     KS_Stat 
-#>  1.68490700  0.80066783 95.99847561 
+#>  1.65902776  0.80066783 95.99847561 
 #> 
 #> $ranger
 #> ZeroOneLoss    Accuracy   Precision      Recall Sensitivity Specificity 
-#>  0.02857143  0.97142857  0.96341463  0.96341463  0.96341463  0.97656250 
+#>  0.02380952  0.97619048  0.97530864  0.96341463  0.96341463  0.98437500 
 #>    F1_Score Fbeta_Score     LogLoss         AUC        Gini       PRAUC 
-#>  0.96341463  0.96341463  0.10160195  0.99256860  0.98513720  0.74429656 
+#>  0.96932515  0.96932515  0.09782736  0.99323552  0.98647104  0.76957551 
 #>     LiftAUC     GainAUC     KS_Stat 
-#>  1.71378114  0.80023229 96.43673780
+#>  1.74052776  0.80063879 96.43673780
 ```
 
 If you change the list object to tidy format, you’ll see the following
@@ -1452,20 +1478,20 @@ at a glance:
 # Convert to matrix for compare performace.
 sapply(performance, "c")
 #>                logistic       rpart       ctree randomForest      ranger
-#> ZeroOneLoss  0.04761905  0.06190476  0.04761905   0.02857143  0.02857143
-#> Accuracy     0.95238095  0.93809524  0.95238095   0.97142857  0.97142857
-#> Precision    0.95000000  0.93670886  0.92857143   0.95238095  0.96341463
+#> ZeroOneLoss  0.04761905  0.06190476  0.04761905   0.02857143  0.02380952
+#> Accuracy     0.95238095  0.93809524  0.95238095   0.97142857  0.97619048
+#> Precision    0.95000000  0.93670886  0.92857143   0.95238095  0.97530864
 #> Recall       0.92682927  0.90243902  0.95121951   0.97560976  0.96341463
 #> Sensitivity  0.92682927  0.90243902  0.95121951   0.97560976  0.96341463
-#> Specificity  0.96875000  0.96093750  0.95312500   0.96875000  0.97656250
-#> F1_Score     0.93827160  0.91925466  0.93975904   0.96385542  0.96341463
-#> Fbeta_Score  0.93827160  0.91925466  0.93975904   0.96385542  0.96341463
-#> LogLoss      1.51027400  0.41591455  0.61176450   0.10014639  0.10160195
-#> AUC          0.95126715  0.92721037  0.97170351   0.99328316  0.99256860
-#> Gini         0.94702744  0.89176829  0.95865091   0.98666159  0.98513720
-#> PRAUC        0.06077086  0.80545712  0.47903471   0.70973083  0.74429656
-#> LiftAUC      1.08596033  1.82146153  1.49393413   1.68490700  1.71378114
-#> GainAUC      0.77505807  0.76039489  0.78751452   0.80066783  0.80023229
+#> Specificity  0.96875000  0.96093750  0.95312500   0.96875000  0.98437500
+#> F1_Score     0.93827160  0.91925466  0.93975904   0.96385542  0.96932515
+#> Fbeta_Score  0.93827160  0.91925466  0.93975904   0.96385542  0.96932515
+#> LogLoss      1.51027400  0.41591455  0.61176450   0.09943100  0.09782736
+#> AUC          0.95126715  0.92721037  0.97170351   0.99328316  0.99323552
+#> Gini         0.94702744  0.89176829  0.95865091   0.98647104  0.98647104
+#> PRAUC        0.06077086  0.80545712  0.47903471   0.68540128  0.76957551
+#> LiftAUC      1.08596033  1.82146153  1.49393413   1.65902776  1.74052776
+#> GainAUC      0.77505807  0.76039489  0.78751452   0.80066783  0.80063879
 #> KS_Stat     90.33917683 86.33765244 90.43445122  95.99847561 96.43673780
 ```
 
@@ -1489,15 +1515,15 @@ model.
 comp_perf <- compare_performance(pred)
 comp_perf
 #> $recommend_model
-#> [1] "randomForest"
+#> [1] "ranger"
 #> 
 #> $top_metric_count
 #>     logistic        rpart        ctree randomForest       ranger 
-#>            0            2            0            8            5 
+#>            0            2            0            4            8 
 #> 
 #> $mean_rank
 #>     logistic        rpart        ctree randomForest       ranger 
-#>     3.961538     4.076923     3.615385     1.653846     1.692308 
+#>     3.961538     4.076923     3.615385     1.923077     1.423077 
 #> 
 #> $top_metric
 #> $top_metric$logistic
@@ -1510,11 +1536,11 @@ comp_perf
 #> NULL
 #> 
 #> $top_metric$randomForest
-#> [1] "ZeroOneLoss" "Accuracy"    "Recall"      "F1_Score"    "LogLoss"    
-#> [6] "AUC"         "Gini"        "GainAUC"    
+#> [1] "Recall"  "AUC"     "Gini"    "GainAUC"
 #> 
 #> $top_metric$ranger
-#> [1] "ZeroOneLoss" "Accuracy"    "Precision"   "Specificity" "KS_Stat"
+#> [1] "ZeroOneLoss" "Accuracy"    "Precision"   "Specificity" "F1_Score"   
+#> [6] "LogLoss"     "Gini"        "KS_Stat"
 ```
 
 #### Plot the ROC curve with `plot_performance()`
@@ -1530,8 +1556,14 @@ plot_performance(pred)
 
 #### Tunning the cut-off
 
-Compare the statistics of the numerical variables of the train set and
-test set included in the “split\_df” class.
+In general, if the prediction probability is greater than 0.5 in the
+binary classification model, it is predicted as `positive class`. In
+other words, 0.5 is used for the cut-off value. This applies to most
+model algorithms. However, in some cases, the performance can be tuned
+by changing the cut-off value.
+
+`plot_cutoff ()` visualizes a plot to select the cut-off value, and
+returns the cut-off value.
 
 ``` r
 pred_best <- pred %>% 
@@ -1548,7 +1580,7 @@ cutoff <- plot_cutoff(pred_best, test$Class, "malignant", type = "mcc")
 
 ``` r
 cutoff
-#> [1] 0.62
+#> [1] 0.4
 
 cutoff2 <- plot_cutoff(pred_best, test$Class, "malignant", type = "density")
 ```
@@ -1557,7 +1589,7 @@ cutoff2 <- plot_cutoff(pred_best, test$Class, "malignant", type = "density")
 
 ``` r
 cutoff2
-#> [1] 0.9393
+#> [1] 0.9139
 
 cutoff3 <- plot_cutoff(pred_best, test$Class, "malignant", type = "prob")
 ```
@@ -1566,7 +1598,7 @@ cutoff3 <- plot_cutoff(pred_best, test$Class, "malignant", type = "prob")
 
 ``` r
 cutoff3
-#> [1] 0.62
+#> [1] 0.4
 ```
 
 #### Performance comparison between prediction and tuned cut-off with `performance_metric()`
@@ -1577,7 +1609,7 @@ with the best performance `comp_perf$recommend_model`.
 
 ``` r
 comp_perf$recommend_model
-#> [1] "randomForest"
+#> [1] "ranger"
 
 # extract predicted probability
 idx <- which(pred$model_id == comp_perf$recommend_model)
@@ -1593,28 +1625,52 @@ pred_prob <- pred %>%
 
 # predicted probability
 pred_prob  
-#>   [1] 0.000 0.000 0.000 0.000 0.040 0.000 0.000 0.000 0.000 0.000 0.728 0.000
-#>  [13] 0.780 0.970 0.982 0.998 0.810 0.862 0.714 0.910 0.042 0.024 0.000 0.026
-#>  [25] 0.994 0.000 0.000 0.000 0.000 1.000 0.688 0.678 0.822 1.000 0.902 0.996
-#>  [37] 0.174 0.000 0.002 0.802 0.136 0.966 0.000 0.000 0.186 0.956 1.000 0.000
-#>  [49] 1.000 0.000 0.028 0.000 0.000 0.000 1.000 0.990 0.980 0.000 0.000 0.000
-#>  [61] 1.000 0.000 0.944 0.984 0.994 0.998 0.000 0.000 0.964 0.000 1.000 0.994
-#>  [73] 1.000 1.000 0.000 0.996 0.010 0.004 0.976 0.994 0.982 1.000 0.996 0.332
-#>  [85] 0.010 0.000 0.862 0.000 1.000 0.998 0.000 0.996 0.000 0.000 0.000 0.000
-#>  [97] 0.990 0.000 0.574 0.958 0.000 0.980 0.626 0.990 1.000 0.000 1.000 0.000
-#> [109] 0.000 0.000 0.230 0.048 0.686 0.000 0.936 0.682 1.000 1.000 0.966 1.000
-#> [121] 0.000 0.000 0.184 0.000 0.000 0.996 0.000 0.076 0.032 0.000 0.000 0.998
-#> [133] 0.064 0.010 1.000 0.014 0.948 0.998 0.008 0.000 0.964 0.312 0.000 0.488
-#> [145] 1.000 0.998 1.000 0.000 0.998 1.000 0.000 0.988 0.000 0.000 0.000 0.000
-#> [157] 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.110
-#> [169] 0.550 0.000 0.010 1.000 0.000 0.000 0.020 1.000 0.000 0.998 0.004 0.014
-#> [181] 0.000 0.000 0.732 0.992 0.964 0.000 0.000 0.000 0.000 0.000 0.000 0.000
-#> [193] 0.000 0.992 0.000 0.000 0.000 0.000 0.012 0.936 0.000 0.000 0.000 1.000
-#> [205] 0.000 0.016 0.000 0.004 0.998 0.978
+#>   [1] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0205833333
+#>   [6] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000
+#>  [11] 0.6707753968 0.0006944444 0.6684047619 0.9756777778 0.9949785714
+#>  [16] 0.9990000000 0.6925880952 0.9037761905 0.5328198413 0.9166833333
+#>  [21] 0.0331595238 0.0147444444 0.0000000000 0.0521071429 0.9940896825
+#>  [26] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 1.0000000000
+#>  [31] 0.7108809524 0.6118476190 0.8382333333 0.9996666667 0.9298571429
+#>  [36] 1.0000000000 0.1262626984 0.0012190476 0.0027746032 0.8097222222
+#>  [41] 0.1313126984 0.8987753968 0.0000000000 0.0000000000 0.1115285714
+#>  [46] 0.9373230159 1.0000000000 0.0000000000 1.0000000000 0.0000000000
+#>  [51] 0.0479595238 0.0000000000 0.0000000000 0.0000000000 1.0000000000
+#>  [56] 0.9977166667 0.9947666667 0.0000000000 0.0000000000 0.0000000000
+#>  [61] 0.9998000000 0.0000000000 0.9502523810 0.9975920635 1.0000000000
+#>  [66] 0.9984444444 0.0000000000 0.0000000000 0.9685920635 0.0000000000
+#>  [71] 1.0000000000 1.0000000000 0.9997500000 0.9995000000 0.0000000000
+#>  [76] 0.9929277778 0.0160777778 0.0122246032 0.9988000000 1.0000000000
+#>  [81] 0.9987000000 0.9988277778 0.9918174603 0.2190603175 0.0043333333
+#>  [86] 0.0000000000 0.9037761905 0.0000000000 1.0000000000 0.9980952381
+#>  [91] 0.0000000000 0.9927277778 0.0000000000 0.0008666667 0.0000000000
+#>  [96] 0.0000000000 0.9517920635 0.0000000000 0.2981222222 0.8820182540
+#> [101] 0.0000000000 0.9956428571 0.5261833333 0.9724634921 0.9946500000
+#> [106] 0.0000000000 0.9869634921 0.0000000000 0.0000000000 0.0000000000
+#> [111] 0.1347230159 0.0296865079 0.4730571429 0.0000000000 0.9128222222
+#> [116] 0.5965928571 1.0000000000 0.9929666667 0.9420142857 1.0000000000
+#> [121] 0.0000000000 0.0000000000 0.1508253968 0.0000000000 0.0000000000
+#> [126] 0.9923833333 0.0000000000 0.0175500000 0.0030222222 0.0000000000
+#> [131] 0.0000000000 0.9995000000 0.0198722222 0.0138111111 1.0000000000
+#> [136] 0.0052142857 0.9744706349 0.9822666667 0.0095904762 0.0000000000
+#> [141] 0.9216746032 0.1468793651 0.0000000000 0.4026603175 0.9991000000
+#> [146] 0.9995000000 1.0000000000 0.0000000000 0.9941190476 1.0000000000
+#> [151] 0.0000000000 0.9972500000 0.0000000000 0.0000000000 0.0000000000
+#> [156] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000
+#> [161] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000
+#> [166] 0.0000000000 0.0000000000 0.0532007937 0.4910793651 0.0000000000
+#> [171] 0.0057079365 1.0000000000 0.0000000000 0.0000000000 0.0218484127
+#> [176] 1.0000000000 0.0000000000 0.9945523810 0.0117444444 0.0113055556
+#> [181] 0.0000000000 0.0000000000 0.7085634921 0.9912404762 0.9178690476
+#> [186] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000
+#> [191] 0.0000000000 0.0000000000 0.0000000000 0.9638690476 0.0000000000
+#> [196] 0.0000000000 0.0000000000 0.0000000000 0.0032944444 0.9911285714
+#> [201] 0.0000000000 0.0000000000 0.0000000000 1.0000000000 0.0000000000
+#> [206] 0.0303150794 0.0000000000 0.0017968254 0.9897047619 0.9862357143
 
 # compaire Accuracy
 performance_metric(pred_prob, test$Class, "malignant", "Accuracy")
-#> [1] 0.9714286
+#> [1] 0.9761905
 performance_metric(pred_prob, test$Class, "malignant", "Accuracy",
                    cutoff = cutoff)
 #> [1] 0.9809524
@@ -1623,24 +1679,24 @@ performance_metric(pred_prob, test$Class, "malignant", "Accuracy",
 performance_metric(pred_prob, test$Class, "malignant", "ConfusionMatrix")
 #>            actual
 #> predict     benign malignant
-#>   benign       124         2
-#>   malignant      4        80
+#>   benign       126         3
+#>   malignant      2        79
 performance_metric(pred_prob, test$Class, "malignant", "ConfusionMatrix", 
                    cutoff = cutoff)
 #>            actual
 #> predict     benign malignant
-#>   benign       126         2
-#>   malignant      2        80
+#>   benign       125         1
+#>   malignant      3        81
 
 # compaire F1 Score
 performance_metric(pred_prob, test$Class, "malignant", "F1_Score")
-#> [1] 0.9638554
+#> [1] 0.9693252
 performance_metric(pred_prob, test$Class,  "malignant", "F1_Score", 
                    cutoff = cutoff)
-#> [1] 0.9756098
+#> [1] 0.9759036
 performance_metric(pred_prob, test$Class,  "malignant", "F1_Score", 
                    cutoff = cutoff2)
-#> [1] 0.8630137
+#> [1] 0.8707483
 ```
 
 If the performance of the tuned cut-off is good, use it as a cut-off to

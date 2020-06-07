@@ -189,4 +189,4 @@ exam_02 <- treatment_corr(exam, verbose = FALSE)
 head(exam_02)
 ```
 
-* `remove variables whose unique value is one` : The year variable has only one value, "2018". Not needed when fitting the model. So it was removed.
+* `remove variables whose strong correlation` : x1, x4, x5 are removed.

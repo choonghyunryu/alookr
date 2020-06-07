@@ -416,6 +416,9 @@ performance_metric <- function(pred, actual, positive,
 #' \item KS_Stat : Kolmogorov-Smirnov Statistic.
 #' }
 #'
+#' @details 
+#' run_performance() is performed in parallel when calculating the performance evaluation index. 
+#' However, it is not supported in MS-Windows operating system and RStudio environment.
 #' @examples
 #' library(dplyr)
 #'

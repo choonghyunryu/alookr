@@ -38,6 +38,9 @@ The following binary classifications are supported:
 \item "randomForest" : random forest model by predict.randomForest() in randomForest package.
 \item "ranger" : random forest model by predict.ranger() in ranger package.
 }
+
+run_predict() is executed in parallel when predicting by model. 
+However, it is not supported in MS-Windows operating system and RStudio environment.
 }
 \examples{
 library(dplyr)

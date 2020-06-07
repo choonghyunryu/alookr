@@ -68,6 +68,9 @@ classifier_dispatch <- function(model = c("logistic", "rpart", "ctree", "randomF
 #' \item "randomForest" : random forest model by randomForest() in randomForest package.
 #' \item "ranger" : random forest model by ranger() in ranger package.
 #' }
+#' 
+#' run_models() executes the process in parallel when fitting the model. 
+#' However, it is not supported in MS-Windows operating system and RStudio environment.
 #'
 #' @return model_df. results of fitted model.
 #' model_df is composed of tbl_df and contains the following variables.:
@@ -191,6 +194,9 @@ predictor <- function(model, .data, target, positive, cutoff = 0.5) {
 #' \item "ranger" : random forest model by predict.ranger() in ranger package.
 #' }
 #'
+#' run_predict() is executed in parallel when predicting by model. 
+#' However, it is not supported in MS-Windows operating system and RStudio environment.
+#' 
 #' @return model_df. results of predicted model.
 #' model_df is composed of tbl_df and contains the following variables.:
 #' \itemize{

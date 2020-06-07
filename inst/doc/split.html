@@ -12,7 +12,7 @@
 
 <meta name="author" content="Choonghyun Ryu" />
 
-<meta name="date" content="2020-03-08" />
+<meta name="date" content="2020-06-07" />
 
 <title>Splitting the dataset</title>
 
@@ -304,7 +304,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Splitting the dataset</h1>
 <h4 class="author">Choonghyun Ryu</h4>
-<h4 class="date">2020-03-08</h4>
+<h4 class="date">2020-06-07</h4>
 
 
 
@@ -405,46 +405,52 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <li>minority_rate : numeric. the rate of the minority class</li>
 <li>majority_rate : numeric. the rate of the majority class</li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>sb_attr &lt;-<span class="st"> </span><span class="kw">attributes</span>(sb)</span>
-<span id="cb3-2"><a href="#cb3-2"></a></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="co"># The third attribute, row.names, is a vector that is very long and excluded from the output.</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a>sb_attr[<span class="op">-</span><span class="dv">3</span>]</span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="op">$</span>names</span>
-<span id="cb3-6"><a href="#cb3-6"></a>[<span class="dv">1</span>] <span class="st">&quot;default&quot;</span>    <span class="st">&quot;student&quot;</span>    <span class="st">&quot;balance&quot;</span>    <span class="st">&quot;income&quot;</span>     <span class="st">&quot;split_flag&quot;</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a></span>
-<span id="cb3-8"><a href="#cb3-8"></a><span class="op">$</span>class</span>
-<span id="cb3-9"><a href="#cb3-9"></a>[<span class="dv">1</span>] <span class="st">&quot;split_df&quot;</span>   <span class="st">&quot;grouped_df&quot;</span> <span class="st">&quot;tbl_df&quot;</span>     <span class="st">&quot;tbl&quot;</span>        <span class="st">&quot;data.frame&quot;</span></span>
-<span id="cb3-10"><a href="#cb3-10"></a></span>
-<span id="cb3-11"><a href="#cb3-11"></a><span class="op">$</span>groups</span>
-<span id="cb3-12"><a href="#cb3-12"></a><span class="co"># A tibble: 2 x 2</span></span>
-<span id="cb3-13"><a href="#cb3-13"></a>  split_flag .rows        </span>
-<span id="cb3-14"><a href="#cb3-14"></a>  <span class="op">&lt;</span>chr<span class="op">&gt;</span><span class="st">      </span><span class="er">&lt;</span>list<span class="op">&gt;</span><span class="st">       </span></span>
-<span id="cb3-15"><a href="#cb3-15"></a><span class="dv">1</span> test       <span class="op">&lt;</span>int [<span class="dv">3</span>,<span class="dv">000</span>]<span class="op">&gt;</span></span>
-<span id="cb3-16"><a href="#cb3-16"></a><span class="dv">2</span> train      <span class="op">&lt;</span>int [<span class="dv">7</span>,<span class="dv">000</span>]<span class="op">&gt;</span></span>
-<span id="cb3-17"><a href="#cb3-17"></a></span>
-<span id="cb3-18"><a href="#cb3-18"></a><span class="er">$</span>split_seed</span>
-<span id="cb3-19"><a href="#cb3-19"></a>[<span class="dv">1</span>] <span class="dv">6534</span></span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>attr_names &lt;-<span class="st"> </span><span class="kw">names</span>(<span class="kw">attributes</span>(sb))</span>
+<span id="cb3-2"><a href="#cb3-2"></a>attr_names</span>
+<span id="cb3-3"><a href="#cb3-3"></a> [<span class="dv">1</span>] <span class="st">&quot;names&quot;</span>         <span class="st">&quot;row.names&quot;</span>     <span class="st">&quot;groups&quot;</span>        <span class="st">&quot;class&quot;</span>        </span>
+<span id="cb3-4"><a href="#cb3-4"></a> [<span class="dv">5</span>] <span class="st">&quot;split_seed&quot;</span>    <span class="st">&quot;target&quot;</span>        <span class="st">&quot;binary&quot;</span>        <span class="st">&quot;minority&quot;</span>     </span>
+<span id="cb3-5"><a href="#cb3-5"></a> [<span class="dv">9</span>] <span class="st">&quot;majority&quot;</span>      <span class="st">&quot;minority_rate&quot;</span> <span class="st">&quot;majority_rate&quot;</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a>sb_attr &lt;-<span class="st"> </span><span class="kw">attributes</span>(sb)</span>
+<span id="cb3-8"><a href="#cb3-8"></a></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="co"># The third property, row.names, is excluded from the output because its length is very long.</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a>sb_attr[<span class="op">!</span>attr_names <span class="op">%in%</span><span class="st"> &quot;row.names&quot;</span>]</span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="op">$</span>names</span>
+<span id="cb3-12"><a href="#cb3-12"></a>[<span class="dv">1</span>] <span class="st">&quot;default&quot;</span>    <span class="st">&quot;student&quot;</span>    <span class="st">&quot;balance&quot;</span>    <span class="st">&quot;income&quot;</span>     <span class="st">&quot;split_flag&quot;</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="op">$</span>groups</span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="co"># A tibble: 2 x 2</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a>  split_flag       .rows</span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="op">*</span><span class="st"> </span><span class="er">&lt;</span>chr<span class="op">&gt;</span><span class="st">      </span><span class="er">&lt;</span>list<span class="op">&lt;</span>int<span class="op">&gt;</span><span class="er">&gt;</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="dv">1</span> test           [<span class="dv">3</span>,<span class="dv">000</span>]</span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="dv">2</span> train          [<span class="dv">7</span>,<span class="dv">000</span>]</span>
 <span id="cb3-20"><a href="#cb3-20"></a></span>
-<span id="cb3-21"><a href="#cb3-21"></a><span class="op">$</span>target</span>
-<span id="cb3-22"><a href="#cb3-22"></a>  default </span>
-<span id="cb3-23"><a href="#cb3-23"></a><span class="st">&quot;default&quot;</span> </span>
-<span id="cb3-24"><a href="#cb3-24"></a></span>
-<span id="cb3-25"><a href="#cb3-25"></a><span class="op">$</span>binary</span>
-<span id="cb3-26"><a href="#cb3-26"></a>[<span class="dv">1</span>] <span class="ot">TRUE</span></span>
-<span id="cb3-27"><a href="#cb3-27"></a></span>
-<span id="cb3-28"><a href="#cb3-28"></a><span class="op">$</span>minority</span>
-<span id="cb3-29"><a href="#cb3-29"></a>[<span class="dv">1</span>] <span class="st">&quot;Yes&quot;</span></span>
+<span id="cb3-21"><a href="#cb3-21"></a><span class="op">$</span>class</span>
+<span id="cb3-22"><a href="#cb3-22"></a>[<span class="dv">1</span>] <span class="st">&quot;split_df&quot;</span>   <span class="st">&quot;grouped_df&quot;</span> <span class="st">&quot;tbl_df&quot;</span>     <span class="st">&quot;tbl&quot;</span>        <span class="st">&quot;data.frame&quot;</span></span>
+<span id="cb3-23"><a href="#cb3-23"></a></span>
+<span id="cb3-24"><a href="#cb3-24"></a><span class="op">$</span>split_seed</span>
+<span id="cb3-25"><a href="#cb3-25"></a>[<span class="dv">1</span>] <span class="dv">6534</span></span>
+<span id="cb3-26"><a href="#cb3-26"></a></span>
+<span id="cb3-27"><a href="#cb3-27"></a><span class="op">$</span>target</span>
+<span id="cb3-28"><a href="#cb3-28"></a>  default </span>
+<span id="cb3-29"><a href="#cb3-29"></a><span class="st">&quot;default&quot;</span> </span>
 <span id="cb3-30"><a href="#cb3-30"></a></span>
-<span id="cb3-31"><a href="#cb3-31"></a><span class="op">$</span>majority</span>
-<span id="cb3-32"><a href="#cb3-32"></a>[<span class="dv">1</span>] <span class="st">&quot;No&quot;</span></span>
+<span id="cb3-31"><a href="#cb3-31"></a><span class="op">$</span>binary</span>
+<span id="cb3-32"><a href="#cb3-32"></a>[<span class="dv">1</span>] <span class="ot">TRUE</span></span>
 <span id="cb3-33"><a href="#cb3-33"></a></span>
-<span id="cb3-34"><a href="#cb3-34"></a><span class="op">$</span>minority_rate</span>
-<span id="cb3-35"><a href="#cb3-35"></a>   Yes </span>
-<span id="cb3-36"><a href="#cb3-36"></a><span class="fl">0.0333</span> </span>
-<span id="cb3-37"><a href="#cb3-37"></a></span>
-<span id="cb3-38"><a href="#cb3-38"></a><span class="op">$</span>majority_rate</span>
-<span id="cb3-39"><a href="#cb3-39"></a>    No </span>
-<span id="cb3-40"><a href="#cb3-40"></a><span class="fl">0.9667</span> </span></code></pre></div>
+<span id="cb3-34"><a href="#cb3-34"></a><span class="op">$</span>minority</span>
+<span id="cb3-35"><a href="#cb3-35"></a>[<span class="dv">1</span>] <span class="st">&quot;Yes&quot;</span></span>
+<span id="cb3-36"><a href="#cb3-36"></a></span>
+<span id="cb3-37"><a href="#cb3-37"></a><span class="op">$</span>majority</span>
+<span id="cb3-38"><a href="#cb3-38"></a>[<span class="dv">1</span>] <span class="st">&quot;No&quot;</span></span>
+<span id="cb3-39"><a href="#cb3-39"></a></span>
+<span id="cb3-40"><a href="#cb3-40"></a><span class="op">$</span>minority_rate</span>
+<span id="cb3-41"><a href="#cb3-41"></a>   Yes </span>
+<span id="cb3-42"><a href="#cb3-42"></a><span class="fl">0.0333</span> </span>
+<span id="cb3-43"><a href="#cb3-43"></a></span>
+<span id="cb3-44"><a href="#cb3-44"></a><span class="op">$</span>majority_rate</span>
+<span id="cb3-45"><a href="#cb3-45"></a>    No </span>
+<span id="cb3-46"><a href="#cb3-46"></a><span class="fl">0.9667</span> </span></code></pre></div>
 <p><code>summary()</code> summarizes the information of two datasets splitted by <code>split_by()</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">summary</span>(sb)</span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="op">**</span><span class="st"> </span>Split train<span class="op">/</span>test set information <span class="op">**</span></span>
@@ -462,11 +468,11 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <p>Train data and test data should be similar. If the two datasets are not similar, the performance of the predictive model may be reduced.</p>
 <p><code>alookr</code> provides a function to compare the similarity between train dataset and test dataset.</p>
 <p>If the two data sets are not similar, the train dataset and test dataset should be splitted again from the original data.</p>
-<div id="comparison-of-categorical-variables-with-compare_category" class="section level3">
-<h3>Comparison of categorical variables with <code>compare_category()</code></h3>
+<div id="comparison-of-categorical-variables-with-compare_target_category" class="section level3">
+<h3>Comparison of categorical variables with <code>compare_target_category()</code></h3>
 <p>Compare the statistics of the categorical variables of the train set and test set included in the “split_df” class.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>sb <span class="op">%&gt;%</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="st">  </span><span class="kw">compare_category</span>()</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="st">  </span><span class="kw">compare_target_category</span>()</span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="co"># A tibble: 4 x 5</span></span>
 <span id="cb5-4"><a href="#cb5-4"></a>  variable level train  test abs_diff</span>
 <span id="cb5-5"><a href="#cb5-5"></a>  <span class="op">&lt;</span>chr<span class="op">&gt;</span><span class="st">    </span><span class="er">&lt;</span>fct<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st">    </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span></span>
@@ -477,7 +483,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <span id="cb5-10"><a href="#cb5-10"></a></span>
 <span id="cb5-11"><a href="#cb5-11"></a><span class="co"># compare variables that are character data types.</span></span>
 <span id="cb5-12"><a href="#cb5-12"></a>sb <span class="op">%&gt;%</span></span>
-<span id="cb5-13"><a href="#cb5-13"></a><span class="st">  </span><span class="kw">compare_category</span>(<span class="dt">add_character =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="st">  </span><span class="kw">compare_target_category</span>(<span class="dt">add_character =</span> <span class="ot">TRUE</span>)</span>
 <span id="cb5-14"><a href="#cb5-14"></a><span class="co"># A tibble: 4 x 5</span></span>
 <span id="cb5-15"><a href="#cb5-15"></a>  variable level train  test abs_diff</span>
 <span id="cb5-16"><a href="#cb5-16"></a>  <span class="op">&lt;</span>chr<span class="op">&gt;</span><span class="st">    </span><span class="er">&lt;</span>fct<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st">    </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span></span>
@@ -488,7 +494,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <span id="cb5-21"><a href="#cb5-21"></a></span>
 <span id="cb5-22"><a href="#cb5-22"></a><span class="co"># display marginal</span></span>
 <span id="cb5-23"><a href="#cb5-23"></a>sb <span class="op">%&gt;%</span></span>
-<span id="cb5-24"><a href="#cb5-24"></a><span class="st">  </span><span class="kw">compare_category</span>(<span class="dt">margin =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb5-24"><a href="#cb5-24"></a><span class="st">  </span><span class="kw">compare_target_category</span>(<span class="dt">margin =</span> <span class="ot">TRUE</span>)</span>
 <span id="cb5-25"><a href="#cb5-25"></a><span class="co"># A tibble: 6 x 5</span></span>
 <span id="cb5-26"><a href="#cb5-26"></a>  variable level    train   test abs_diff</span>
 <span id="cb5-27"><a href="#cb5-27"></a>  <span class="op">&lt;</span>chr<span class="op">&gt;</span><span class="st">    </span><span class="er">&lt;</span>fct<span class="op">&gt;</span><span class="st">    </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st">  </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st">    </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span></span>
@@ -501,7 +507,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <span id="cb5-34"><a href="#cb5-34"></a></span>
 <span id="cb5-35"><a href="#cb5-35"></a><span class="co"># student variable only</span></span>
 <span id="cb5-36"><a href="#cb5-36"></a>sb <span class="op">%&gt;%</span></span>
-<span id="cb5-37"><a href="#cb5-37"></a><span class="st">  </span><span class="kw">compare_category</span>(student)</span>
+<span id="cb5-37"><a href="#cb5-37"></a><span class="st">  </span><span class="kw">compare_target_category</span>(student)</span>
 <span id="cb5-38"><a href="#cb5-38"></a><span class="co"># A tibble: 2 x 5</span></span>
 <span id="cb5-39"><a href="#cb5-39"></a>  variable level train  test abs_diff</span>
 <span id="cb5-40"><a href="#cb5-40"></a>  <span class="op">&lt;</span>chr<span class="op">&gt;</span><span class="st">    </span><span class="er">&lt;</span>fct<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st">    </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span></span>
@@ -509,14 +515,14 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <span id="cb5-42"><a href="#cb5-42"></a><span class="dv">2</span> student  Yes    <span class="fl">30.0</span>  <span class="fl">28.2</span>     <span class="fl">1.77</span></span>
 <span id="cb5-43"><a href="#cb5-43"></a></span>
 <span id="cb5-44"><a href="#cb5-44"></a>sb <span class="op">%&gt;%</span></span>
-<span id="cb5-45"><a href="#cb5-45"></a><span class="st">  </span><span class="kw">compare_category</span>(student, <span class="dt">margin =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb5-45"><a href="#cb5-45"></a><span class="st">  </span><span class="kw">compare_target_category</span>(student, <span class="dt">margin =</span> <span class="ot">TRUE</span>)</span>
 <span id="cb5-46"><a href="#cb5-46"></a><span class="co"># A tibble: 3 x 5</span></span>
 <span id="cb5-47"><a href="#cb5-47"></a>  variable level   train  test abs_diff</span>
 <span id="cb5-48"><a href="#cb5-48"></a>  <span class="op">&lt;</span>chr<span class="op">&gt;</span><span class="st">    </span><span class="er">&lt;</span>fct<span class="op">&gt;</span><span class="st">   </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st"> </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st">    </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span></span>
 <span id="cb5-49"><a href="#cb5-49"></a><span class="dv">1</span> student  No       <span class="fl">70.0</span>  <span class="fl">71.8</span>     <span class="fl">1.77</span></span>
 <span id="cb5-50"><a href="#cb5-50"></a><span class="dv">2</span> student  Yes      <span class="fl">30.0</span>  <span class="fl">28.2</span>     <span class="fl">1.77</span></span>
 <span id="cb5-51"><a href="#cb5-51"></a><span class="dv">3</span> student  <span class="op">&lt;</span>Total<span class="op">&gt;</span><span class="st"> </span><span class="dv">100</span>   <span class="dv">100</span>       <span class="fl">3.54</span></span></code></pre></div>
-<p>compare_category() returns tbl_df, where the variables have the following.:</p>
+<p>compare_target_category() returns tbl_df, where the variables have the following.:</p>
 <ul>
 <li>variable : character. categorical variable name</li>
 <li>level : factor. level of categorical variables</li>
@@ -525,11 +531,11 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <li>abs_diff : numeric. the absolute value of the difference between two relative frequencies</li>
 </ul>
 </div>
-<div id="comparison-of-numeric-variables-with-compare_numeric" class="section level3">
-<h3>Comparison of numeric variables with <code>compare_numeric()</code></h3>
+<div id="comparison-of-numeric-variables-with-compare_target_numeric" class="section level3">
+<h3>Comparison of numeric variables with <code>compare_target_numeric()</code></h3>
 <p>Compare the statistics of the numerical variables of the train set and test set included in the “split_df” class.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>sb <span class="op">%&gt;%</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="st">  </span><span class="kw">compare_numeric</span>()</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="st">  </span><span class="kw">compare_target_numeric</span>()</span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="co"># A tibble: 2 x 7</span></span>
 <span id="cb6-4"><a href="#cb6-4"></a>  variable train_mean test_mean train_sd test_sd train_z test_z</span>
 <span id="cb6-5"><a href="#cb6-5"></a>  <span class="op">&lt;</span>chr<span class="op">&gt;</span><span class="st">         </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st">     </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st">    </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st">   </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st">   </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st">  </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span></span>
@@ -538,12 +544,12 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <span id="cb6-8"><a href="#cb6-8"></a></span>
 <span id="cb6-9"><a href="#cb6-9"></a><span class="co"># balance variable only</span></span>
 <span id="cb6-10"><a href="#cb6-10"></a>sb <span class="op">%&gt;%</span></span>
-<span id="cb6-11"><a href="#cb6-11"></a><span class="st">  </span><span class="kw">compare_numeric</span>(balance)</span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="st">  </span><span class="kw">compare_target_numeric</span>(balance)</span>
 <span id="cb6-12"><a href="#cb6-12"></a><span class="co"># A tibble: 1 x 7</span></span>
 <span id="cb6-13"><a href="#cb6-13"></a>  variable train_mean test_mean train_sd test_sd train_z test_z</span>
 <span id="cb6-14"><a href="#cb6-14"></a>  <span class="op">&lt;</span>chr<span class="op">&gt;</span><span class="st">         </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st">     </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st">    </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st">   </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st">   </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span><span class="st">  </span><span class="er">&lt;</span>dbl<span class="op">&gt;</span></span>
 <span id="cb6-15"><a href="#cb6-15"></a><span class="dv">1</span> balance        <span class="fl">836.</span>      <span class="fl">834.</span>     <span class="fl">487.</span>    <span class="fl">477.</span>    <span class="fl">1.72</span>   <span class="fl">1.75</span></span></code></pre></div>
-<p>compare_numeric() returns tbl_df, where the variables have the following.:</p>
+<p>compare_target_numeric() returns tbl_df, where the variables have the following.:</p>
 <ul>
 <li>variable : character. numeric variable name</li>
 <li>train_mean : numeric. arithmetic mean of train set</li>

@@ -43,6 +43,10 @@ The performance metrics calculated are as follows.:
 \description{
 Apply calculate performance metrics for binary classification model evaluation.
 }
+\details{
+run_performance() is performed in parallel when calculating the performance evaluation index. 
+However, it is not supported in MS-Windows operating system and RStudio environment.
+}
 \examples{
 library(dplyr)
 

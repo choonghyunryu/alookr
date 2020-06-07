@@ -83,10 +83,13 @@ The attributes of the `split_df` class are as follows.:
 * majority_rate : numeric. the rate of the majority class
 
 ```{r attr}
+attr_names <- names(attributes(sb))
+attr_names
+
 sb_attr <- attributes(sb)
 
-# The third attribute, row.names, is a vector that is very long and excluded from the output.
-sb_attr[-3]
+# The third property, row.names, is excluded from the output because its length is very long.
+sb_attr[!attr_names %in% "row.names"]
 ```
 
 `summary()` summarizes the information of two datasets splitted by `split_by()`.
@@ -103,31 +106,31 @@ Train data and test data should be similar. If the two datasets are not similar,
 
 If the two data sets are not similar, the train dataset and test dataset should be splitted again from the original data.
 
-### Comparison of categorical variables with `compare_category()`
+### Comparison of categorical variables with `compare_target_category()`
 
 Compare the statistics of the categorical variables of the train set and test set included in the "split_df" class.
 
-```{r compare_category}
+```{r compare_target_category}
 sb %>%
-  compare_category()
+  compare_target_category()
 
 # compare variables that are character data types.
 sb %>%
-  compare_category(add_character = TRUE)
+  compare_target_category(add_character = TRUE)
 
 # display marginal
 sb %>%
-  compare_category(margin = TRUE)
+  compare_target_category(margin = TRUE)
 
 # student variable only
 sb %>%
-  compare_category(student)
+  compare_target_category(student)
 
 sb %>%
-  compare_category(student, margin = TRUE)
+  compare_target_category(student, margin = TRUE)
 ```
 
-compare_category() returns tbl_df, where the variables have the following.:
+compare_target_category() returns tbl_df, where the variables have the following.:
 
 * variable : character. categorical variable name
 * level : factor. level of categorical variables
@@ -135,20 +138,20 @@ compare_category() returns tbl_df, where the variables have the following.:
 * test : numeric. the relative frequency of the level in the test set
 * abs_diff : numeric. the absolute value of the difference between two relative frequencies
 
-### Comparison of numeric variables with `compare_numeric()`
+### Comparison of numeric variables with `compare_target_numeric()`
 
 Compare the statistics of the numerical variables of the train set and test set included in the "split_df" class.
 
-```{r compare_numeric}
+```{r compare_target_numeric}
 sb %>%
-  compare_numeric()
+  compare_target_numeric()
 
 # balance variable only
 sb %>%
-  compare_numeric(balance)
+  compare_target_numeric(balance)
 ```
 
-compare_numeric() returns tbl_df, where the variables have the following.:
+compare_target_numeric() returns tbl_df, where the variables have the following.:
 
 * variable : character. numeric variable name
 * train_mean : numeric. arithmetic mean of train set

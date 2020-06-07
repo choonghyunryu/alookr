@@ -25,40 +25,43 @@ sb <- ISLR::Default %>%
 sb
 
 ## ----attr---------------------------------------------------------------------
+attr_names <- names(attributes(sb))
+attr_names
+
 sb_attr <- attributes(sb)
 
-# The third attribute, row.names, is a vector that is very long and excluded from the output.
-sb_attr[-3]
+# The third property, row.names, is excluded from the output because its length is very long.
+sb_attr[!attr_names %in% "row.names"]
 
 ## ----summ---------------------------------------------------------------------
 summary(sb)
 
-## ----compare_category---------------------------------------------------------
+## ----compare_target_category--------------------------------------------------
 sb %>%
-  compare_category()
+  compare_target_category()
 
 # compare variables that are character data types.
 sb %>%
-  compare_category(add_character = TRUE)
+  compare_target_category(add_character = TRUE)
 
 # display marginal
 sb %>%
-  compare_category(margin = TRUE)
+  compare_target_category(margin = TRUE)
 
 # student variable only
 sb %>%
-  compare_category(student)
+  compare_target_category(student)
 
 sb %>%
-  compare_category(student, margin = TRUE)
+  compare_target_category(student, margin = TRUE)
 
-## ----compare_numeric----------------------------------------------------------
+## ----compare_target_numeric---------------------------------------------------
 sb %>%
-  compare_numeric()
+  compare_target_numeric()
 
 # balance variable only
 sb %>%
-  compare_numeric(balance)
+  compare_target_numeric(balance)
 
 ## ----compare_plot, fig.height=5, fig.width=6, message=FALSE-------------------
 # income variable only
