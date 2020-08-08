@@ -246,7 +246,7 @@ cleanse.data.frame <- function(.data, uniq = TRUE, uniq_thres = 0.1, char = TRUE
 #' treatment_corr(exam, verbose = FALSE)
 #'
 #' @importFrom dlookr diagnose
-#' @importFrom tibble as.tibble add_column
+#' @importFrom tibble as_tibble add_column
 #' @importFrom stats cor
 #' @import dplyr
 #' @export
@@ -290,7 +290,7 @@ treatment_corr <- function(.data, corr_thres = 0.8, treat = TRUE, verbose = TRUE
     cor(method = "spearman")
 
   m <- as.vector(M)
-  tab <- tibble::as.tibble(expand.grid(var1 = row.names(M),
+  tab <- tibble::as_tibble(expand.grid(var1 = row.names(M),
     var2 = row.names(M)))
   corr2 <- tibble::add_column(tab, coef_corr = m) %>%
     filter(var1 != var2) %>%
