@@ -20,7 +20,9 @@ model_df is composed of tbl_df and contains the following variables.:
 \item step : character. The current stage in the model fit process. The result of calling run_predict() is returned as "2.Predicted".
 \item model_id : character. Type of fit model.
 \item target : character. Name of target variable.
+\item is_factor : logical. Indicates whether the target variable is a factor.
 \item positive : character. Level of positive class of binary classification.
+\item negative : character. Level of negative class of binary classification.
 \item fitted_model : list. Fitted model object.
 \item predicted : list. Predicted value by individual model. Each value has a predict_class class object.
 }

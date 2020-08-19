@@ -78,7 +78,9 @@ classifier_dispatch <- function(model = c("logistic", "rpart", "ctree", "randomF
 #' \item step : character. The current stage in the model fit process. The result of calling run_models() is returned as "1.Fitted".
 #' \item model_id : character. Type of fit model.
 #' \item target : character. Name of target variable.
+#' \item is_factor : logical. Indicates whether the target variable is a factor. 
 #' \item positive : character. Level of positive class of binary classification.
+#' \item negative : character. Level of negative class of binary classification. 
 #' \item fitted_model : list. Fitted model object.
 #' }
 #'
@@ -126,8 +128,17 @@ run_models <- function(.data, target, positive,
     future::plan(future::multiprocess)
   }
 
+  actual_target <- pull(.data, target)
+  
+  flag_factor <- is.factor(actual_target)
+  
+  level <- if (flag_factor) levels(actual_target) else unique(actual_target)
+  
+  negative <- setdiff(level, positive)
+  
   result <- purrr::map(models, ~future::future(classifier_dispatch(.x, .data, target))) %>%
-    tibble::tibble(step = "1.Fitted", model_id = models, target = target, positive = positive,
+    tibble::tibble(step = "1.Fitted", model_id = models, target = target, is_factor = flag_factor,
+                   positive = positive, negative = negative,  
                    fitted_model = purrr::map(., ~future::value(.x)))
 
   result <- result[, -1]
@@ -144,14 +155,8 @@ run_models <- function(.data, target, positive,
 #' @rawNamespace import(randomForest, except = c(margin, combine, importance))
 #' @import ranger
 #'
-predictor <- function(model, .data, target, positive, cutoff = 0.5) {
+predictor <- function(model, .data, target, positive, negative, is_factor, cutoff = 0.5) {
   model_class <- is(model)[1]
-
-  actual <- pull(.data, target)
-
-  flag_factor <- is.factor(actual)
-
-  level <- if (flag_factor) levels(actual) else unique(actual)
 
   pred <- switch(model_class,
                  glm = predict(model, newdata = .data, type = "response"),
@@ -162,15 +167,15 @@ predictor <- function(model, .data, target, positive, cutoff = 0.5) {
 
   names(pred) <- NULL
 
-  pred_class <- ifelse(pred >= cutoff, positive, setdiff(level, positive))
-  if (flag_factor) pred_class <- as.factor(pred_class)
+  pred_class <- ifelse(pred >= cutoff, positive, negative)
+  
+  if (is_factor) pred_class <- as.factor(pred_class)
 
   attr(pred_class , "target") <- target
-  attr(pred_class , "level") <- level
   attr(pred_class , "positive") <- positive
+  attr(pred_class , "negative") <- negative  
   attr(pred_class , "cutoff") <- cutoff
   attr(pred_class , "pred_prob") <- pred
-  attr(pred_class , "actual") <- actual
 
   class(pred_class) <- append("predict_class", class(pred_class))
 
@@ -203,7 +208,9 @@ predictor <- function(model, .data, target, positive, cutoff = 0.5) {
 #' \item step : character. The current stage in the model fit process. The result of calling run_predict() is returned as "2.Predicted".
 #' \item model_id : character. Type of fit model.
 #' \item target : character. Name of target variable.
+#' \item is_factor : logical. Indicates whether the target variable is a factor.
 #' \item positive : character. Level of positive class of binary classification.
+#' \item negative : character. Level of negative class of binary classification.
 #' \item fitted_model : list. Fitted model object.
 #' \item predicted : list. Predicted value by individual model. Each value has a predict_class class object.
 #' }
@@ -256,10 +263,12 @@ run_predict <- function(model, .data, cutoff = 0.5) {
                        ~future::future(predictor(model$fitted_model[[.x]], .data,
                                                  model$target[[.x]],
                                                  model$positive[[.x]],
+                                                 model$negative[[.x]],
+                                                 model$is_factor[[.x]],
                                                  cutoff))) %>%
     tibble::tibble(step = "2.Predicted", model_id = model$model_id, target = model$target,
-                   positive = model$positive, fitted_model = model$fitted_model,
-                   predicted = purrr::map(., ~future::value(.x)))
+                   is_factor = model$is_factor, positive = model$positive, negative = model$negative, 
+                   fitted_model = model$fitted_model, predicted = purrr::map(., ~future::value(.x)))
 
   result <- result[, -1]
 
