@@ -12,26 +12,66 @@
 
 <meta name="author" content="Choonghyun Ryu" />
 
-<meta name="date" content="2020-08-07" />
+<meta name="date" content="2020-12-26" />
 
 <title>Cleansing the dataset</title>
 
-<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
-// v0.0.1
-// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
-
-document.addEventListener('DOMContentLoaded', function() {
-  const codeList = document.getElementsByClassName("sourceCode");
-  for (var i = 0; i < codeList.length; i++) {
-    var linkList = codeList[i].getElementsByTagName('a');
-    for (var j = 0; j < linkList.length; j++) {
-      if (linkList[j].innerHTML === "") {
-        linkList[j].setAttribute('aria-hidden', 'true');
-      }
-    }
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
   }
 });
 </script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '') {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -318,7 +358,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Cleansing the dataset</h1>
 <h4 class="author">Choonghyun Ryu</h4>
-<h4 class="date">2020-08-07</h4>
+<h4 class="date">2020-12-26</h4>
 
 
 
@@ -350,49 +390,49 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <li><code>alpha</code> : character</li>
 <li><code>flag</code> : character</li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># create sample dataset</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">set.seed</span>(123L)</span>
-<span id="cb1-3"><a href="#cb1-3"></a>id &lt;-<span class="st"> </span><span class="kw">sapply</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>, <span class="cf">function</span>(x)</span>
-<span id="cb1-4"><a href="#cb1-4"></a>  <span class="kw">paste</span>(<span class="kw">c</span>(<span class="kw">sample</span>(letters, <span class="dv">5</span>), x), <span class="dt">collapse =</span> <span class="st">&quot;&quot;</span>))</span>
-<span id="cb1-5"><a href="#cb1-5"></a></span>
-<span id="cb1-6"><a href="#cb1-6"></a>year &lt;-<span class="st"> &quot;2018&quot;</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a></span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="kw">set.seed</span>(123L)</span>
-<span id="cb1-9"><a href="#cb1-9"></a>count &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">size =</span> <span class="dv">1000</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb1-10"><a href="#cb1-10"></a></span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="kw">set.seed</span>(123L)</span>
-<span id="cb1-12"><a href="#cb1-12"></a>alpha &lt;-<span class="st"> </span><span class="kw">sample</span>(letters, <span class="dt">size =</span> <span class="dv">1000</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb1-13"><a href="#cb1-13"></a></span>
-<span id="cb1-14"><a href="#cb1-14"></a><span class="kw">set.seed</span>(123L)</span>
-<span id="cb1-15"><a href="#cb1-15"></a>flag &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;Y&quot;</span>, <span class="st">&quot;N&quot;</span>), <span class="dt">size =</span> <span class="dv">1000</span>, <span class="dt">prob =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb1-16"><a href="#cb1-16"></a></span>
-<span id="cb1-17"><a href="#cb1-17"></a>data_exam &lt;-<span class="st"> </span><span class="kw">data.frame</span>(id, year, count, alpha, flag, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb1-18"><a href="#cb1-18"></a></span>
-<span id="cb1-19"><a href="#cb1-19"></a><span class="co"># structure of dataset</span></span>
-<span id="cb1-20"><a href="#cb1-20"></a><span class="kw">str</span>(data_exam)</span>
-<span id="cb1-21"><a href="#cb1-21"></a><span class="st">&#39;data.frame&#39;</span><span class="op">:</span><span class="st">   </span><span class="dv">1000</span> obs. of  <span class="dv">5</span> variables<span class="op">:</span></span>
-<span id="cb1-22"><a href="#cb1-22"></a><span class="st"> </span><span class="er">$</span><span class="st"> </span>id   <span class="op">:</span><span class="st"> </span>chr  <span class="st">&quot;osncj1&quot;</span> <span class="st">&quot;rvket2&quot;</span> <span class="st">&quot;nvesi3&quot;</span> <span class="st">&quot;chgji4&quot;</span> ...</span>
-<span id="cb1-23"><a href="#cb1-23"></a> <span class="op">$</span><span class="st"> </span>year <span class="op">:</span><span class="st"> </span>chr  <span class="st">&quot;2018&quot;</span> <span class="st">&quot;2018&quot;</span> <span class="st">&quot;2018&quot;</span> <span class="st">&quot;2018&quot;</span> ...</span>
-<span id="cb1-24"><a href="#cb1-24"></a> <span class="op">$</span><span class="st"> </span>count<span class="op">:</span><span class="st"> </span>int  <span class="dv">3</span> <span class="dv">3</span> <span class="dv">10</span> <span class="dv">2</span> <span class="dv">6</span> <span class="dv">5</span> <span class="dv">4</span> <span class="dv">6</span> <span class="dv">9</span> <span class="dv">10</span> ...</span>
-<span id="cb1-25"><a href="#cb1-25"></a> <span class="op">$</span><span class="st"> </span>alpha<span class="op">:</span><span class="st"> </span>chr  <span class="st">&quot;o&quot;</span> <span class="st">&quot;s&quot;</span> <span class="st">&quot;n&quot;</span> <span class="st">&quot;c&quot;</span> ...</span>
-<span id="cb1-26"><a href="#cb1-26"></a> <span class="op">$</span><span class="st"> </span>flag <span class="op">:</span><span class="st"> </span>chr  <span class="st">&quot;N&quot;</span> <span class="st">&quot;N&quot;</span> <span class="st">&quot;N&quot;</span> <span class="st">&quot;N&quot;</span> ...</span>
-<span id="cb1-27"><a href="#cb1-27"></a></span>
-<span id="cb1-28"><a href="#cb1-28"></a><span class="co"># summary of dataset</span></span>
-<span id="cb1-29"><a href="#cb1-29"></a><span class="kw">summary</span>(data_exam)</span>
-<span id="cb1-30"><a href="#cb1-30"></a>      id                year               count           alpha          </span>
-<span id="cb1-31"><a href="#cb1-31"></a> Length<span class="op">:</span><span class="dv">1000</span>        Length<span class="op">:</span><span class="dv">1000</span>        Min.   <span class="op">:</span><span class="st"> </span><span class="fl">1.000</span>   Length<span class="op">:</span><span class="dv">1000</span>       </span>
-<span id="cb1-32"><a href="#cb1-32"></a> Class <span class="op">:</span>character   Class <span class="op">:</span>character   1st Qu.<span class="op">:</span><span class="st"> </span><span class="fl">3.000</span>   Class <span class="op">:</span>character  </span>
-<span id="cb1-33"><a href="#cb1-33"></a> Mode  <span class="op">:</span>character   Mode  <span class="op">:</span>character   Median <span class="op">:</span><span class="st"> </span><span class="fl">6.000</span>   Mode  <span class="op">:</span>character  </span>
-<span id="cb1-34"><a href="#cb1-34"></a>                                       Mean   <span class="op">:</span><span class="st"> </span><span class="fl">5.698</span>                     </span>
-<span id="cb1-35"><a href="#cb1-35"></a>                                       3rd Qu.<span class="op">:</span><span class="st"> </span><span class="fl">8.000</span>                     </span>
-<span id="cb1-36"><a href="#cb1-36"></a>                                       Max.   <span class="op">:</span><span class="fl">10.000</span>                     </span>
-<span id="cb1-37"><a href="#cb1-37"></a>     flag          </span>
-<span id="cb1-38"><a href="#cb1-38"></a> Length<span class="op">:</span><span class="dv">1000</span>       </span>
-<span id="cb1-39"><a href="#cb1-39"></a> Class <span class="op">:</span>character  </span>
-<span id="cb1-40"><a href="#cb1-40"></a> Mode  <span class="op">:</span>character  </span>
-<span id="cb1-41"><a href="#cb1-41"></a>                   </span>
-<span id="cb1-42"><a href="#cb1-42"></a>                   </span>
-<span id="cb1-43"><a href="#cb1-43"></a>                   </span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create sample dataset</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(123L)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>id <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>, <span class="cf">function</span>(x)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">c</span>(<span class="fu">sample</span>(letters, <span class="dv">5</span>), x), <span class="at">collapse =</span> <span class="st">&quot;&quot;</span>))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>year <span class="ot">&lt;-</span> <span class="st">&quot;2018&quot;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(123L)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>count <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="at">size =</span> <span class="dv">1000</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(123L)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fu">sample</span>(letters, <span class="at">size =</span> <span class="dv">1000</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(123L)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>flag <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">&quot;Y&quot;</span>, <span class="st">&quot;N&quot;</span>), <span class="at">size =</span> <span class="dv">1000</span>, <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>data_exam <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(id, year, count, alpha, flag, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># structure of dataset</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data_exam)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;data.frame&#39;</span><span class="sc">:</span>   <span class="dv">1000</span> obs. of  <span class="dv">5</span> variables<span class="sc">:</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a> <span class="er">$</span> id   <span class="sc">:</span> chr  <span class="st">&quot;osncj1&quot;</span> <span class="st">&quot;rvket2&quot;</span> <span class="st">&quot;nvesi3&quot;</span> <span class="st">&quot;chgji4&quot;</span> ...</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> year <span class="sc">:</span> chr  <span class="st">&quot;2018&quot;</span> <span class="st">&quot;2018&quot;</span> <span class="st">&quot;2018&quot;</span> <span class="st">&quot;2018&quot;</span> ...</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> count<span class="sc">:</span> int  <span class="dv">3</span> <span class="dv">3</span> <span class="dv">10</span> <span class="dv">2</span> <span class="dv">6</span> <span class="dv">5</span> <span class="dv">4</span> <span class="dv">6</span> <span class="dv">9</span> <span class="dv">10</span> ...</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> alpha<span class="sc">:</span> chr  <span class="st">&quot;o&quot;</span> <span class="st">&quot;s&quot;</span> <span class="st">&quot;n&quot;</span> <span class="st">&quot;c&quot;</span> ...</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> flag <span class="sc">:</span> chr  <span class="st">&quot;N&quot;</span> <span class="st">&quot;N&quot;</span> <span class="st">&quot;N&quot;</span> <span class="st">&quot;N&quot;</span> ...</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co"># summary of dataset</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(data_exam)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>      id                year               count           alpha          </span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a> Length<span class="sc">:</span><span class="dv">1000</span>        Length<span class="sc">:</span><span class="dv">1000</span>        Min.   <span class="sc">:</span> <span class="fl">1.000</span>   Length<span class="sc">:</span><span class="dv">1000</span>       </span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a> Class <span class="sc">:</span>character   Class <span class="sc">:</span>character   1st Qu.<span class="sc">:</span> <span class="fl">3.000</span>   Class <span class="sc">:</span>character  </span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a> Mode  <span class="sc">:</span>character   Mode  <span class="sc">:</span>character   Median <span class="sc">:</span> <span class="fl">6.000</span>   Mode  <span class="sc">:</span>character  </span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>                                       Mean   <span class="sc">:</span> <span class="fl">5.698</span>                     </span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>                                       3rd Qu.<span class="sc">:</span> <span class="fl">8.000</span>                     </span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>                                       Max.   <span class="sc">:</span><span class="fl">10.000</span>                     </span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>     flag          </span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a> Length<span class="sc">:</span><span class="dv">1000</span>       </span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a> Class <span class="sc">:</span>character  </span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a> Mode  <span class="sc">:</span>character  </span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>                   </span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>                   </span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>                   </span></code></pre></div>
 </div>
 <div id="clean-dataset" class="section level2">
 <h2>Clean dataset</h2>
@@ -407,27 +447,27 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="cleanse-dataset-with-cleanse" class="section level3">
 <h3>Cleanse dataset with <code>cleanse()</code></h3>
 <p>For example, we can cleanse all variables in <code>data_exam</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># cleansing dataset</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>newDat &lt;-<span class="st"> </span><span class="kw">cleanse</span>(data_exam)</span>
-<span id="cb2-3"><a href="#cb2-3"></a>── Checking unique value ─────────────────────────── unique value is one ──</span>
-<span id="cb2-4"><a href="#cb2-4"></a>remove variables that unique value is one</span>
-<span id="cb2-5"><a href="#cb2-5"></a>● year</span>
-<span id="cb2-6"><a href="#cb2-6"></a></span>
-<span id="cb2-7"><a href="#cb2-7"></a>── Checking unique rate ─────────────────────────────── high unique rate ──</span>
-<span id="cb2-8"><a href="#cb2-8"></a>remove variables with high unique rate</span>
-<span id="cb2-9"><a href="#cb2-9"></a>● id =<span class="st"> </span><span class="dv">1000</span>(<span class="dv">1</span>)</span>
-<span id="cb2-10"><a href="#cb2-10"></a></span>
-<span id="cb2-11"><a href="#cb2-11"></a>── Checking character variables ─────────────────────── categorical data ──</span>
-<span id="cb2-12"><a href="#cb2-12"></a>converts character variables to factor</span>
-<span id="cb2-13"><a href="#cb2-13"></a>● alpha</span>
-<span id="cb2-14"><a href="#cb2-14"></a>● flag</span>
-<span id="cb2-15"><a href="#cb2-15"></a></span>
-<span id="cb2-16"><a href="#cb2-16"></a><span class="co"># structure of cleansing dataset</span></span>
-<span id="cb2-17"><a href="#cb2-17"></a><span class="kw">str</span>(newDat)</span>
-<span id="cb2-18"><a href="#cb2-18"></a><span class="st">&#39;data.frame&#39;</span><span class="op">:</span><span class="st">   </span><span class="dv">1000</span> obs. of  <span class="dv">3</span> variables<span class="op">:</span></span>
-<span id="cb2-19"><a href="#cb2-19"></a><span class="st"> </span><span class="er">$</span><span class="st"> </span>count<span class="op">:</span><span class="st"> </span>int  <span class="dv">3</span> <span class="dv">3</span> <span class="dv">10</span> <span class="dv">2</span> <span class="dv">6</span> <span class="dv">5</span> <span class="dv">4</span> <span class="dv">6</span> <span class="dv">9</span> <span class="dv">10</span> ...</span>
-<span id="cb2-20"><a href="#cb2-20"></a> <span class="op">$</span><span class="st"> </span>alpha<span class="op">:</span><span class="st"> </span>Factor w<span class="op">/</span><span class="st"> </span><span class="dv">26</span> levels <span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;c&quot;</span>,<span class="st">&quot;d&quot;</span>,..<span class="op">:</span><span class="st"> </span><span class="dv">15</span> <span class="dv">19</span> <span class="dv">14</span> <span class="dv">3</span> <span class="dv">10</span> <span class="dv">18</span> <span class="dv">22</span> <span class="dv">11</span> <span class="dv">5</span> <span class="dv">20</span> ...</span>
-<span id="cb2-21"><a href="#cb2-21"></a> <span class="op">$</span><span class="st"> </span>flag <span class="op">:</span><span class="st"> </span>Factor w<span class="op">/</span><span class="st"> </span><span class="dv">2</span> levels <span class="st">&quot;N&quot;</span>,<span class="st">&quot;Y&quot;</span><span class="op">:</span><span class="st"> </span><span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> ...</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cleansing dataset</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>newDat <span class="ot">&lt;-</span> <span class="fu">cleanse</span>(data_exam)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>── Checking unique value ─────────────────────────── unique value is one ──</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>remove variables that unique value is one</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>● year</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>── Checking unique rate ─────────────────────────────── high unique rate ──</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>remove variables with high unique rate</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>● id <span class="ot">=</span> <span class="dv">1000</span>(<span class="dv">1</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>── Checking character variables ─────────────────────── categorical data ──</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>converts character variables to factor</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>● alpha</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>● flag</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># structure of cleansing dataset</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(newDat)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;data.frame&#39;</span><span class="sc">:</span>   <span class="dv">1000</span> obs. of  <span class="dv">3</span> variables<span class="sc">:</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a> <span class="er">$</span> count<span class="sc">:</span> int  <span class="dv">3</span> <span class="dv">3</span> <span class="dv">10</span> <span class="dv">2</span> <span class="dv">6</span> <span class="dv">5</span> <span class="dv">4</span> <span class="dv">6</span> <span class="dv">9</span> <span class="dv">10</span> ...</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> alpha<span class="sc">:</span> Factor w<span class="sc">/</span> <span class="dv">26</span> levels <span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;c&quot;</span>,<span class="st">&quot;d&quot;</span>,..<span class="sc">:</span> <span class="dv">15</span> <span class="dv">19</span> <span class="dv">14</span> <span class="dv">3</span> <span class="dv">10</span> <span class="dv">18</span> <span class="dv">22</span> <span class="dv">11</span> <span class="dv">5</span> <span class="dv">20</span> ...</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> flag <span class="sc">:</span> Factor w<span class="sc">/</span> <span class="dv">2</span> levels <span class="st">&quot;N&quot;</span>,<span class="st">&quot;Y&quot;</span><span class="sc">:</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> ...</span></code></pre></div>
 <ul>
 <li><code>remove variables whose unique value is one</code> : The year variable has only one value, “2018”. Not needed when fitting the model. So it was removed.</li>
 <li><code>remove variables with high unique rate</code> : If the number of levels of categorical data is very large, it is not suitable for classification model. In this case, it is highly likely to be an identifier of the data. So, remove the categorical (or character) variable with a high value of the unique rate defined as “number of levels / number of observations”.
@@ -438,89 +478,89 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <li><code>converts character variables to factor</code> : The character type flag variable is converted to a factor type.</li>
 </ul>
 <p>For example, we can not remove the categorical data that is removed by changing the threshold of the <code>unique rate</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># cleansing dataset</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>newDat &lt;-<span class="st"> </span><span class="kw">cleanse</span>(data_exam, <span class="dt">uniq_thres =</span> <span class="fl">0.03</span>)</span>
-<span id="cb3-3"><a href="#cb3-3"></a>── Checking unique value ─────────────────────────── unique value is one ──</span>
-<span id="cb3-4"><a href="#cb3-4"></a>remove variables that unique value is one</span>
-<span id="cb3-5"><a href="#cb3-5"></a>● year</span>
-<span id="cb3-6"><a href="#cb3-6"></a></span>
-<span id="cb3-7"><a href="#cb3-7"></a>── Checking unique rate ─────────────────────────────── high unique rate ──</span>
-<span id="cb3-8"><a href="#cb3-8"></a>remove variables with high unique rate</span>
-<span id="cb3-9"><a href="#cb3-9"></a>● id =<span class="st"> </span><span class="dv">1000</span>(<span class="dv">1</span>)</span>
-<span id="cb3-10"><a href="#cb3-10"></a></span>
-<span id="cb3-11"><a href="#cb3-11"></a>── Checking character variables ─────────────────────── categorical data ──</span>
-<span id="cb3-12"><a href="#cb3-12"></a>converts character variables to factor</span>
-<span id="cb3-13"><a href="#cb3-13"></a>● alpha</span>
-<span id="cb3-14"><a href="#cb3-14"></a>● flag</span>
-<span id="cb3-15"><a href="#cb3-15"></a></span>
-<span id="cb3-16"><a href="#cb3-16"></a><span class="co"># structure of cleansing dataset</span></span>
-<span id="cb3-17"><a href="#cb3-17"></a><span class="kw">str</span>(newDat)</span>
-<span id="cb3-18"><a href="#cb3-18"></a><span class="st">&#39;data.frame&#39;</span><span class="op">:</span><span class="st">   </span><span class="dv">1000</span> obs. of  <span class="dv">3</span> variables<span class="op">:</span></span>
-<span id="cb3-19"><a href="#cb3-19"></a><span class="st"> </span><span class="er">$</span><span class="st"> </span>count<span class="op">:</span><span class="st"> </span>int  <span class="dv">3</span> <span class="dv">3</span> <span class="dv">10</span> <span class="dv">2</span> <span class="dv">6</span> <span class="dv">5</span> <span class="dv">4</span> <span class="dv">6</span> <span class="dv">9</span> <span class="dv">10</span> ...</span>
-<span id="cb3-20"><a href="#cb3-20"></a> <span class="op">$</span><span class="st"> </span>alpha<span class="op">:</span><span class="st"> </span>Factor w<span class="op">/</span><span class="st"> </span><span class="dv">26</span> levels <span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;c&quot;</span>,<span class="st">&quot;d&quot;</span>,..<span class="op">:</span><span class="st"> </span><span class="dv">15</span> <span class="dv">19</span> <span class="dv">14</span> <span class="dv">3</span> <span class="dv">10</span> <span class="dv">18</span> <span class="dv">22</span> <span class="dv">11</span> <span class="dv">5</span> <span class="dv">20</span> ...</span>
-<span id="cb3-21"><a href="#cb3-21"></a> <span class="op">$</span><span class="st"> </span>flag <span class="op">:</span><span class="st"> </span>Factor w<span class="op">/</span><span class="st"> </span><span class="dv">2</span> levels <span class="st">&quot;N&quot;</span>,<span class="st">&quot;Y&quot;</span><span class="op">:</span><span class="st"> </span><span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> ...</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cleansing dataset</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>newDat <span class="ot">&lt;-</span> <span class="fu">cleanse</span>(data_exam, <span class="at">uniq_thres =</span> <span class="fl">0.03</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>── Checking unique value ─────────────────────────── unique value is one ──</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>remove variables that unique value is one</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>● year</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>── Checking unique rate ─────────────────────────────── high unique rate ──</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>remove variables with high unique rate</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>● id <span class="ot">=</span> <span class="dv">1000</span>(<span class="dv">1</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>── Checking character variables ─────────────────────── categorical data ──</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>converts character variables to factor</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>● alpha</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>● flag</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co"># structure of cleansing dataset</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(newDat)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;data.frame&#39;</span><span class="sc">:</span>   <span class="dv">1000</span> obs. of  <span class="dv">3</span> variables<span class="sc">:</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a> <span class="er">$</span> count<span class="sc">:</span> int  <span class="dv">3</span> <span class="dv">3</span> <span class="dv">10</span> <span class="dv">2</span> <span class="dv">6</span> <span class="dv">5</span> <span class="dv">4</span> <span class="dv">6</span> <span class="dv">9</span> <span class="dv">10</span> ...</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> alpha<span class="sc">:</span> Factor w<span class="sc">/</span> <span class="dv">26</span> levels <span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;c&quot;</span>,<span class="st">&quot;d&quot;</span>,..<span class="sc">:</span> <span class="dv">15</span> <span class="dv">19</span> <span class="dv">14</span> <span class="dv">3</span> <span class="dv">10</span> <span class="dv">18</span> <span class="dv">22</span> <span class="dv">11</span> <span class="dv">5</span> <span class="dv">20</span> ...</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> flag <span class="sc">:</span> Factor w<span class="sc">/</span> <span class="dv">2</span> levels <span class="st">&quot;N&quot;</span>,<span class="st">&quot;Y&quot;</span><span class="sc">:</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> ...</span></code></pre></div>
 <p>The <code>alpha</code> variable was not removed.</p>
 <p>If you do not want to apply a unique rate, you can set the value of the <code>uniq</code> argument to FALSE.:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># cleansing dataset</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>newDat &lt;-<span class="st"> </span><span class="kw">cleanse</span>(data_exam, <span class="dt">uniq =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb4-3"><a href="#cb4-3"></a>── Checking character variables ─────────────────────── categorical data ──</span>
-<span id="cb4-4"><a href="#cb4-4"></a>converts character variables to factor</span>
-<span id="cb4-5"><a href="#cb4-5"></a>● id</span>
-<span id="cb4-6"><a href="#cb4-6"></a>● year</span>
-<span id="cb4-7"><a href="#cb4-7"></a>● alpha</span>
-<span id="cb4-8"><a href="#cb4-8"></a>● flag</span>
-<span id="cb4-9"><a href="#cb4-9"></a></span>
-<span id="cb4-10"><a href="#cb4-10"></a><span class="co"># structure of cleansing dataset</span></span>
-<span id="cb4-11"><a href="#cb4-11"></a><span class="kw">str</span>(newDat)</span>
-<span id="cb4-12"><a href="#cb4-12"></a><span class="st">&#39;data.frame&#39;</span><span class="op">:</span><span class="st">   </span><span class="dv">1000</span> obs. of  <span class="dv">5</span> variables<span class="op">:</span></span>
-<span id="cb4-13"><a href="#cb4-13"></a><span class="st"> </span><span class="er">$</span><span class="st"> </span>id   <span class="op">:</span><span class="st"> </span>Factor w<span class="op">/</span><span class="st"> </span><span class="dv">1000</span> levels <span class="st">&quot;ablnc282&quot;</span>,<span class="st">&quot;abqym54&quot;</span>,..<span class="op">:</span><span class="st"> </span><span class="dv">594</span> <span class="dv">715</span> <span class="dv">558</span> <span class="dv">94</span> <span class="dv">727</span> <span class="dv">270</span> <span class="dv">499</span> <span class="dv">882</span> <span class="dv">930</span> <span class="dv">515</span> ...</span>
-<span id="cb4-14"><a href="#cb4-14"></a> <span class="op">$</span><span class="st"> </span>year <span class="op">:</span><span class="st"> </span>Factor w<span class="op">/</span><span class="st"> </span><span class="dv">1</span> level <span class="st">&quot;2018&quot;</span><span class="op">:</span><span class="st"> </span><span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> ...</span>
-<span id="cb4-15"><a href="#cb4-15"></a> <span class="op">$</span><span class="st"> </span>count<span class="op">:</span><span class="st"> </span>int  <span class="dv">3</span> <span class="dv">3</span> <span class="dv">10</span> <span class="dv">2</span> <span class="dv">6</span> <span class="dv">5</span> <span class="dv">4</span> <span class="dv">6</span> <span class="dv">9</span> <span class="dv">10</span> ...</span>
-<span id="cb4-16"><a href="#cb4-16"></a> <span class="op">$</span><span class="st"> </span>alpha<span class="op">:</span><span class="st"> </span>Factor w<span class="op">/</span><span class="st"> </span><span class="dv">26</span> levels <span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;c&quot;</span>,<span class="st">&quot;d&quot;</span>,..<span class="op">:</span><span class="st"> </span><span class="dv">15</span> <span class="dv">19</span> <span class="dv">14</span> <span class="dv">3</span> <span class="dv">10</span> <span class="dv">18</span> <span class="dv">22</span> <span class="dv">11</span> <span class="dv">5</span> <span class="dv">20</span> ...</span>
-<span id="cb4-17"><a href="#cb4-17"></a> <span class="op">$</span><span class="st"> </span>flag <span class="op">:</span><span class="st"> </span>Factor w<span class="op">/</span><span class="st"> </span><span class="dv">2</span> levels <span class="st">&quot;N&quot;</span>,<span class="st">&quot;Y&quot;</span><span class="op">:</span><span class="st"> </span><span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> ...</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cleansing dataset</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>newDat <span class="ot">&lt;-</span> <span class="fu">cleanse</span>(data_exam, <span class="at">uniq =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>── Checking character variables ─────────────────────── categorical data ──</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>converts character variables to factor</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>● id</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>● year</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>● alpha</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>● flag</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># structure of cleansing dataset</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(newDat)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;data.frame&#39;</span><span class="sc">:</span>   <span class="dv">1000</span> obs. of  <span class="dv">5</span> variables<span class="sc">:</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a> <span class="er">$</span> id   <span class="sc">:</span> Factor w<span class="sc">/</span> <span class="dv">1000</span> levels <span class="st">&quot;ablnc282&quot;</span>,<span class="st">&quot;abqym54&quot;</span>,..<span class="sc">:</span> <span class="dv">594</span> <span class="dv">715</span> <span class="dv">558</span> <span class="dv">94</span> <span class="dv">727</span> <span class="dv">270</span> <span class="dv">499</span> <span class="dv">882</span> <span class="dv">930</span> <span class="dv">515</span> ...</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> year <span class="sc">:</span> Factor w<span class="sc">/</span> <span class="dv">1</span> level <span class="st">&quot;2018&quot;</span><span class="sc">:</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> ...</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> count<span class="sc">:</span> int  <span class="dv">3</span> <span class="dv">3</span> <span class="dv">10</span> <span class="dv">2</span> <span class="dv">6</span> <span class="dv">5</span> <span class="dv">4</span> <span class="dv">6</span> <span class="dv">9</span> <span class="dv">10</span> ...</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> alpha<span class="sc">:</span> Factor w<span class="sc">/</span> <span class="dv">26</span> levels <span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;c&quot;</span>,<span class="st">&quot;d&quot;</span>,..<span class="sc">:</span> <span class="dv">15</span> <span class="dv">19</span> <span class="dv">14</span> <span class="dv">3</span> <span class="dv">10</span> <span class="dv">18</span> <span class="dv">22</span> <span class="dv">11</span> <span class="dv">5</span> <span class="dv">20</span> ...</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> flag <span class="sc">:</span> Factor w<span class="sc">/</span> <span class="dv">2</span> levels <span class="st">&quot;N&quot;</span>,<span class="st">&quot;Y&quot;</span><span class="sc">:</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> ...</span></code></pre></div>
 <p>If you do not want to force type conversion of a character variable to factor, you can set the value of the <code>char</code> argument to FALSE.:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># cleansing dataset</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>newDat &lt;-<span class="st"> </span><span class="kw">cleanse</span>(data_exam, <span class="dt">char =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb5-3"><a href="#cb5-3"></a>── Checking unique value ─────────────────────────── unique value is one ──</span>
-<span id="cb5-4"><a href="#cb5-4"></a>remove variables that unique value is one</span>
-<span id="cb5-5"><a href="#cb5-5"></a>● year</span>
-<span id="cb5-6"><a href="#cb5-6"></a></span>
-<span id="cb5-7"><a href="#cb5-7"></a>── Checking unique rate ─────────────────────────────── high unique rate ──</span>
-<span id="cb5-8"><a href="#cb5-8"></a>remove variables with high unique rate</span>
-<span id="cb5-9"><a href="#cb5-9"></a>● id =<span class="st"> </span><span class="dv">1000</span>(<span class="dv">1</span>)</span>
-<span id="cb5-10"><a href="#cb5-10"></a></span>
-<span id="cb5-11"><a href="#cb5-11"></a><span class="co"># structure of cleansing dataset</span></span>
-<span id="cb5-12"><a href="#cb5-12"></a><span class="kw">str</span>(newDat)</span>
-<span id="cb5-13"><a href="#cb5-13"></a><span class="st">&#39;data.frame&#39;</span><span class="op">:</span><span class="st">   </span><span class="dv">1000</span> obs. of  <span class="dv">3</span> variables<span class="op">:</span></span>
-<span id="cb5-14"><a href="#cb5-14"></a><span class="st"> </span><span class="er">$</span><span class="st"> </span>count<span class="op">:</span><span class="st"> </span>int  <span class="dv">3</span> <span class="dv">3</span> <span class="dv">10</span> <span class="dv">2</span> <span class="dv">6</span> <span class="dv">5</span> <span class="dv">4</span> <span class="dv">6</span> <span class="dv">9</span> <span class="dv">10</span> ...</span>
-<span id="cb5-15"><a href="#cb5-15"></a> <span class="op">$</span><span class="st"> </span>alpha<span class="op">:</span><span class="st"> </span>chr  <span class="st">&quot;o&quot;</span> <span class="st">&quot;s&quot;</span> <span class="st">&quot;n&quot;</span> <span class="st">&quot;c&quot;</span> ...</span>
-<span id="cb5-16"><a href="#cb5-16"></a> <span class="op">$</span><span class="st"> </span>flag <span class="op">:</span><span class="st"> </span>chr  <span class="st">&quot;N&quot;</span> <span class="st">&quot;N&quot;</span> <span class="st">&quot;N&quot;</span> <span class="st">&quot;N&quot;</span> ...</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cleansing dataset</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>newDat <span class="ot">&lt;-</span> <span class="fu">cleanse</span>(data_exam, <span class="at">char =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>── Checking unique value ─────────────────────────── unique value is one ──</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>remove variables that unique value is one</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>● year</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>── Checking unique rate ─────────────────────────────── high unique rate ──</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>remove variables with high unique rate</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>● id <span class="ot">=</span> <span class="dv">1000</span>(<span class="dv">1</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># structure of cleansing dataset</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(newDat)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;data.frame&#39;</span><span class="sc">:</span>   <span class="dv">1000</span> obs. of  <span class="dv">3</span> variables<span class="sc">:</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a> <span class="er">$</span> count<span class="sc">:</span> int  <span class="dv">3</span> <span class="dv">3</span> <span class="dv">10</span> <span class="dv">2</span> <span class="dv">6</span> <span class="dv">5</span> <span class="dv">4</span> <span class="dv">6</span> <span class="dv">9</span> <span class="dv">10</span> ...</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> alpha<span class="sc">:</span> chr  <span class="st">&quot;o&quot;</span> <span class="st">&quot;s&quot;</span> <span class="st">&quot;n&quot;</span> <span class="st">&quot;c&quot;</span> ...</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> flag <span class="sc">:</span> chr  <span class="st">&quot;N&quot;</span> <span class="st">&quot;N&quot;</span> <span class="st">&quot;N&quot;</span> <span class="st">&quot;N&quot;</span> ...</span></code></pre></div>
 <p>If you want to remove a variable that contains missing values, specify the value of the <code>missing</code> argument as TRUE. The following example <strong>removes the flag variable</strong> that contains the missing value.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>data_exam<span class="op">$</span>flag[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="ot">NA</span> </span>
-<span id="cb6-2"><a href="#cb6-2"></a></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="co"># cleansing dataset</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a>newDat &lt;-<span class="st"> </span><span class="kw">cleanse</span>(data_exam, <span class="dt">missing =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb6-5"><a href="#cb6-5"></a>── Checking missing value ────────────────────────────────── included <span class="ot">NA</span> ──</span>
-<span id="cb6-6"><a href="#cb6-6"></a>remove variables whose included <span class="ot">NA</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a>● flag</span>
-<span id="cb6-8"><a href="#cb6-8"></a></span>
-<span id="cb6-9"><a href="#cb6-9"></a>── Checking unique value ─────────────────────────── unique value is one ──</span>
-<span id="cb6-10"><a href="#cb6-10"></a>remove variables that unique value is one</span>
-<span id="cb6-11"><a href="#cb6-11"></a>● year</span>
-<span id="cb6-12"><a href="#cb6-12"></a></span>
-<span id="cb6-13"><a href="#cb6-13"></a>── Checking unique rate ─────────────────────────────── high unique rate ──</span>
-<span id="cb6-14"><a href="#cb6-14"></a>remove variables with high unique rate</span>
-<span id="cb6-15"><a href="#cb6-15"></a>● id =<span class="st"> </span><span class="dv">1000</span>(<span class="dv">1</span>)</span>
-<span id="cb6-16"><a href="#cb6-16"></a></span>
-<span id="cb6-17"><a href="#cb6-17"></a>── Checking character variables ─────────────────────── categorical data ──</span>
-<span id="cb6-18"><a href="#cb6-18"></a>converts character variables to factor</span>
-<span id="cb6-19"><a href="#cb6-19"></a>● alpha</span>
-<span id="cb6-20"><a href="#cb6-20"></a></span>
-<span id="cb6-21"><a href="#cb6-21"></a><span class="co"># structure of cleansing dataset</span></span>
-<span id="cb6-22"><a href="#cb6-22"></a><span class="kw">str</span>(newDat)</span>
-<span id="cb6-23"><a href="#cb6-23"></a><span class="st">&#39;data.frame&#39;</span><span class="op">:</span><span class="st">   </span><span class="dv">1000</span> obs. of  <span class="dv">2</span> variables<span class="op">:</span></span>
-<span id="cb6-24"><a href="#cb6-24"></a><span class="st"> </span><span class="er">$</span><span class="st"> </span>count<span class="op">:</span><span class="st"> </span>int  <span class="dv">3</span> <span class="dv">3</span> <span class="dv">10</span> <span class="dv">2</span> <span class="dv">6</span> <span class="dv">5</span> <span class="dv">4</span> <span class="dv">6</span> <span class="dv">9</span> <span class="dv">10</span> ...</span>
-<span id="cb6-25"><a href="#cb6-25"></a> <span class="op">$</span><span class="st"> </span>alpha<span class="op">:</span><span class="st"> </span>Factor w<span class="op">/</span><span class="st"> </span><span class="dv">26</span> levels <span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;c&quot;</span>,<span class="st">&quot;d&quot;</span>,..<span class="op">:</span><span class="st"> </span><span class="dv">15</span> <span class="dv">19</span> <span class="dv">14</span> <span class="dv">3</span> <span class="dv">10</span> <span class="dv">18</span> <span class="dv">22</span> <span class="dv">11</span> <span class="dv">5</span> <span class="dv">20</span> ...</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data_exam<span class="sc">$</span>flag[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># cleansing dataset</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>newDat <span class="ot">&lt;-</span> <span class="fu">cleanse</span>(data_exam, <span class="at">missing =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>── Checking missing value ────────────────────────────────── included <span class="cn">NA</span> ──</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>remove variables whose included <span class="cn">NA</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>● flag</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>── Checking unique value ─────────────────────────── unique value is one ──</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>remove variables that unique value is one</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>● year</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>── Checking unique rate ─────────────────────────────── high unique rate ──</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>remove variables with high unique rate</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>● id <span class="ot">=</span> <span class="dv">1000</span>(<span class="dv">1</span>)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>── Checking character variables ─────────────────────── categorical data ──</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>converts character variables to factor</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>● alpha</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co"># structure of cleansing dataset</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(newDat)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;data.frame&#39;</span><span class="sc">:</span>   <span class="dv">1000</span> obs. of  <span class="dv">2</span> variables<span class="sc">:</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a> <span class="er">$</span> count<span class="sc">:</span> int  <span class="dv">3</span> <span class="dv">3</span> <span class="dv">10</span> <span class="dv">2</span> <span class="dv">6</span> <span class="dv">5</span> <span class="dv">4</span> <span class="dv">6</span> <span class="dv">9</span> <span class="dv">10</span> ...</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> alpha<span class="sc">:</span> Factor w<span class="sc">/</span> <span class="dv">26</span> levels <span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;c&quot;</span>,<span class="st">&quot;d&quot;</span>,..<span class="sc">:</span> <span class="dv">15</span> <span class="dv">19</span> <span class="dv">14</span> <span class="dv">3</span> <span class="dv">10</span> <span class="dv">18</span> <span class="dv">22</span> <span class="dv">11</span> <span class="dv">5</span> <span class="dv">20</span> ...</span></code></pre></div>
 </div>
 </div>
 <div id="diagnosis-and-removal-of-highly-correlated-variables" class="section level2">
@@ -532,84 +572,84 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p><code>treatment_corr()</code> diagnose pairs of highly correlated variables or remove on of them.</p>
 <p><code>treatment_corr()</code> calculates correlation coefficient of pearson for numerical variable, and correlation coefficient of spearman for categorical variable.</p>
 <p>For example, we can diagnosis and removal of highly correlated variables:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># numerical variable</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a>x1 &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">100</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a><span class="kw">set.seed</span>(12L)</span>
-<span id="cb7-4"><a href="#cb7-4"></a>x2 &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dt">size =</span> <span class="dv">100</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>) <span class="op">*</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>)</span>
-<span id="cb7-5"><a href="#cb7-5"></a><span class="kw">set.seed</span>(1234L)</span>
-<span id="cb7-6"><a href="#cb7-6"></a>x3 &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, <span class="dt">size =</span> <span class="dv">100</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>) <span class="op">*</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>)</span>
-<span id="cb7-7"><a href="#cb7-7"></a></span>
-<span id="cb7-8"><a href="#cb7-8"></a><span class="co"># categorical variable</span></span>
-<span id="cb7-9"><a href="#cb7-9"></a>x4 &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">rep</span>(letters[<span class="dv">1</span><span class="op">:</span><span class="dv">20</span>], <span class="dt">time =</span> <span class="dv">5</span>))</span>
-<span id="cb7-10"><a href="#cb7-10"></a><span class="kw">set.seed</span>(100L)</span>
-<span id="cb7-11"><a href="#cb7-11"></a>x5 &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">rep</span>(letters[<span class="dv">1</span><span class="op">:</span><span class="dv">20</span> <span class="op">+</span><span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dt">size =</span> <span class="dv">20</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)], <span class="dt">time =</span> <span class="dv">5</span>))</span>
-<span id="cb7-12"><a href="#cb7-12"></a><span class="kw">set.seed</span>(200L)</span>
-<span id="cb7-13"><a href="#cb7-13"></a>x6 &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">rep</span>(letters[<span class="dv">1</span><span class="op">:</span><span class="dv">20</span> <span class="op">+</span><span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dt">size =</span> <span class="dv">20</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)], <span class="dt">time =</span> <span class="dv">5</span>))</span>
-<span id="cb7-14"><a href="#cb7-14"></a><span class="kw">set.seed</span>(300L)</span>
-<span id="cb7-15"><a href="#cb7-15"></a>x7 &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">sample</span>(letters[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>], <span class="dt">size =</span> <span class="dv">100</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>))</span>
-<span id="cb7-16"><a href="#cb7-16"></a></span>
-<span id="cb7-17"><a href="#cb7-17"></a>exam &lt;-<span class="st"> </span><span class="kw">data.frame</span>(x1, x2, x3, x4, x5, x6, x7)</span>
-<span id="cb7-18"><a href="#cb7-18"></a><span class="kw">str</span>(exam)</span>
-<span id="cb7-19"><a href="#cb7-19"></a><span class="st">&#39;data.frame&#39;</span><span class="op">:</span><span class="st">   </span><span class="dv">100</span> obs. of  <span class="dv">7</span> variables<span class="op">:</span></span>
-<span id="cb7-20"><a href="#cb7-20"></a><span class="st"> </span><span class="er">$</span><span class="st"> </span>x1<span class="op">:</span><span class="st"> </span>int  <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span> <span class="dv">8</span> <span class="dv">9</span> <span class="dv">10</span> ...</span>
-<span id="cb7-21"><a href="#cb7-21"></a> <span class="op">$</span><span class="st"> </span>x2<span class="op">:</span><span class="st"> </span>num  <span class="fl">2.55</span> <span class="fl">4.55</span> <span class="fl">9.55</span> <span class="fl">12.55</span> <span class="fl">10.55</span> ...</span>
-<span id="cb7-22"><a href="#cb7-22"></a> <span class="op">$</span><span class="st"> </span>x3<span class="op">:</span><span class="st"> </span>num  <span class="fl">0.194</span> <span class="fl">2.194</span> <span class="fl">4.194</span> <span class="fl">6.194</span> <span class="fl">3.194</span> ...</span>
-<span id="cb7-23"><a href="#cb7-23"></a> <span class="op">$</span><span class="st"> </span>x4<span class="op">:</span><span class="st"> </span>Factor w<span class="op">/</span><span class="st"> </span><span class="dv">20</span> levels <span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;c&quot;</span>,<span class="st">&quot;d&quot;</span>,..<span class="op">:</span><span class="st"> </span><span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span> <span class="dv">8</span> <span class="dv">9</span> <span class="dv">10</span> ...</span>
-<span id="cb7-24"><a href="#cb7-24"></a> <span class="op">$</span><span class="st"> </span>x5<span class="op">:</span><span class="st"> </span>Factor w<span class="op">/</span><span class="st"> </span><span class="dv">13</span> levels <span class="st">&quot;c&quot;</span>,<span class="st">&quot;e&quot;</span>,<span class="st">&quot;f&quot;</span>,<span class="st">&quot;g&quot;</span>,..<span class="op">:</span><span class="st"> </span><span class="dv">1</span> <span class="dv">5</span> <span class="dv">3</span> <span class="dv">2</span> <span class="dv">4</span> <span class="dv">7</span> <span class="dv">6</span> <span class="dv">8</span> <span class="dv">9</span> <span class="dv">8</span> ...</span>
-<span id="cb7-25"><a href="#cb7-25"></a> <span class="op">$</span><span class="st"> </span>x6<span class="op">:</span><span class="st"> </span>Factor w<span class="op">/</span><span class="st"> </span><span class="dv">15</span> levels <span class="st">&quot;c&quot;</span>,<span class="st">&quot;d&quot;</span>,<span class="st">&quot;f&quot;</span>,<span class="st">&quot;g&quot;</span>,..<span class="op">:</span><span class="st"> </span><span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">3</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span> <span class="dv">8</span> <span class="dv">9</span> ...</span>
-<span id="cb7-26"><a href="#cb7-26"></a> <span class="op">$</span><span class="st"> </span>x7<span class="op">:</span><span class="st"> </span>Factor w<span class="op">/</span><span class="st"> </span><span class="dv">5</span> levels <span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;c&quot;</span>,<span class="st">&quot;d&quot;</span>,..<span class="op">:</span><span class="st"> </span><span class="dv">2</span> <span class="dv">2</span> <span class="dv">1</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">1</span> <span class="dv">4</span> <span class="dv">3</span> <span class="dv">1</span> <span class="dv">5</span> ...</span>
-<span id="cb7-27"><a href="#cb7-27"></a><span class="kw">head</span>(exam)</span>
-<span id="cb7-28"><a href="#cb7-28"></a>  x1        x2         x3 x4 x5 x6 x7</span>
-<span id="cb7-29"><a href="#cb7-29"></a><span class="dv">1</span>  <span class="dv">1</span>  <span class="fl">2.554297</span>  <span class="fl">0.1939687</span>  a  c  c  b</span>
-<span id="cb7-30"><a href="#cb7-30"></a><span class="dv">2</span>  <span class="dv">2</span>  <span class="fl">4.554297</span>  <span class="fl">2.1939687</span>  b  h  d  b</span>
-<span id="cb7-31"><a href="#cb7-31"></a><span class="dv">3</span>  <span class="dv">3</span>  <span class="fl">9.554297</span>  <span class="fl">4.1939687</span>  c  f  f  a</span>
-<span id="cb7-32"><a href="#cb7-32"></a><span class="dv">4</span>  <span class="dv">4</span> <span class="fl">12.554297</span>  <span class="fl">6.1939687</span>  d  e  g  d</span>
-<span id="cb7-33"><a href="#cb7-33"></a><span class="dv">5</span>  <span class="dv">5</span> <span class="fl">10.554297</span>  <span class="fl">3.1939687</span>  e  g  f  e</span>
-<span id="cb7-34"><a href="#cb7-34"></a><span class="dv">6</span>  <span class="dv">6</span>  <span class="fl">6.554297</span> <span class="fl">10.1939687</span>  f  l  h  a</span>
-<span id="cb7-35"><a href="#cb7-35"></a></span>
-<span id="cb7-36"><a href="#cb7-36"></a><span class="co"># default case</span></span>
-<span id="cb7-37"><a href="#cb7-37"></a>exam_<span class="dv">01</span> &lt;-<span class="st"> </span><span class="kw">treatment_corr</span>(exam)</span>
-<span id="cb7-38"><a href="#cb7-38"></a><span class="op">*</span><span class="st"> </span>remove variables whose strong <span class="kw">correlation</span> (pearson <span class="op">&gt;=</span><span class="st"> </span><span class="fl">0.8</span>)</span>
-<span id="cb7-39"><a href="#cb7-39"></a> <span class="op">-</span><span class="st"> </span>remove x1 <span class="op">:</span><span class="st"> </span>with <span class="kw">x3</span> (<span class="fl">0.825</span>)</span>
-<span id="cb7-40"><a href="#cb7-40"></a><span class="op">*</span><span class="st"> </span>remove variables whose strong <span class="kw">correlation</span> (spearman <span class="op">&gt;=</span><span class="st"> </span><span class="fl">0.8</span>)</span>
-<span id="cb7-41"><a href="#cb7-41"></a> <span class="op">-</span><span class="st"> </span>remove x4 <span class="op">:</span><span class="st"> </span>with <span class="kw">x5</span> (<span class="fl">0.9649</span>)</span>
-<span id="cb7-42"><a href="#cb7-42"></a> <span class="op">-</span><span class="st"> </span>remove x4 <span class="op">:</span><span class="st"> </span>with <span class="kw">x6</span> (<span class="fl">0.9928</span>)</span>
-<span id="cb7-43"><a href="#cb7-43"></a> <span class="op">-</span><span class="st"> </span>remove x5 <span class="op">:</span><span class="st"> </span>with <span class="kw">x6</span> (<span class="fl">0.9485</span>)</span>
-<span id="cb7-44"><a href="#cb7-44"></a><span class="kw">head</span>(exam_<span class="dv">01</span>)</span>
-<span id="cb7-45"><a href="#cb7-45"></a>         x2         x3 x6 x7</span>
-<span id="cb7-46"><a href="#cb7-46"></a><span class="dv">1</span>  <span class="fl">2.554297</span>  <span class="fl">0.1939687</span>  c  b</span>
-<span id="cb7-47"><a href="#cb7-47"></a><span class="dv">2</span>  <span class="fl">4.554297</span>  <span class="fl">2.1939687</span>  d  b</span>
-<span id="cb7-48"><a href="#cb7-48"></a><span class="dv">3</span>  <span class="fl">9.554297</span>  <span class="fl">4.1939687</span>  f  a</span>
-<span id="cb7-49"><a href="#cb7-49"></a><span class="dv">4</span> <span class="fl">12.554297</span>  <span class="fl">6.1939687</span>  g  d</span>
-<span id="cb7-50"><a href="#cb7-50"></a><span class="dv">5</span> <span class="fl">10.554297</span>  <span class="fl">3.1939687</span>  f  e</span>
-<span id="cb7-51"><a href="#cb7-51"></a><span class="dv">6</span>  <span class="fl">6.554297</span> <span class="fl">10.1939687</span>  h  a</span>
-<span id="cb7-52"><a href="#cb7-52"></a></span>
-<span id="cb7-53"><a href="#cb7-53"></a><span class="co"># not removing variables</span></span>
-<span id="cb7-54"><a href="#cb7-54"></a><span class="kw">treatment_corr</span>(exam, <span class="dt">treat =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb7-55"><a href="#cb7-55"></a><span class="op">*</span><span class="st"> </span>remove variables whose strong <span class="kw">correlation</span> (pearson <span class="op">&gt;=</span><span class="st"> </span><span class="fl">0.8</span>)</span>
-<span id="cb7-56"><a href="#cb7-56"></a> <span class="op">-</span><span class="st"> </span>remove x1 <span class="op">:</span><span class="st"> </span>with <span class="kw">x3</span> (<span class="fl">0.825</span>)</span>
-<span id="cb7-57"><a href="#cb7-57"></a><span class="op">*</span><span class="st"> </span>remove variables whose strong <span class="kw">correlation</span> (spearman <span class="op">&gt;=</span><span class="st"> </span><span class="fl">0.8</span>)</span>
-<span id="cb7-58"><a href="#cb7-58"></a> <span class="op">-</span><span class="st"> </span>remove x4 <span class="op">:</span><span class="st"> </span>with <span class="kw">x5</span> (<span class="fl">0.9649</span>)</span>
-<span id="cb7-59"><a href="#cb7-59"></a> <span class="op">-</span><span class="st"> </span>remove x4 <span class="op">:</span><span class="st"> </span>with <span class="kw">x6</span> (<span class="fl">0.9928</span>)</span>
-<span id="cb7-60"><a href="#cb7-60"></a> <span class="op">-</span><span class="st"> </span>remove x5 <span class="op">:</span><span class="st"> </span>with <span class="kw">x6</span> (<span class="fl">0.9485</span>)</span>
-<span id="cb7-61"><a href="#cb7-61"></a></span>
-<span id="cb7-62"><a href="#cb7-62"></a><span class="co"># Set a threshold to detecting variables when correlation greater then 0.9</span></span>
-<span id="cb7-63"><a href="#cb7-63"></a><span class="kw">treatment_corr</span>(exam, <span class="dt">corr_thres =</span> <span class="fl">0.9</span>, <span class="dt">treat =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb7-64"><a href="#cb7-64"></a><span class="op">*</span><span class="st"> </span>remove variables whose strong <span class="kw">correlation</span> (spearman <span class="op">&gt;=</span><span class="st"> </span><span class="fl">0.9</span>)</span>
-<span id="cb7-65"><a href="#cb7-65"></a> <span class="op">-</span><span class="st"> </span>remove x4 <span class="op">:</span><span class="st"> </span>with <span class="kw">x5</span> (<span class="fl">0.9649</span>)</span>
-<span id="cb7-66"><a href="#cb7-66"></a> <span class="op">-</span><span class="st"> </span>remove x4 <span class="op">:</span><span class="st"> </span>with <span class="kw">x6</span> (<span class="fl">0.9928</span>)</span>
-<span id="cb7-67"><a href="#cb7-67"></a> <span class="op">-</span><span class="st"> </span>remove x5 <span class="op">:</span><span class="st"> </span>with <span class="kw">x6</span> (<span class="fl">0.9485</span>)</span>
-<span id="cb7-68"><a href="#cb7-68"></a></span>
-<span id="cb7-69"><a href="#cb7-69"></a><span class="co"># not verbose mode</span></span>
-<span id="cb7-70"><a href="#cb7-70"></a>exam_<span class="dv">02</span> &lt;-<span class="st"> </span><span class="kw">treatment_corr</span>(exam, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb7-71"><a href="#cb7-71"></a><span class="kw">head</span>(exam_<span class="dv">02</span>)</span>
-<span id="cb7-72"><a href="#cb7-72"></a>         x2         x3 x6 x7</span>
-<span id="cb7-73"><a href="#cb7-73"></a><span class="dv">1</span>  <span class="fl">2.554297</span>  <span class="fl">0.1939687</span>  c  b</span>
-<span id="cb7-74"><a href="#cb7-74"></a><span class="dv">2</span>  <span class="fl">4.554297</span>  <span class="fl">2.1939687</span>  d  b</span>
-<span id="cb7-75"><a href="#cb7-75"></a><span class="dv">3</span>  <span class="fl">9.554297</span>  <span class="fl">4.1939687</span>  f  a</span>
-<span id="cb7-76"><a href="#cb7-76"></a><span class="dv">4</span> <span class="fl">12.554297</span>  <span class="fl">6.1939687</span>  g  d</span>
-<span id="cb7-77"><a href="#cb7-77"></a><span class="dv">5</span> <span class="fl">10.554297</span>  <span class="fl">3.1939687</span>  f  e</span>
-<span id="cb7-78"><a href="#cb7-78"></a><span class="dv">6</span>  <span class="fl">6.554297</span> <span class="fl">10.1939687</span>  h  a</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># numerical variable</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(12L)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">size =</span> <span class="dv">100</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>) <span class="sc">*</span> x1 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(1234L)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>x3 <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">size =</span> <span class="dv">100</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>) <span class="sc">*</span> x1 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># categorical variable</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>x4 <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">rep</span>(letters[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>], <span class="at">time =</span> <span class="dv">5</span>))</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(100L)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>x5 <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">rep</span>(letters[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span> <span class="sc">+</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">size =</span> <span class="dv">20</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)], <span class="at">time =</span> <span class="dv">5</span>))</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(200L)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>x6 <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">rep</span>(letters[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span> <span class="sc">+</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">size =</span> <span class="dv">20</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)], <span class="at">time =</span> <span class="dv">5</span>))</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(300L)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>x7 <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">sample</span>(letters[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>], <span class="at">size =</span> <span class="dv">100</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>exam <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(x1, x2, x3, x4, x5, x6, x7)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(exam)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;data.frame&#39;</span><span class="sc">:</span>   <span class="dv">100</span> obs. of  <span class="dv">7</span> variables<span class="sc">:</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a> <span class="er">$</span> x1<span class="sc">:</span> int  <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span> <span class="dv">8</span> <span class="dv">9</span> <span class="dv">10</span> ...</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> x2<span class="sc">:</span> num  <span class="fl">2.55</span> <span class="fl">4.55</span> <span class="fl">9.55</span> <span class="fl">12.55</span> <span class="fl">10.55</span> ...</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> x3<span class="sc">:</span> num  <span class="fl">0.194</span> <span class="fl">2.194</span> <span class="fl">4.194</span> <span class="fl">6.194</span> <span class="fl">3.194</span> ...</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> x4<span class="sc">:</span> Factor w<span class="sc">/</span> <span class="dv">20</span> levels <span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;c&quot;</span>,<span class="st">&quot;d&quot;</span>,..<span class="sc">:</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span> <span class="dv">8</span> <span class="dv">9</span> <span class="dv">10</span> ...</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> x5<span class="sc">:</span> Factor w<span class="sc">/</span> <span class="dv">13</span> levels <span class="st">&quot;c&quot;</span>,<span class="st">&quot;e&quot;</span>,<span class="st">&quot;f&quot;</span>,<span class="st">&quot;g&quot;</span>,..<span class="sc">:</span> <span class="dv">1</span> <span class="dv">5</span> <span class="dv">3</span> <span class="dv">2</span> <span class="dv">4</span> <span class="dv">7</span> <span class="dv">6</span> <span class="dv">8</span> <span class="dv">9</span> <span class="dv">8</span> ...</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> x6<span class="sc">:</span> Factor w<span class="sc">/</span> <span class="dv">15</span> levels <span class="st">&quot;c&quot;</span>,<span class="st">&quot;d&quot;</span>,<span class="st">&quot;f&quot;</span>,<span class="st">&quot;g&quot;</span>,..<span class="sc">:</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">3</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span> <span class="dv">8</span> <span class="dv">9</span> ...</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> x7<span class="sc">:</span> Factor w<span class="sc">/</span> <span class="dv">5</span> levels <span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;c&quot;</span>,<span class="st">&quot;d&quot;</span>,..<span class="sc">:</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">1</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">1</span> <span class="dv">4</span> <span class="dv">3</span> <span class="dv">1</span> <span class="dv">5</span> ...</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(exam)</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  x1        x2         x3 x4 x5 x6 x7</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span>  <span class="dv">1</span>  <span class="fl">2.554297</span>  <span class="fl">0.1939687</span>  a  c  c  b</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span>  <span class="dv">2</span>  <span class="fl">4.554297</span>  <span class="fl">2.1939687</span>  b  h  d  b</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span>  <span class="dv">3</span>  <span class="fl">9.554297</span>  <span class="fl">4.1939687</span>  c  f  f  a</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="dv">4</span>  <span class="dv">4</span> <span class="fl">12.554297</span>  <span class="fl">6.1939687</span>  d  e  g  d</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span>  <span class="dv">5</span> <span class="fl">10.554297</span>  <span class="fl">3.1939687</span>  e  g  f  e</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="dv">6</span>  <span class="dv">6</span>  <span class="fl">6.554297</span> <span class="fl">10.1939687</span>  f  l  h  a</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="co"># default case</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>exam_01 <span class="ot">&lt;-</span> <span class="fu">treatment_corr</span>(exam)</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> remove variables whose strong <span class="fu">correlation</span> (pearson <span class="sc">&gt;=</span> <span class="fl">0.8</span>)</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a> <span class="sc">-</span> remove x1 <span class="sc">:</span> with <span class="fu">x3</span> (<span class="fl">0.825</span>)</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> remove variables whose strong <span class="fu">correlation</span> (spearman <span class="sc">&gt;=</span> <span class="fl">0.8</span>)</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a> <span class="sc">-</span> remove x4 <span class="sc">:</span> with <span class="fu">x5</span> (<span class="fl">0.9649</span>)</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a> <span class="sc">-</span> remove x4 <span class="sc">:</span> with <span class="fu">x6</span> (<span class="fl">0.9928</span>)</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a> <span class="sc">-</span> remove x5 <span class="sc">:</span> with <span class="fu">x6</span> (<span class="fl">0.9485</span>)</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(exam_01)</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>         x2         x3 x6 x7</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span>  <span class="fl">2.554297</span>  <span class="fl">0.1939687</span>  c  b</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span>  <span class="fl">4.554297</span>  <span class="fl">2.1939687</span>  d  b</span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span>  <span class="fl">9.554297</span>  <span class="fl">4.1939687</span>  f  a</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="dv">4</span> <span class="fl">12.554297</span>  <span class="fl">6.1939687</span>  g  d</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span> <span class="fl">10.554297</span>  <span class="fl">3.1939687</span>  f  e</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a><span class="dv">6</span>  <span class="fl">6.554297</span> <span class="fl">10.1939687</span>  h  a</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a><span class="co"># not removing variables</span></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a><span class="fu">treatment_corr</span>(exam, <span class="at">treat =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> remove variables whose strong <span class="fu">correlation</span> (pearson <span class="sc">&gt;=</span> <span class="fl">0.8</span>)</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a> <span class="sc">-</span> remove x1 <span class="sc">:</span> with <span class="fu">x3</span> (<span class="fl">0.825</span>)</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> remove variables whose strong <span class="fu">correlation</span> (spearman <span class="sc">&gt;=</span> <span class="fl">0.8</span>)</span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a> <span class="sc">-</span> remove x4 <span class="sc">:</span> with <span class="fu">x5</span> (<span class="fl">0.9649</span>)</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a> <span class="sc">-</span> remove x4 <span class="sc">:</span> with <span class="fu">x6</span> (<span class="fl">0.9928</span>)</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a> <span class="sc">-</span> remove x5 <span class="sc">:</span> with <span class="fu">x6</span> (<span class="fl">0.9485</span>)</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a><span class="co"># Set a threshold to detecting variables when correlation greater then 0.9</span></span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a><span class="fu">treatment_corr</span>(exam, <span class="at">corr_thres =</span> <span class="fl">0.9</span>, <span class="at">treat =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> remove variables whose strong <span class="fu">correlation</span> (spearman <span class="sc">&gt;=</span> <span class="fl">0.9</span>)</span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a> <span class="sc">-</span> remove x4 <span class="sc">:</span> with <span class="fu">x5</span> (<span class="fl">0.9649</span>)</span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a> <span class="sc">-</span> remove x4 <span class="sc">:</span> with <span class="fu">x6</span> (<span class="fl">0.9928</span>)</span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a> <span class="sc">-</span> remove x5 <span class="sc">:</span> with <span class="fu">x6</span> (<span class="fl">0.9485</span>)</span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a><span class="co"># not verbose mode</span></span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>exam_02 <span class="ot">&lt;-</span> <span class="fu">treatment_corr</span>(exam, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(exam_02)</span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>         x2         x3 x6 x7</span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span>  <span class="fl">2.554297</span>  <span class="fl">0.1939687</span>  c  b</span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span>  <span class="fl">4.554297</span>  <span class="fl">2.1939687</span>  d  b</span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span>  <span class="fl">9.554297</span>  <span class="fl">4.1939687</span>  f  a</span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a><span class="dv">4</span> <span class="fl">12.554297</span>  <span class="fl">6.1939687</span>  g  d</span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span> <span class="fl">10.554297</span>  <span class="fl">3.1939687</span>  f  e</span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a><span class="dv">6</span>  <span class="fl">6.554297</span> <span class="fl">10.1939687</span>  h  a</span></code></pre></div>
 <ul>
 <li><code>remove variables whose strong correlation</code> : x1, x4, x5 are removed.</li>
 </ul>

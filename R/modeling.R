@@ -122,7 +122,7 @@ classifier_dispatch <- function(model = c("logistic", "rpart", "ctree", "randomF
 #' @export
 run_models <- function(.data, target, positive,
                        models = c("logistic", "rpart", "ctree", "randomForest", "ranger")) {
-  if (dlookr::get_os() == "windows") {
+  if (dlookr::get_os() == "windows" || .Platform$GUI == "RStudio") {
     future::plan(future::sequential)
   } else {
     future::plan(future::multiprocess)
@@ -177,6 +177,10 @@ predictor <- function(model, .data, target, positive, negative, is_factor, cutof
   attr(pred_class , "cutoff") <- cutoff
   attr(pred_class , "pred_prob") <- pred
 
+  if (target %in% names(.data)) {
+    attr(pred_class , "actual") <- .data[, target] %>% pull()
+  }
+    
   class(pred_class) <- append("predict_class", class(pred_class))
 
   pred_class
@@ -253,7 +257,7 @@ predictor <- function(model, .data, target, positive, negative, is_factor, cutof
 #' @importFrom stats density
 #' @export
 run_predict <- function(model, .data, cutoff = 0.5) {
-  if (dlookr::get_os() == "windows") {
+  if (dlookr::get_os() == "windows" || .Platform$GUI == "RStudio") {
     future::plan(future::sequential)
   } else {
     future::plan(future::multiprocess)

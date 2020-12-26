@@ -4,7 +4,7 @@
 \alias{run_performance}
 \title{Apply calculate performance metrics for model evaluation}
 \usage{
-run_performance(model)
+run_performance(model, actual = NULL)
 }
 \arguments{
 \item{model}{A model_df. results of predicted model that created by run_predict().}
@@ -74,12 +74,21 @@ train <- train \%>\%
 result <- run_models(.data = train, target = "Kyphosis", positive = "present")
 result
 
-# Predict the model.
+# Predict the model. (Case 1)
 pred <- run_predict(result, test)
 pred
 
-# Calculate performace metrics.
+# Calculate performace metrics. (Case 1)
 perf <- run_performance(pred)
+perf
+perf$performance
+
+# Predict the model. (Case 2)
+pred <- run_predict(result, test[, -1])
+pred
+
+# Calculate performace metrics. (Case 2)
+perf <- run_performance(pred, pull(test[, 1]))
 perf
 perf$performance
 

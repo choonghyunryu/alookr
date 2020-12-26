@@ -446,21 +446,30 @@ performance_metric <- function(pred, actual, positive,
 #' result <- run_models(.data = train, target = "Kyphosis", positive = "present")
 #' result
 #'
-#' # Predict the model.
+#' # Predict the model. (Case 1)
 #' pred <- run_predict(result, test)
 #' pred
 #'
-#' # Calculate performace metrics.
+#' # Calculate performace metrics. (Case 1)
 #' perf <- run_performance(pred)
 #' perf
 #' perf$performance
 #'
+#' # Predict the model. (Case 2)
+#' pred <- run_predict(result, test[, -1])
+#' pred
+#'
+#' # Calculate performace metrics. (Case 2)
+#' perf <- run_performance(pred, pull(test[, 1]))
+#' perf
+#' perf$performance
+#' 
 #' # Convert to matrix for compare performace.
 #' sapply(perf$performance, "c")
 #'
 #' @importFrom stats density
 #' @export
-run_performance <- function(model) {
+run_performance <- function(model, actual = NULL) {
   metric <- list("ZeroOneLoss", "Accuracy", "Precision", "Recall",
                  "Sensitivity", "Specificity", "F1_Score", "Fbeta_Score", "LogLoss",
                  "AUC", "Gini", "PRAUC", "LiftAUC", "GainAUC", "KS_Stat")
@@ -472,20 +481,31 @@ run_performance <- function(model) {
     pmetric
   }
 
-  if (dlookr::get_os() == "windows") {
+  if (dlookr::get_os() == "windows" || .Platform$GUI == "RStudio") {
     future::plan(future::sequential)
   } else {
     future::plan(future::multiprocess)
   }
   
-  result <- purrr::map(seq(NROW(model)),
-                       ~future::future(performance(attr(pred$predicted[[.x]], "pred_prob"),
-                                                   attr(pred$predicted[[.x]], "actual"),
-                                                   attr(pred$predicted[[.x]], "positive")))) %>%
-    tibble::tibble(step = "3.Performanced", model_id = model$model_id, target = model$target,
-                   positive = model$positive, fitted_model = model$fitted_model,
-                   predicted = model$predicted,
-                   performance = purrr::map(., ~future::value(.x)))
+  if (is.null(actual)) {
+    result <- purrr::map(seq(NROW(model)),
+                         ~future::future(performance(attr(pred$predicted[[.x]], "pred_prob"),
+                                                     attr(pred$predicted[[.x]], "actual"),
+                                                     attr(pred$predicted[[.x]], "positive")))) %>%
+      tibble::tibble(step = "3.Performanced", model_id = model$model_id, target = model$target,
+                     positive = model$positive, fitted_model = model$fitted_model,
+                     predicted = model$predicted,
+                     performance = purrr::map(., ~future::value(.x)))
+  } else {
+    result <- purrr::map(seq(NROW(model)),
+                         ~future::future(performance(attr(pred$predicted[[.x]], "pred_prob"),
+                                                     actual,
+                                                     attr(pred$predicted[[.x]], "positive")))) %>%
+      tibble::tibble(step = "3.Performanced", model_id = model$model_id, target = model$target,
+                     positive = model$positive, fitted_model = model$fitted_model,
+                     predicted = model$predicted,
+                     performance = purrr::map(., ~future::value(.x)))
+  }
 
   result <- result[, -1]
 
