@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">alookr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.3</span>
       </span>
     </div>
 
@@ -120,7 +120,7 @@
     <p>Apply calculate performance metrics for binary classification model evaluation.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>run_performance</span>(<span class='no'>model</span>)</pre>
+    <pre class="usage"><span class='fu'>run_performance</span>(<span class='no'>model</span>, <span class='kw'>actual</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -198,26 +198,38 @@ However, it is not supported in MS-Windows operating system and RStudio environm
 #&gt; </span><span></div><div class='input'>
 <span class='co'># Run the model fitting.</span>
 <span class='no'>result</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='run_models.html'>run_models</a></span>(<span class='kw'>.data</span> <span class='kw'>=</span> <span class='no'>train</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='st'>"Kyphosis"</span>, <span class='kw'>positive</span> <span class='kw'>=</span> <span class='st'>"present"</span>)
-<span class='no'>result</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 5 x 5</span><span>
-#&gt;   step     model_id     target   positive fitted_model
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;list&gt;</span><span>      
-#&gt; </span><span style='color: #555555;'>1</span><span> 1.Fitted logistic     Kyphosis present  </span><span style='color: #555555;'>&lt;glm&gt;</span><span>       
-#&gt; </span><span style='color: #555555;'>2</span><span> 1.Fitted rpart        Kyphosis present  </span><span style='color: #555555;'>&lt;rpart&gt;</span><span>     
-#&gt; </span><span style='color: #555555;'>3</span><span> 1.Fitted ctree        Kyphosis present  </span><span style='color: #555555;'>&lt;BinaryTr&gt;</span><span>  
-#&gt; </span><span style='color: #555555;'>4</span><span> 1.Fitted randomForest Kyphosis present  </span><span style='color: #555555;'>&lt;rndmFrs.&gt;</span><span>  
-#&gt; </span><span style='color: #555555;'>5</span><span> 1.Fitted ranger       Kyphosis present  </span><span style='color: #555555;'>&lt;ranger&gt;</span><span>    </div><div class='input'>
-<span class='co'># Predict the model.</span>
+<span class='no'>result</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 5 x 7</span><span>
+#&gt;   step     model_id     target   is_factor positive negative fitted_model
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;lgl&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;list&gt;</span><span>      
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> 1.Fitted logistic     Kyphosis TRUE      present  absent   </span><span style='color: #949494;'>&lt;glm&gt;</span><span>       
+#&gt; </span><span style='color: #BCBCBC;'>2</span><span> 1.Fitted rpart        Kyphosis TRUE      present  absent   </span><span style='color: #949494;'>&lt;rpart&gt;</span><span>     
+#&gt; </span><span style='color: #BCBCBC;'>3</span><span> 1.Fitted ctree        Kyphosis TRUE      present  absent   </span><span style='color: #949494;'>&lt;BinaryTr&gt;</span><span>  
+#&gt; </span><span style='color: #BCBCBC;'>4</span><span> 1.Fitted randomForest Kyphosis TRUE      present  absent   </span><span style='color: #949494;'>&lt;rndmFrs.&gt;</span><span>  
+#&gt; </span><span style='color: #BCBCBC;'>5</span><span> 1.Fitted ranger       Kyphosis TRUE      present  absent   </span><span style='color: #949494;'>&lt;ranger&gt;</span><span>    </div><div class='input'>
+<span class='co'># Predict the model. (Case 1)</span>
 <span class='no'>pred</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='run_predict.html'>run_predict</a></span>(<span class='no'>result</span>, <span class='no'>test</span>)
-<span class='no'>pred</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 5 x 6</span><span>
-#&gt;   step        model_id     target   positive fitted_model predicted 
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;list&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;list&gt;</span><span>    
-#&gt; </span><span style='color: #555555;'>1</span><span> 2.Predicted logistic     Kyphosis present  </span><span style='color: #555555;'>&lt;glm&gt;</span><span>        </span><span style='color: #555555;'>&lt;fct [24]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>2</span><span> 2.Predicted rpart        Kyphosis present  </span><span style='color: #555555;'>&lt;rpart&gt;</span><span>      </span><span style='color: #555555;'>&lt;fct [24]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>3</span><span> 2.Predicted ctree        Kyphosis present  </span><span style='color: #555555;'>&lt;BinaryTr&gt;</span><span>   </span><span style='color: #555555;'>&lt;fct [24]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>4</span><span> 2.Predicted randomForest Kyphosis present  </span><span style='color: #555555;'>&lt;rndmFrs.&gt;</span><span>   </span><span style='color: #555555;'>&lt;fct [24]&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>5</span><span> 2.Predicted ranger       Kyphosis present  </span><span style='color: #555555;'>&lt;ranger&gt;</span><span>     </span><span style='color: #555555;'>&lt;fct [24]&gt;</span><span></div><div class='input'>
-<span class='co'># Calculate performace metrics.</span>
+<span class='no'>pred</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 5 x 8</span><span>
+#&gt;   step     model_id   target  is_factor positive negative fitted_model predicted
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;lgl&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;list&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;list&gt;</span><span>   
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> 2.Predi… logistic   Kyphos… TRUE      present  absent   </span><span style='color: #949494;'>&lt;glm&gt;</span><span>        </span><span style='color: #949494;'>&lt;fct [24</span><span>…
+#&gt; </span><span style='color: #BCBCBC;'>2</span><span> 2.Predi… rpart      Kyphos… TRUE      present  absent   </span><span style='color: #949494;'>&lt;rpart&gt;</span><span>      </span><span style='color: #949494;'>&lt;fct [24</span><span>…
+#&gt; </span><span style='color: #BCBCBC;'>3</span><span> 2.Predi… ctree      Kyphos… TRUE      present  absent   </span><span style='color: #949494;'>&lt;BinaryTr&gt;</span><span>   </span><span style='color: #949494;'>&lt;fct [24</span><span>…
+#&gt; </span><span style='color: #BCBCBC;'>4</span><span> 2.Predi… randomFor… Kyphos… TRUE      present  absent   </span><span style='color: #949494;'>&lt;rndmFrs.&gt;</span><span>   </span><span style='color: #949494;'>&lt;fct [24</span><span>…
+#&gt; </span><span style='color: #BCBCBC;'>5</span><span> 2.Predi… ranger     Kyphos… TRUE      present  absent   </span><span style='color: #949494;'>&lt;ranger&gt;</span><span>     </span><span style='color: #949494;'>&lt;fct [24</span><span>…</div><div class='input'>
+<span class='co'># Calculate performace metrics. (Case 1)</span>
 <span class='no'>perf</span> <span class='kw'>&lt;-</span> <span class='fu'>run_performance</span>(<span class='no'>pred</span>)</div><div class='output co'>#&gt; <span class='error'>Error in levels(actual): object 'pred' not found</span></div><div class='input'><span class='no'>perf</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'perf' not found</span></div><div class='input'><span class='no'>perf</span>$<span class='no'>performance</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'perf' not found</span></div><div class='input'>
+<span class='co'># Predict the model. (Case 2)</span>
+<span class='no'>pred</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='run_predict.html'>run_predict</a></span>(<span class='no'>result</span>, <span class='no'>test</span>[, -<span class='fl'>1</span>])
+<span class='no'>pred</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 5 x 8</span><span>
+#&gt;   step     model_id   target  is_factor positive negative fitted_model predicted
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;lgl&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;list&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;list&gt;</span><span>   
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> 2.Predi… logistic   Kyphos… TRUE      present  absent   </span><span style='color: #949494;'>&lt;glm&gt;</span><span>        </span><span style='color: #949494;'>&lt;fct [24</span><span>…
+#&gt; </span><span style='color: #BCBCBC;'>2</span><span> 2.Predi… rpart      Kyphos… TRUE      present  absent   </span><span style='color: #949494;'>&lt;rpart&gt;</span><span>      </span><span style='color: #949494;'>&lt;fct [24</span><span>…
+#&gt; </span><span style='color: #BCBCBC;'>3</span><span> 2.Predi… ctree      Kyphos… TRUE      present  absent   </span><span style='color: #949494;'>&lt;BinaryTr&gt;</span><span>   </span><span style='color: #949494;'>&lt;fct [24</span><span>…
+#&gt; </span><span style='color: #BCBCBC;'>4</span><span> 2.Predi… randomFor… Kyphos… TRUE      present  absent   </span><span style='color: #949494;'>&lt;rndmFrs.&gt;</span><span>   </span><span style='color: #949494;'>&lt;fct [24</span><span>…
+#&gt; </span><span style='color: #BCBCBC;'>5</span><span> 2.Predi… ranger     Kyphos… TRUE      present  absent   </span><span style='color: #949494;'>&lt;ranger&gt;</span><span>     </span><span style='color: #949494;'>&lt;fct [24</span><span>…</div><div class='input'>
+<span class='co'># Calculate performace metrics. (Case 2)</span>
+<span class='no'>perf</span> <span class='kw'>&lt;-</span> <span class='fu'>run_performance</span>(<span class='no'>pred</span>, <span class='fu'><a href='https://dplyr.tidyverse.org/reference/pull.html'>pull</a></span>(<span class='no'>test</span>[, <span class='fl'>1</span>]))</div><div class='output co'>#&gt; <span class='error'>Error in ifelse(pred &lt; cutoff, setdiff(level, positive), positive): object 'pred' not found</span></div><div class='input'><span class='no'>perf</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'perf' not found</span></div><div class='input'><span class='no'>perf</span>$<span class='no'>performance</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'perf' not found</span></div><div class='input'>
 <span class='co'># Convert to matrix for compare performace.</span>
 <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='no'>perf</span>$<span class='no'>performance</span>, <span class='st'>"c"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in lapply(X = X, FUN = FUN, ...): object 'perf' not found</span></div><div class='input'>
 </div></span></pre>
