@@ -8,23 +8,26 @@ run_models(
   .data,
   target,
   positive,
-  models = c("logistic", "rpart", "ctree", "randomForest", "ranger")
+  models = c("logistic", "rpart", "ctree", "randomForest", "ranger", "xgboost")
 )
 }
 \arguments{
-\item{.data}{A train_df. Train data to fit the model. It also supports tbl_df, tbl, and data.frame objects.}
+\item{.data}{A train_df. Train data to fit the model. It also supports tbl_df, 
+tbl, and data.frame objects.}
 
 \item{target}{character. Name of target variable.}
 
 \item{positive}{character. Level of positive class of binary classification.}
 
-\item{models}{character. Algorithm types of model to fit. See details. default value is c("logistic", "rpart", "ctree", "randomForest", "ranger").}
+\item{models}{character. Algorithm types of model to fit. See details. 
+default value is c("logistic", "rpart", "ctree", "randomForest", "ranger").}
 }
 \value{
 model_df. results of fitted model.
 model_df is composed of tbl_df and contains the following variables.:
 \itemize{
-\item step : character. The current stage in the model fit process. The result of calling run_models() is returned as "1.Fitted".
+\item step : character. The current stage in the model fit process. 
+The result of calling run_models() is returned as "1.Fitted".
 \item model_id : character. Type of fit model.
 \item target : character. Name of target variable.
 \item is_factor : logical. Indicates whether the target variable is a factor. 
@@ -37,18 +40,22 @@ model_df is composed of tbl_df and contains the following variables.:
 Fit some representative binary classification models.
 }
 \details{
-Supported models are functions supported by the representative model package used in R environment.
+Supported models are functions supported by the representative 
+model package used in R environment.
 The following binary classifications are supported:
 \itemize{
 \item "logistic" : logistic regression by glm() in stats package.
 \item "rpart" : recursive partitioning tree model by rpart() in rpart package.
 \item "ctree" : conditional inference tree model by ctree() in party package.
-\item "randomForest" : random forest model by randomForest() in randomForest package.
+\item "randomForest" : random forest model by randomForest() in 
+randomForest package.
 \item "ranger" : random forest model by ranger() in ranger package.
+\item "xgboost" : XGBoosting model by xgboost() in xgboost package.
 }
 
 run_models() executes the process in parallel when fitting the model. 
-However, it is not supported in MS-Windows operating system and RStudio environment.
+However, it is not supported in MS-Windows operating system and RStudio 
+environment.
 }
 \examples{
 library(dplyr)

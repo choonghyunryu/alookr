@@ -1,7 +1,7 @@
 Package: alookr
 Type: Package
 Title: Model Classifier for Binary Classification
-Version: 0.3.3
+Version: 0.3.4
 Authors@R: c(
   person("Choonghyun", "Ryu",, "choonghyun.ryu@gmail.com", role = c("aut", "cre"))
   )
@@ -14,27 +14,27 @@ Depends:
     R (>= 3.2.0),
     ggplot2,
     randomForest
-Imports: dlookr,
+Imports: caTools,
+      cli,
+      dlookr,
       dplyr,
-      stats,
-      methods,
-      caTools,
+      future,
       ggmosaic,
+      MASS,
+      MLmetrics,      
+      methods,
+      party,  
+      purrr,
+      ROCR,    
+      ranger,  
+      rlang,      
+      rpart,      
+      stats,
+      tibble,
       tidyr,
       tidyselect,
       unbalanced,
-      rlang,
-      tibble,
-      cli,
-      party,
-      rpart,
-      ranger,      
-      MLmetrics,
-      MASS,
-      RColorBrewer,
-      ROCR,
-      future,
-      purrr
+      xgboost
 Suggests: 
     knitr,
     ISLR,

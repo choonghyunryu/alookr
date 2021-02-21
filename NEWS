@@ -1,21 +1,56 @@
-alookr 0.3.3
-----------------------------------------------------------------
-* run_predict() fixed error when try to predict on dataset without the response variable (@shivakhanal, #1).
-* run_models(), run_predict(), run_performance() not support future::multiprocess when running R from RStudio. 
+CHANGES IN R VERSION 0.3.4:
+      
+  MAJOR CHANGES:
+  
+    * add xgboosting methodlogy for binary classifier.
+      
+      
+      
+CHANGES IN R VERSION 0.3.3:
+      
+  BUG FIXES:
+
+    * run_predict() fixed error when try to predict on dataset without 
+      the response variable (thanks @shivakhanal, #1).
+    
+  MINOR CHANGES:
+  
+    * run_models(), run_predict(), run_performance() not support 
+      future::multiprocess when running R from RStudio. 
 
 
-alookr 0.3.2
-----------------------------------------------------------------
-* Renamed compare_category() to compare_target_category(). This is because it overlaps the function name of the dlookr package.
-* Renamed compare_numeric() to compare_target_numeric(). This is because it overlaps the function name of the dlookr package.
-* compare_target_category() modified from is.tibble(), as.tibble() to is_tibble(), as_tibble().
-* compare_diag() modified from is.tibble(), as.tibble() to is_tibble(), as_tibble().
-* sampling_target() modified from as.tbl() to tibble::as_tibble().
-* Fixed explanation errors in `Classification Modeling` vignettes for debian linux.
 
+CHANGES IN R VERSION 0.3.2:
+      
+  BUG FIXES:
 
-alookr 0.3.1
-----------------------------------------------------------------
-* Fixed explanation errors in `Cleansing the dataset` vignettes.
-* Fixed explanation errors in `Classification Modeling` vignettes.
-* Modified explanation errors in `Splitting the dataset` vignettes.
+    * Fixed explanation errors in `Classification Modeling` vignettes 
+      for debian linux.
+    
+  MINOR CHANGES:
+
+    * Renamed compare_category() to compare_target_category(). 
+      This is because it overlaps the function name of the dlookr package.
+    
+    * Renamed compare_numeric() to compare_target_numeric(). 
+      This is because it overlaps the function name of the dlookr package.
+      
+    * compare_target_category() modified from is.tibble(), 
+      as.tibble() to is_tibble(), as_tibble().  
+      
+    * compare_diag() modified from is.tibble(), as.tibble() to 
+      is_tibble(), as_tibble().  
+
+    * sampling_target() modified from as.tbl() to tibble::as_tibble().
+    
+    
+
+CHANGES IN R VERSION 0.3.1:
+      
+  BUG FIXES:
+
+    * Fixed explanation errors in `Cleansing the dataset` vignettes.
+    
+    * Fixed explanation errors in `Classification Modeling` vignettes.
+    
+    * Modified explanation errors in `Splitting the dataset` vignettes.

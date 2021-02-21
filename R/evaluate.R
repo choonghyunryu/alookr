@@ -683,7 +683,8 @@ plot_performance <- function(model) {
     data_all <- rbind(data_all, data.frame(tmp[[i]], model_id = model_id[i]))
   }
 
-  color_palette <- RColorBrewer::brewer.pal(7, "Dark2")
+  color_palette <- c("#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E",
+                     "#E6AB02", "#A6761D")
   color_palette <- setNames(color_palette[seq(model_id)], model_id)
 
   ggplot(data_all, aes(x = x, y = y, color = model_id)) +
