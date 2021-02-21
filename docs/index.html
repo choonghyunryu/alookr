@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">alookr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
       </span>
     </div>
 
@@ -57,7 +57,7 @@
 </li>
 <li>
   <a href="https://github.com/choonghyunryu/alookr/">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -112,7 +112,7 @@
 <li>Split the data into a train set and a test set</li>
 <li>Modeling and Evaluate, Predict</li>
 </ul>
-<!-- end list --><div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/browseVignettes.html">browseVignettes</a></span>(<span class="kw">package</span> <span class="kw">=</span> <span class="st">"alookr"</span>)</pre></div>
+<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/browseVignettes.html">browseVignettes</a></span>(<span class="kw">package</span> <span class="kw">=</span> <span class="st">"alookr"</span>)</pre></div>
 </div>
 <div id="cleansing-the-dataset" class="section level2">
 <h2 class="hasAnchor">
@@ -134,7 +134,7 @@
 <li>
 <code>flag</code> : character</li>
 </ul>
-<!-- end list --><div class="sourceCode" id="cb5"><pre class="r"><span class="co"># create sample dataset</span>
+<div class="sourceCode" id="cb5"><pre class="r"><span class="co"># create sample dataset</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">123L</span>)
 <span class="no">id</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span>(<span class="fl">1</span>:<span class="fl">1000</span>, <span class="kw">function</span>(<span class="no">x</span>)
   <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="no">letters</span>, <span class="fl">5</span>), <span class="no">x</span>), <span class="kw">collapse</span> <span class="kw">=</span> <span class="st">""</span>))
@@ -155,10 +155,10 @@
 <span class="co"># structure of dataset</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="no">data_exam</span>)
 <span class="co">#&gt; 'data.frame':    1000 obs. of  5 variables:</span>
-<span class="co">#&gt;  $ id   : chr  "htjuw1" "bnvmk2" "ylqnc3" "xgbhu4" ...</span>
+<span class="co">#&gt;  $ id   : chr  "osncj1" "rvket2" "nvesi3" "chgji4" ...</span>
 <span class="co">#&gt;  $ year : chr  "2018" "2018" "2018" "2018" ...</span>
-<span class="co">#&gt;  $ count: int  3 8 5 9 10 1 6 9 6 5 ...</span>
-<span class="co">#&gt;  $ alpha: chr  "h" "u" "k" "w" ...</span>
+<span class="co">#&gt;  $ count: int  3 3 10 2 6 5 4 6 9 10 ...</span>
+<span class="co">#&gt;  $ alpha: chr  "o" "s" "n" "c" ...</span>
 <span class="co">#&gt;  $ flag : chr  "N" "N" "N" "N" ...</span>
 
 <span class="co"># summary of dataset</span>
@@ -166,8 +166,8 @@
 <span class="co">#&gt;       id                year               count           alpha          </span>
 <span class="co">#&gt;  Length:1000        Length:1000        Min.   : 1.000   Length:1000       </span>
 <span class="co">#&gt;  Class :character   Class :character   1st Qu.: 3.000   Class :character  </span>
-<span class="co">#&gt;  Mode  :character   Mode  :character   Median : 5.000   Mode  :character  </span>
-<span class="co">#&gt;                                        Mean   : 5.474                     </span>
+<span class="co">#&gt;  Mode  :character   Mode  :character   Median : 6.000   Mode  :character  </span>
+<span class="co">#&gt;                                        Mean   : 5.698                     </span>
 <span class="co">#&gt;                                        3rd Qu.: 8.000                     </span>
 <span class="co">#&gt;                                        Max.   :10.000                     </span>
 <span class="co">#&gt;      flag          </span>
@@ -223,8 +223,8 @@
 <span class="co"># structure of cleansing dataset</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="no">newDat</span>)
 <span class="co">#&gt; 'data.frame':    1000 obs. of  3 variables:</span>
-<span class="co">#&gt;  $ count: int  3 8 5 9 10 1 6 9 6 5 ...</span>
-<span class="co">#&gt;  $ alpha: Factor w/ 26 levels "a","b","c","d",..: 8 21 11 23 25 2 14 24 15 12 ...</span>
+<span class="co">#&gt;  $ count: int  3 3 10 2 6 5 4 6 9 10 ...</span>
+<span class="co">#&gt;  $ alpha: Factor w/ 26 levels "a","b","c","d",..: 15 19 14 3 10 18 22 11 5 20 ...</span>
 <span class="co">#&gt;  $ flag : Factor w/ 2 levels "N","Y": 1 1 1 1 2 1 1 1 1 1 ...</span></pre></div>
 <ul>
 <li>
@@ -258,8 +258,8 @@
 <span class="co"># structure of cleansing dataset</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="no">newDat</span>)
 <span class="co">#&gt; 'data.frame':    1000 obs. of  3 variables:</span>
-<span class="co">#&gt;  $ count: int  3 8 5 9 10 1 6 9 6 5 ...</span>
-<span class="co">#&gt;  $ alpha: Factor w/ 26 levels "a","b","c","d",..: 8 21 11 23 25 2 14 24 15 12 ...</span>
+<span class="co">#&gt;  $ count: int  3 3 10 2 6 5 4 6 9 10 ...</span>
+<span class="co">#&gt;  $ alpha: Factor w/ 26 levels "a","b","c","d",..: 15 19 14 3 10 18 22 11 5 20 ...</span>
 <span class="co">#&gt;  $ flag : Factor w/ 2 levels "N","Y": 1 1 1 1 2 1 1 1 1 1 ...</span></pre></div>
 <p>The <code>alpha</code> variable was not removed.</p>
 <p>If you do not want to apply a unique rate, you can set the value of the <code>uniq</code> argument to FALSE.:</p>
@@ -275,10 +275,10 @@
 <span class="co"># structure of cleansing dataset</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="no">newDat</span>)
 <span class="co">#&gt; 'data.frame':    1000 obs. of  5 variables:</span>
-<span class="co">#&gt;  $ id   : Factor w/ 1000 levels "abety794","abkoe306",..: 301 59 929 890 904 694 997 465 134 124 ...</span>
+<span class="co">#&gt;  $ id   : Factor w/ 1000 levels "ablnc282","abqym54",..: 594 715 558 94 727 270 499 882 930 515 ...</span>
 <span class="co">#&gt;  $ year : Factor w/ 1 level "2018": 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="co">#&gt;  $ count: int  3 8 5 9 10 1 6 9 6 5 ...</span>
-<span class="co">#&gt;  $ alpha: Factor w/ 26 levels "a","b","c","d",..: 8 21 11 23 25 2 14 24 15 12 ...</span>
+<span class="co">#&gt;  $ count: int  3 3 10 2 6 5 4 6 9 10 ...</span>
+<span class="co">#&gt;  $ alpha: Factor w/ 26 levels "a","b","c","d",..: 15 19 14 3 10 18 22 11 5 20 ...</span>
 <span class="co">#&gt;  $ flag : Factor w/ 2 levels "N","Y": 1 1 1 1 2 1 1 1 1 1 ...</span></pre></div>
 <p>If you do not want to force type conversion of a character variable to factor, you can set the value of the <code>char</code> argument to FALSE.:</p>
 <div class="sourceCode" id="cb9"><pre class="r"><span class="co"># cleansing dataset</span>
@@ -294,8 +294,8 @@
 <span class="co"># structure of cleansing dataset</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="no">newDat</span>)
 <span class="co">#&gt; 'data.frame':    1000 obs. of  3 variables:</span>
-<span class="co">#&gt;  $ count: int  3 8 5 9 10 1 6 9 6 5 ...</span>
-<span class="co">#&gt;  $ alpha: chr  "h" "u" "k" "w" ...</span>
+<span class="co">#&gt;  $ count: int  3 3 10 2 6 5 4 6 9 10 ...</span>
+<span class="co">#&gt;  $ alpha: chr  "o" "s" "n" "c" ...</span>
 <span class="co">#&gt;  $ flag : chr  "N" "N" "N" "N" ...</span></pre></div>
 <p>If you want to remove a variable that contains missing values, specify the value of the <code>missing</code> argument as TRUE. The following example <strong>removes the flag variable</strong> that contains the missing value.</p>
 <div class="sourceCode" id="cb10"><pre class="r"><span class="no">data_exam</span>$<span class="no">flag</span>[<span class="fl">1</span>] <span class="kw">&lt;-</span> <span class="fl">NA</span>
@@ -321,8 +321,8 @@
 <span class="co"># structure of cleansing dataset</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="no">newDat</span>)
 <span class="co">#&gt; 'data.frame':    1000 obs. of  2 variables:</span>
-<span class="co">#&gt;  $ count: int  3 8 5 9 10 1 6 9 6 5 ...</span>
-<span class="co">#&gt;  $ alpha: Factor w/ 26 levels "a","b","c","d",..: 8 21 11 23 25 2 14 24 15 12 ...</span></pre></div>
+<span class="co">#&gt;  $ count: int  3 3 10 2 6 5 4 6 9 10 ...</span>
+<span class="co">#&gt;  $ alpha: Factor w/ 26 levels "a","b","c","d",..: 15 19 14 3 10 18 22 11 5 20 ...</span></pre></div>
 </div>
 </div>
 <div id="diagnosis-and-removal-of-highly-correlated-variables" class="section level3">
@@ -357,69 +357,64 @@
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="no">exam</span>)
 <span class="co">#&gt; 'data.frame':    100 obs. of  7 variables:</span>
 <span class="co">#&gt;  $ x1: int  1 2 3 4 5 6 7 8 9 10 ...</span>
-<span class="co">#&gt;  $ x2: num  0.957 5.957 8.957 3.957 4.957 ...</span>
-<span class="co">#&gt;  $ x3: num  -0.806 2.194 4.194 6.194 8.194 ...</span>
+<span class="co">#&gt;  $ x2: num  2.55 4.55 9.55 12.55 10.55 ...</span>
+<span class="co">#&gt;  $ x3: num  0.194 2.194 4.194 6.194 3.194 ...</span>
 <span class="co">#&gt;  $ x4: Factor w/ 20 levels "a","b","c","d",..: 1 2 3 4 5 6 7 8 9 10 ...</span>
-<span class="co">#&gt;  $ x5: Factor w/ 17 levels "c","d","e","g",..: 1 2 4 3 5 6 8 7 9 8 ...</span>
-<span class="co">#&gt;  $ x6: Factor w/ 14 levels "c","d","e","g",..: 1 2 3 4 5 6 7 6 8 8 ...</span>
-<span class="co">#&gt;  $ x7: Factor w/ 5 levels "a","b","c","d",..: 5 4 5 4 4 1 4 3 3 5 ...</span>
+<span class="co">#&gt;  $ x5: Factor w/ 13 levels "c","e","f","g",..: 1 5 3 2 4 7 6 8 9 8 ...</span>
+<span class="co">#&gt;  $ x6: Factor w/ 15 levels "c","d","f","g",..: 1 2 3 4 3 5 6 7 8 9 ...</span>
+<span class="co">#&gt;  $ x7: Factor w/ 5 levels "a","b","c","d",..: 2 2 1 4 5 1 4 3 1 5 ...</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">exam</span>)
 <span class="co">#&gt;   x1        x2         x3 x4 x5 x6 x7</span>
-<span class="co">#&gt; 1  1 0.9573151 -0.8060313  a  c  c  e</span>
-<span class="co">#&gt; 2  2 5.9573151  2.1939687  b  d  d  d</span>
-<span class="co">#&gt; 3  3 8.9573151  4.1939687  c  g  e  e</span>
-<span class="co">#&gt; 4  4 3.9573151  6.1939687  d  e  g  d</span>
-<span class="co">#&gt; 5  5 4.9573151  8.1939687  e  h  h  d</span>
-<span class="co">#&gt; 6  6 5.9573151 10.1939687  f  i  i  a</span>
+<span class="co">#&gt; 1  1  2.554297  0.1939687  a  c  c  b</span>
+<span class="co">#&gt; 2  2  4.554297  2.1939687  b  h  d  b</span>
+<span class="co">#&gt; 3  3  9.554297  4.1939687  c  f  f  a</span>
+<span class="co">#&gt; 4  4 12.554297  6.1939687  d  e  g  d</span>
+<span class="co">#&gt; 5  5 10.554297  3.1939687  e  g  f  e</span>
+<span class="co">#&gt; 6  6  6.554297 10.1939687  f  l  h  a</span>
 
 <span class="co"># default case</span>
 <span class="no">exam_01</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/treatment_corr.html">treatment_corr</a></span>(<span class="no">exam</span>)
 <span class="co">#&gt; * remove variables whose strong correlation (pearson &gt;= 0.8)</span>
-<span class="co">#&gt;  - remove x1 : with x3 (0.8072)</span>
-<span class="co">#&gt; Warning: `as.tibble()` is deprecated as of tibble 2.0.0.</span>
-<span class="co">#&gt; Please use `as_tibble()` instead.</span>
-<span class="co">#&gt; The signature and semantics have changed, see `?as_tibble`.</span>
-<span class="co">#&gt; This warning is displayed once every 8 hours.</span>
-<span class="co">#&gt; Call `lifecycle::last_warnings()` to see where this warning was generated.</span>
+<span class="co">#&gt;  - remove x1 : with x3 (0.825)</span>
 <span class="co">#&gt; * remove variables whose strong correlation (spearman &gt;= 0.8)</span>
-<span class="co">#&gt;  - remove x4 : with x5 (0.9823)</span>
-<span class="co">#&gt;  - remove x4 : with x6 (0.9955)</span>
-<span class="co">#&gt;  - remove x5 : with x6 (0.9853)</span>
+<span class="co">#&gt;  - remove x4 : with x5 (0.9649)</span>
+<span class="co">#&gt;  - remove x4 : with x6 (0.9928)</span>
+<span class="co">#&gt;  - remove x5 : with x6 (0.9485)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">exam_01</span>)
 <span class="co">#&gt;          x2         x3 x6 x7</span>
-<span class="co">#&gt; 1 0.9573151 -0.8060313  c  e</span>
-<span class="co">#&gt; 2 5.9573151  2.1939687  d  d</span>
-<span class="co">#&gt; 3 8.9573151  4.1939687  e  e</span>
-<span class="co">#&gt; 4 3.9573151  6.1939687  g  d</span>
-<span class="co">#&gt; 5 4.9573151  8.1939687  h  d</span>
-<span class="co">#&gt; 6 5.9573151 10.1939687  i  a</span>
+<span class="co">#&gt; 1  2.554297  0.1939687  c  b</span>
+<span class="co">#&gt; 2  4.554297  2.1939687  d  b</span>
+<span class="co">#&gt; 3  9.554297  4.1939687  f  a</span>
+<span class="co">#&gt; 4 12.554297  6.1939687  g  d</span>
+<span class="co">#&gt; 5 10.554297  3.1939687  f  e</span>
+<span class="co">#&gt; 6  6.554297 10.1939687  h  a</span>
 
 <span class="co"># not removing variables</span>
 <span class="fu"><a href="reference/treatment_corr.html">treatment_corr</a></span>(<span class="no">exam</span>, <span class="kw">treat</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="co">#&gt; * remove variables whose strong correlation (pearson &gt;= 0.8)</span>
-<span class="co">#&gt;  - remove x1 : with x3 (0.8072)</span>
+<span class="co">#&gt;  - remove x1 : with x3 (0.825)</span>
 <span class="co">#&gt; * remove variables whose strong correlation (spearman &gt;= 0.8)</span>
-<span class="co">#&gt;  - remove x4 : with x5 (0.9823)</span>
-<span class="co">#&gt;  - remove x4 : with x6 (0.9955)</span>
-<span class="co">#&gt;  - remove x5 : with x6 (0.9853)</span>
+<span class="co">#&gt;  - remove x4 : with x5 (0.9649)</span>
+<span class="co">#&gt;  - remove x4 : with x6 (0.9928)</span>
+<span class="co">#&gt;  - remove x5 : with x6 (0.9485)</span>
 
 <span class="co"># Set a threshold to detecting variables when correlation greater then 0.9</span>
 <span class="fu"><a href="reference/treatment_corr.html">treatment_corr</a></span>(<span class="no">exam</span>, <span class="kw">corr_thres</span> <span class="kw">=</span> <span class="fl">0.9</span>, <span class="kw">treat</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="co">#&gt; * remove variables whose strong correlation (spearman &gt;= 0.9)</span>
-<span class="co">#&gt;  - remove x4 : with x5 (0.9823)</span>
-<span class="co">#&gt;  - remove x4 : with x6 (0.9955)</span>
-<span class="co">#&gt;  - remove x5 : with x6 (0.9853)</span>
+<span class="co">#&gt;  - remove x4 : with x5 (0.9649)</span>
+<span class="co">#&gt;  - remove x4 : with x6 (0.9928)</span>
+<span class="co">#&gt;  - remove x5 : with x6 (0.9485)</span>
 
 <span class="co"># not verbose mode</span>
 <span class="no">exam_02</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/treatment_corr.html">treatment_corr</a></span>(<span class="no">exam</span>, <span class="kw">verbose</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">exam_02</span>)
 <span class="co">#&gt;          x2         x3 x6 x7</span>
-<span class="co">#&gt; 1 0.9573151 -0.8060313  c  e</span>
-<span class="co">#&gt; 2 5.9573151  2.1939687  d  d</span>
-<span class="co">#&gt; 3 8.9573151  4.1939687  e  e</span>
-<span class="co">#&gt; 4 3.9573151  6.1939687  g  d</span>
-<span class="co">#&gt; 5 4.9573151  8.1939687  h  d</span>
-<span class="co">#&gt; 6 5.9573151 10.1939687  i  a</span></pre></div>
+<span class="co">#&gt; 1  2.554297  0.1939687  c  b</span>
+<span class="co">#&gt; 2  4.554297  2.1939687  d  b</span>
+<span class="co">#&gt; 3  9.554297  4.1939687  f  a</span>
+<span class="co">#&gt; 4 12.554297  6.1939687  g  d</span>
+<span class="co">#&gt; 5 10.554297  3.1939687  f  e</span>
+<span class="co">#&gt; 6  6.554297 10.1939687  h  a</span></pre></div>
 <ul>
 <li>
 <code>remove variables whose strong correlation</code> : x1, x4, x5 are removed.</li>
@@ -445,7 +440,7 @@
 <li>
 <code>income</code> : numeric. Income of customer</li>
 </ul>
-<!-- end list --><div class="sourceCode" id="cb12"><pre class="r"><span class="co"># Credit Card Default Data</span>
+<div class="sourceCode" id="cb12"><pre class="r"><span class="co"># Credit Card Default Data</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="kw pkg">ISLR</span><span class="kw ns">::</span><span class="no"><a href="https://rdrr.io/pkg/ISLR/man/Default.html">Default</a></span>)
 <span class="co">#&gt;   default student   balance    income</span>
 <span class="co">#&gt; 1      No      No  729.5265 44361.625</span>
@@ -515,7 +510,7 @@
 <li>minority_rate : numeric. the rate of the minority class</li>
 <li>majority_rate : numeric. the rate of the majority class</li>
 </ul>
-<!-- end list --><div class="sourceCode" id="cb14"><pre class="r"><span class="no">attr_names</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/attributes.html">attributes</a></span>(<span class="no">sb</span>))
+<div class="sourceCode" id="cb14"><pre class="r"><span class="no">attr_names</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/attributes.html">attributes</a></span>(<span class="no">sb</span>))
 <span class="no">attr_names</span>
 <span class="co">#&gt;  [1] "names"         "row.names"     "groups"        "class"        </span>
 <span class="co">#&gt;  [5] "split_seed"    "target"        "binary"        "minority"     </span>
@@ -684,8 +679,7 @@
 <span class="no">sb</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="reference/compare_plot.html">compare_plot</a></span>(<span class="st">"income"</span>)</pre></div>
 <p><img src="reference/figures/README-compare_plot-1.png"><!-- --></p>
-<div class="sourceCode" id="cb19"><pre class="r">
-<span class="co"># all varibales</span>
+<div class="sourceCode" id="cb19"><pre class="r"><span class="co"># all varibales</span>
 <span class="no">sb</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="reference/compare_plot.html">compare_plot</a></span>()</pre></div>
 <p><img src="reference/figures/README-compare_plot-2.png"><!-- --><img src="reference/figures/README-compare_plot-3.png"><!-- --><img src="reference/figures/README-compare_plot-4.png"><!-- --><img src="reference/figures/README-compare_plot-5.png"><!-- --></p>
@@ -711,15 +705,17 @@
 <span class="co">#&gt; * Detected diagnose missing value</span>
 <span class="co">#&gt;  - student</span>
 <span class="co">#&gt;  - balance</span>
+<span class="co">#&gt;  - balance</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; * Detected diagnose missing levels</span>
 <span class="co">#&gt;  - student</span>
 <span class="co">#&gt; $missing_value</span>
-<span class="co">#&gt; # A tibble: 2 x 4</span>
+<span class="co">#&gt; # A tibble: 3 x 4</span>
 <span class="co">#&gt;   variables train_misscount train_missrate test_missrate</span>
 <span class="co">#&gt;   &lt;chr&gt;               &lt;int&gt;          &lt;dbl&gt;         &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 student                 3         0.0429        NA    </span>
-<span class="co">#&gt; 2 balance                 5         0.0714         0.167</span>
+<span class="co">#&gt; 1 student                 3         0.0429       NA     </span>
+<span class="co">#&gt; 2 balance                 8         0.114        NA     </span>
+<span class="co">#&gt; 3 balance                 2        NA             0.0667</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $single_value</span>
 <span class="co">#&gt; # A tibble: 0 x 3</span>
@@ -741,15 +737,17 @@
 <span class="co">#&gt; * Detected diagnose missing value</span>
 <span class="co">#&gt;  - student</span>
 <span class="co">#&gt;  - balance</span>
+<span class="co">#&gt;  - balance</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; * Detected diagnose missing levels</span>
 <span class="co">#&gt;  - student</span>
 <span class="co">#&gt; $missing_value</span>
-<span class="co">#&gt; # A tibble: 2 x 4</span>
+<span class="co">#&gt; # A tibble: 3 x 4</span>
 <span class="co">#&gt;   variables train_misscount train_missrate test_missrate</span>
 <span class="co">#&gt;   &lt;chr&gt;               &lt;int&gt;          &lt;dbl&gt;         &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 student                 3         0.0429        NA    </span>
-<span class="co">#&gt; 2 balance                 5         0.0714         0.167</span>
+<span class="co">#&gt; 1 student                 3         0.0429       NA     </span>
+<span class="co">#&gt; 2 balance                 8         0.114        NA     </span>
+<span class="co">#&gt; 3 balance                 2        NA             0.0667</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $single_value</span>
 <span class="co">#&gt; # A tibble: 0 x 3</span>
@@ -771,6 +769,7 @@
 <span class="co">#&gt; * Detected diagnose missing value</span>
 <span class="co">#&gt;  - student</span>
 <span class="co">#&gt;  - balance</span>
+<span class="co">#&gt;  - balance</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; * Detected diagnose many unique value</span>
 <span class="co">#&gt;  - default</span>
@@ -779,11 +778,12 @@
 <span class="co">#&gt; * Detected diagnose missing levels</span>
 <span class="co">#&gt;  - student</span>
 <span class="co">#&gt; $missing_value</span>
-<span class="co">#&gt; # A tibble: 2 x 4</span>
+<span class="co">#&gt; # A tibble: 3 x 4</span>
 <span class="co">#&gt;   variables train_misscount train_missrate test_missrate</span>
 <span class="co">#&gt;   &lt;chr&gt;               &lt;int&gt;          &lt;dbl&gt;         &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 student                 3         0.0429        NA    </span>
-<span class="co">#&gt; 2 balance                 5         0.0714         0.167</span>
+<span class="co">#&gt; 1 student                 3         0.0429       NA     </span>
+<span class="co">#&gt; 2 balance                 8         0.114        NA     </span>
+<span class="co">#&gt; 3 balance                 2        NA             0.0667</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $single_value</span>
 <span class="co">#&gt; # A tibble: 0 x 3</span>
@@ -858,10 +858,6 @@
 <span class="co"># over-sampling with random seed</span>
 <span class="no">over</span> <span class="kw">&lt;-</span> <span class="no">sb</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="reference/sampling_target.html">sampling_target</a></span>(<span class="kw">method</span> <span class="kw">=</span> <span class="st">"ubOver"</span>, <span class="kw">seed</span> <span class="kw">=</span> <span class="fl">1234L</span>)
-<span class="co">#&gt; Warning: `as.tbl()` is deprecated as of dplyr 1.0.0.</span>
-<span class="co">#&gt; Please use `tibble::as_tibble()` instead.</span>
-<span class="co">#&gt; This warning is displayed once every 8 hours.</span>
-<span class="co">#&gt; Call `lifecycle::last_warnings()` to see where this warning was generated.</span>
 
 <span class="no">over</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span>(<span class="no">default</span>)
@@ -942,7 +938,7 @@
 <li>
 <code>Class</code> : factor. Class. level is <code>benign</code> and <code>malignant</code>.</li>
 </ul>
-<!-- end list --><div class="sourceCode" id="cb23"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">mlbench</span>)
+<div class="sourceCode" id="cb23"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">mlbench</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">BreastCancer</span>)
 
 <span class="co"># class of each variables</span>
@@ -1025,10 +1021,10 @@
 </ul>
 </li>
 </ul>
-<!-- end list --><div class="sourceCode" id="cb26"><pre class="r"><span class="co"># summary() display the some information</span>
+<div class="sourceCode" id="cb26"><pre class="r"><span class="co"># summary() display the some information</span>
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">sb</span>)
 <span class="co">#&gt; ** Split train/test set information **</span>
-<span class="co">#&gt;  + random seed        :  50785 </span>
+<span class="co">#&gt;  + random seed        :  2725 </span>
 <span class="co">#&gt;  + split data            </span>
 <span class="co">#&gt;     - train set count :  489 </span>
 <span class="co">#&gt;     - test set count  :  210 </span>
@@ -1039,7 +1035,7 @@
 <span class="co"># summary() display the some information</span>
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">tmp</span>)
 <span class="co">#&gt; ** Split train/test set information **</span>
-<span class="co">#&gt;  + random seed        :  60620 </span>
+<span class="co">#&gt;  + random seed        :  16653 </span>
 <span class="co">#&gt;  + split data            </span>
 <span class="co">#&gt;     - train set count :  419 </span>
 <span class="co">#&gt;     - test set count  :  280 </span>
@@ -1056,7 +1052,7 @@
 <div class="sourceCode" id="cb27"><pre class="r"><span class="co"># list of categorical variables in the train set that contain missing levels</span>
 <span class="no">nolevel_in_train</span> <span class="kw">&lt;-</span> <span class="no">sb</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="reference/compare_target_category.html">compare_target_category</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">train</span> <span class="kw">==</span> <span class="fl">0</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">train</span>)) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">variable</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>() <span class="kw">%&gt;%</span>
   <span class="no">pull</span>
@@ -1072,7 +1068,7 @@
 
   <span class="no">nolevel_in_train</span> <span class="kw">&lt;-</span> <span class="no">sb</span> <span class="kw">%&gt;%</span>
     <span class="fu"><a href="reference/compare_target_category.html">compare_target_category</a></span>() <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">train</span> <span class="kw">==</span> <span class="fl">0</span>) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">train</span>)) <span class="kw">%&gt;%</span>
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">variable</span>) <span class="kw">%&gt;%</span>
     <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>() <span class="kw">%&gt;%</span>
     <span class="no">pull</span>
@@ -1104,7 +1100,7 @@
 <span class="co"># using summary function - imbalanced classes data</span>
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">sb</span>)
 <span class="co">#&gt; ** Split train/test set information **</span>
-<span class="co">#&gt;  + random seed        :  50785 </span>
+<span class="co">#&gt;  + random seed        :  2725 </span>
 <span class="co">#&gt;  + split data            </span>
 <span class="co">#&gt;     - train set count :  489 </span>
 <span class="co">#&gt;     - test set count  :  210 </span>
@@ -1131,7 +1127,7 @@
 <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">train_over</span>$<span class="no">Class</span>)
 <span class="co">#&gt; </span>
 <span class="co">#&gt;    benign malignant </span>
-<span class="co">#&gt;       330       330</span></pre></div>
+<span class="co">#&gt;       320       320</span></pre></div>
 </div>
 <div id="resampling---undersample-majority-class" class="section level4">
 <h4 class="hasAnchor">
@@ -1146,7 +1142,7 @@
 <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">train_under</span>$<span class="no">Class</span>)
 <span class="co">#&gt; </span>
 <span class="co">#&gt;    benign malignant </span>
-<span class="co">#&gt;       159       159</span></pre></div>
+<span class="co">#&gt;       169       169</span></pre></div>
 </div>
 <div id="generate-synthetic-samples---smote" class="section level4">
 <h4 class="hasAnchor">
@@ -1161,7 +1157,7 @@
 <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">train_smote</span>$<span class="no">Class</span>)
 <span class="co">#&gt; </span>
 <span class="co">#&gt;    benign malignant </span>
-<span class="co">#&gt;       636       477</span></pre></div>
+<span class="co">#&gt;       676       507</span></pre></div>
 </div>
 </div>
 <div id="cleansing-the-dataset-for-classification-modeling-with-cleanse" class="section level3">
@@ -1188,7 +1184,7 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── Checking unique rate ─────────────────────────────── high unique rate ──</span>
 <span class="co">#&gt; remove variables with high unique rate</span>
-<span class="co">#&gt; ● Id = 416(0.373764600179695)</span>
+<span class="co">#&gt; ● Id = 425(0.359256128486898)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── Checking character variables ─────────────────────── categorical data ──</span>
 <span class="co">#&gt; No character variables.</span></pre></div>
@@ -1228,17 +1224,18 @@
 <li>positive : positive class in target variable</li>
 <li>fitted_model : list. Fitted model object by model_id’s algorithms</li>
 </ul>
-<!-- end list --><div class="sourceCode" id="cb34"><pre class="r"><span class="no">result</span> <span class="kw">&lt;-</span> <span class="no">train</span> <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb34"><pre class="r"><span class="no">result</span> <span class="kw">&lt;-</span> <span class="no">train</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="reference/run_models.html">run_models</a></span>(<span class="kw">target</span> <span class="kw">=</span> <span class="st">"Class"</span>, <span class="kw">positive</span> <span class="kw">=</span> <span class="st">"malignant"</span>)
 <span class="no">result</span>
-<span class="co">#&gt; # A tibble: 5 x 5</span>
-<span class="co">#&gt;   step     model_id     target positive  fitted_model</span>
-<span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;  &lt;chr&gt;     &lt;list&gt;      </span>
-<span class="co">#&gt; 1 1.Fitted logistic     Class  malignant &lt;glm&gt;       </span>
-<span class="co">#&gt; 2 1.Fitted rpart        Class  malignant &lt;rpart&gt;     </span>
-<span class="co">#&gt; 3 1.Fitted ctree        Class  malignant &lt;BinaryTr&gt;  </span>
-<span class="co">#&gt; 4 1.Fitted randomForest Class  malignant &lt;rndmFrs.&gt;  </span>
-<span class="co">#&gt; 5 1.Fitted ranger       Class  malignant &lt;ranger&gt;</span></pre></div>
+<span class="co">#&gt; # A tibble: 6 x 7</span>
+<span class="co">#&gt;   step     model_id     target is_factor positive  negative fitted_model</span>
+<span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;  &lt;lgl&gt;     &lt;chr&gt;     &lt;chr&gt;    &lt;list&gt;      </span>
+<span class="co">#&gt; 1 1.Fitted logistic     Class  TRUE      malignant benign   &lt;glm&gt;       </span>
+<span class="co">#&gt; 2 1.Fitted rpart        Class  TRUE      malignant benign   &lt;rpart&gt;     </span>
+<span class="co">#&gt; 3 1.Fitted ctree        Class  TRUE      malignant benign   &lt;BinaryTr&gt;  </span>
+<span class="co">#&gt; 4 1.Fitted randomForest Class  TRUE      malignant benign   &lt;rndmFrs.&gt;  </span>
+<span class="co">#&gt; 5 1.Fitted ranger       Class  TRUE      malignant benign   &lt;ranger&gt;    </span>
+<span class="co">#&gt; 6 1.Fitted xgboost      Class  TRUE      malignant benign   &lt;xgb.Bstr&gt;</span></pre></div>
 </div>
 <div id="evaluate-the-model" class="section level3">
 <h3 class="hasAnchor">
@@ -1263,17 +1260,18 @@
 <li>fitted_model : list. Fitted model object by model_id’s algorithms.</li>
 <li>predicted : result of predcit by each models</li>
 </ul>
-<!-- end list --><div class="sourceCode" id="cb35"><pre class="r"><span class="no">pred</span> <span class="kw">&lt;-</span> <span class="no">result</span> <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb35"><pre class="r"><span class="no">pred</span> <span class="kw">&lt;-</span> <span class="no">result</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="reference/run_predict.html">run_predict</a></span>(<span class="no">test</span>)
 <span class="no">pred</span>
-<span class="co">#&gt; # A tibble: 5 x 6</span>
-<span class="co">#&gt;   step        model_id     target positive  fitted_model predicted  </span>
-<span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;        &lt;chr&gt;  &lt;chr&gt;     &lt;list&gt;       &lt;list&gt;     </span>
-<span class="co">#&gt; 1 2.Predicted logistic     Class  malignant &lt;glm&gt;        &lt;fct [210]&gt;</span>
-<span class="co">#&gt; 2 2.Predicted rpart        Class  malignant &lt;rpart&gt;      &lt;fct [210]&gt;</span>
-<span class="co">#&gt; 3 2.Predicted ctree        Class  malignant &lt;BinaryTr&gt;   &lt;fct [210]&gt;</span>
-<span class="co">#&gt; 4 2.Predicted randomForest Class  malignant &lt;rndmFrs.&gt;   &lt;fct [210]&gt;</span>
-<span class="co">#&gt; 5 2.Predicted ranger       Class  malignant &lt;ranger&gt;     &lt;fct [210]&gt;</span></pre></div>
+<span class="co">#&gt; # A tibble: 6 x 8</span>
+<span class="co">#&gt;   step     model_id   target is_factor positive  negative fitted_model predicted</span>
+<span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;      &lt;chr&gt;  &lt;lgl&gt;     &lt;chr&gt;     &lt;chr&gt;    &lt;list&gt;       &lt;list&gt;   </span>
+<span class="co">#&gt; 1 2.Predi… logistic   Class  TRUE      malignant benign   &lt;glm&gt;        &lt;fct [21…</span>
+<span class="co">#&gt; 2 2.Predi… rpart      Class  TRUE      malignant benign   &lt;rpart&gt;      &lt;fct [21…</span>
+<span class="co">#&gt; 3 2.Predi… ctree      Class  TRUE      malignant benign   &lt;BinaryTr&gt;   &lt;fct [21…</span>
+<span class="co">#&gt; 4 2.Predi… randomFor… Class  TRUE      malignant benign   &lt;rndmFrs.&gt;   &lt;fct [21…</span>
+<span class="co">#&gt; 5 2.Predi… ranger     Class  TRUE      malignant benign   &lt;ranger&gt;     &lt;fct [21…</span>
+<span class="co">#&gt; 6 2.Predi… xgboost    Class  TRUE      malignant benign   &lt;xgb.Bstr&gt;   &lt;fct [21…</span></pre></div>
 </div>
 <div id="calculate-the-performance-metric-with-run_performance" class="section level4">
 <h4 class="hasAnchor">
@@ -1295,17 +1293,18 @@
 <li>predicted : list. Predicted value by individual model. Each value has a predict_class class object.</li>
 <li>performance : list. Calculate metrics by individual model. Each value has a numeric vector.</li>
 </ul>
-<!-- end list --><div class="sourceCode" id="cb36"><pre class="r"><span class="co"># Calculate performace metrics.</span>
+<div class="sourceCode" id="cb36"><pre class="r"><span class="co"># Calculate performace metrics.</span>
 <span class="no">perf</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/run_performance.html">run_performance</a></span>(<span class="no">pred</span>)
 <span class="no">perf</span>
-<span class="co">#&gt; # A tibble: 5 x 7</span>
+<span class="co">#&gt; # A tibble: 6 x 7</span>
 <span class="co">#&gt;   step          model_id     target positive fitted_model predicted  performance</span>
 <span class="co">#&gt;   &lt;chr&gt;         &lt;chr&gt;        &lt;chr&gt;  &lt;chr&gt;    &lt;list&gt;       &lt;list&gt;     &lt;list&gt;     </span>
 <span class="co">#&gt; 1 3.Performanc… logistic     Class  maligna… &lt;glm&gt;        &lt;fct [210… &lt;dbl [15]&gt; </span>
 <span class="co">#&gt; 2 3.Performanc… rpart        Class  maligna… &lt;rpart&gt;      &lt;fct [210… &lt;dbl [15]&gt; </span>
 <span class="co">#&gt; 3 3.Performanc… ctree        Class  maligna… &lt;BinaryTr&gt;   &lt;fct [210… &lt;dbl [15]&gt; </span>
 <span class="co">#&gt; 4 3.Performanc… randomForest Class  maligna… &lt;rndmFrs.&gt;   &lt;fct [210… &lt;dbl [15]&gt; </span>
-<span class="co">#&gt; 5 3.Performanc… ranger       Class  maligna… &lt;ranger&gt;     &lt;fct [210… &lt;dbl [15]&gt;</span></pre></div>
+<span class="co">#&gt; 5 3.Performanc… ranger       Class  maligna… &lt;ranger&gt;     &lt;fct [210… &lt;dbl [15]&gt; </span>
+<span class="co">#&gt; 6 3.Performanc… xgboost      Class  maligna… &lt;xgb.Bstr&gt;   &lt;fct [210… &lt;dbl [15]&gt;</span></pre></div>
 <p>The performance variable contains a list object, which contains 15 performance metrics:</p>
 <ul>
 <li>ZeroOneLoss : Normalized Zero-One Loss(Classification Error Loss).</li>
@@ -1324,68 +1323,92 @@
 <li>GainAUC : Area Under the Gain Chart.</li>
 <li>KS_Stat : Kolmogorov-Smirnov Statistic.</li>
 </ul>
-<!-- end list --><div class="sourceCode" id="cb37"><pre class="r"><span class="co"># Performance by analytics models</span>
+<div class="sourceCode" id="cb37"><pre class="r"><span class="co"># Performance by analytics models</span>
 <span class="no">performance</span> <span class="kw">&lt;-</span> <span class="no">perf</span>$<span class="no">performance</span>
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">performance</span>) <span class="kw">&lt;-</span> <span class="no">perf</span>$<span class="no">model_id</span>
 <span class="no">performance</span>
 <span class="co">#&gt; $logistic</span>
 <span class="co">#&gt; ZeroOneLoss    Accuracy   Precision      Recall Sensitivity Specificity </span>
-<span class="co">#&gt;  0.04761905  0.95238095  0.95000000  0.92682927  0.92682927  0.96875000 </span>
+<span class="co">#&gt;  0.08571429  0.91428571  0.86486486  0.88888889  0.88888889  0.92753623 </span>
 <span class="co">#&gt;    F1_Score Fbeta_Score     LogLoss         AUC        Gini       PRAUC </span>
-<span class="co">#&gt;  0.93827160  0.93827160  1.51027400  0.95126715  0.94702744  0.06077086 </span>
+<span class="co">#&gt;  0.87671233  0.87671233  2.76028551  0.91339573  0.86714976  0.10267867 </span>
 <span class="co">#&gt;     LiftAUC     GainAUC     KS_Stat </span>
-<span class="co">#&gt;  1.08596033  0.77505807 90.33917683 </span>
+<span class="co">#&gt;  1.14456141  0.77166005 83.03140097 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $rpart</span>
 <span class="co">#&gt; ZeroOneLoss    Accuracy   Precision      Recall Sensitivity Specificity </span>
-<span class="co">#&gt;  0.06190476  0.93809524  0.93670886  0.90243902  0.90243902  0.96093750 </span>
+<span class="co">#&gt;  0.08571429  0.91428571  0.85526316  0.90277778  0.90277778  0.92028986 </span>
 <span class="co">#&gt;    F1_Score Fbeta_Score     LogLoss         AUC        Gini       PRAUC </span>
-<span class="co">#&gt;  0.91925466  0.91925466  0.41591455  0.92721037  0.89176829  0.80545712 </span>
+<span class="co">#&gt;  0.87837838  0.87837838  0.76993613  0.92200081  0.86090982  0.76243464 </span>
 <span class="co">#&gt;     LiftAUC     GainAUC     KS_Stat </span>
-<span class="co">#&gt;  1.82146153  0.76039489 86.33765244 </span>
+<span class="co">#&gt;  1.91998633  0.77731481 83.63526570 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $ctree</span>
 <span class="co">#&gt; ZeroOneLoss    Accuracy   Precision      Recall Sensitivity Specificity </span>
-<span class="co">#&gt;  0.04761905  0.95238095  0.92857143  0.95121951  0.95121951  0.95312500 </span>
+<span class="co">#&gt;  0.08571429  0.91428571  0.83750000  0.93055556  0.93055556  0.90579710 </span>
 <span class="co">#&gt;    F1_Score Fbeta_Score     LogLoss         AUC        Gini       PRAUC </span>
-<span class="co">#&gt;  0.93975904  0.93975904  0.61176450  0.97170351  0.95865091  0.47903471 </span>
+<span class="co">#&gt;  0.88157895  0.88157895  0.99432388  0.94509863  0.90438808  0.71643789 </span>
 <span class="co">#&gt;     LiftAUC     GainAUC     KS_Stat </span>
-<span class="co">#&gt;  1.49393413  0.78751452 90.43445122 </span>
+<span class="co">#&gt;  1.85328656  0.79249339 86.35265700 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $randomForest</span>
 <span class="co">#&gt; ZeroOneLoss    Accuracy   Precision      Recall Sensitivity Specificity </span>
-<span class="co">#&gt;  0.02857143  0.97142857  0.95238095  0.97560976  0.97560976  0.96875000 </span>
+<span class="co">#&gt;  0.05238095  0.94761905  0.89610390  0.95833333  0.95833333  0.94202899 </span>
 <span class="co">#&gt;    F1_Score Fbeta_Score     LogLoss         AUC        Gini       PRAUC </span>
-<span class="co">#&gt;  0.96385542  0.96385542  0.09943100  0.99328316  0.98647104  0.68540128 </span>
+<span class="co">#&gt;  0.92617450  0.92617450  0.30364293  0.98077697  0.96095008  0.60833221 </span>
 <span class="co">#&gt;     LiftAUC     GainAUC     KS_Stat </span>
-<span class="co">#&gt;  1.65902776  0.80066783 95.99847561 </span>
+<span class="co">#&gt;  1.71155373  0.81593915 94.20289855 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $ranger</span>
 <span class="co">#&gt; ZeroOneLoss    Accuracy   Precision      Recall Sensitivity Specificity </span>
-<span class="co">#&gt;  0.02380952  0.97619048  0.97530864  0.96341463  0.96341463  0.98437500 </span>
+<span class="co">#&gt;  0.04285714  0.95714286  0.90909091  0.97222222  0.97222222  0.94927536 </span>
 <span class="co">#&gt;    F1_Score Fbeta_Score     LogLoss         AUC        Gini       PRAUC </span>
-<span class="co">#&gt;  0.96932515  0.96932515  0.09782736  0.99323552  0.98647104  0.76957551 </span>
+<span class="co">#&gt;  0.93959732  0.93959732  0.15156344  0.98379630  0.96759259  0.74675595 </span>
 <span class="co">#&gt;     LiftAUC     GainAUC     KS_Stat </span>
-<span class="co">#&gt;  1.74052776  0.80063879 96.43673780</span></pre></div>
+<span class="co">#&gt;  1.83371476  0.81792328 94.20289855 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $xgboost</span>
+<span class="co">#&gt; ZeroOneLoss    Accuracy   Precision      Recall Sensitivity Specificity </span>
+<span class="co">#&gt;  0.06190476  0.93809524  0.89333333  0.93055556  0.93055556  0.94202899 </span>
+<span class="co">#&gt;    F1_Score Fbeta_Score     LogLoss         AUC        Gini       PRAUC </span>
+<span class="co">#&gt;  0.91156463  0.91156463  0.20105329  0.97247383  0.95249597  0.42783593 </span>
+<span class="co">#&gt;     LiftAUC     GainAUC     KS_Stat </span>
+<span class="co">#&gt;  1.57727936  0.81048280 89.31159420</span></pre></div>
 <p>If you change the list object to tidy format, you’ll see the following at a glance:</p>
 <div class="sourceCode" id="cb38"><pre class="r"><span class="co"># Convert to matrix for compare performace.</span>
 <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span>(<span class="no">performance</span>, <span class="st">"c"</span>)
 <span class="co">#&gt;                logistic       rpart       ctree randomForest      ranger</span>
-<span class="co">#&gt; ZeroOneLoss  0.04761905  0.06190476  0.04761905   0.02857143  0.02380952</span>
-<span class="co">#&gt; Accuracy     0.95238095  0.93809524  0.95238095   0.97142857  0.97619048</span>
-<span class="co">#&gt; Precision    0.95000000  0.93670886  0.92857143   0.95238095  0.97530864</span>
-<span class="co">#&gt; Recall       0.92682927  0.90243902  0.95121951   0.97560976  0.96341463</span>
-<span class="co">#&gt; Sensitivity  0.92682927  0.90243902  0.95121951   0.97560976  0.96341463</span>
-<span class="co">#&gt; Specificity  0.96875000  0.96093750  0.95312500   0.96875000  0.98437500</span>
-<span class="co">#&gt; F1_Score     0.93827160  0.91925466  0.93975904   0.96385542  0.96932515</span>
-<span class="co">#&gt; Fbeta_Score  0.93827160  0.91925466  0.93975904   0.96385542  0.96932515</span>
-<span class="co">#&gt; LogLoss      1.51027400  0.41591455  0.61176450   0.09943100  0.09782736</span>
-<span class="co">#&gt; AUC          0.95126715  0.92721037  0.97170351   0.99328316  0.99323552</span>
-<span class="co">#&gt; Gini         0.94702744  0.89176829  0.95865091   0.98647104  0.98647104</span>
-<span class="co">#&gt; PRAUC        0.06077086  0.80545712  0.47903471   0.68540128  0.76957551</span>
-<span class="co">#&gt; LiftAUC      1.08596033  1.82146153  1.49393413   1.65902776  1.74052776</span>
-<span class="co">#&gt; GainAUC      0.77505807  0.76039489  0.78751452   0.80066783  0.80063879</span>
-<span class="co">#&gt; KS_Stat     90.33917683 86.33765244 90.43445122  95.99847561 96.43673780</span></pre></div>
+<span class="co">#&gt; ZeroOneLoss  0.08571429  0.08571429  0.08571429   0.05238095  0.04285714</span>
+<span class="co">#&gt; Accuracy     0.91428571  0.91428571  0.91428571   0.94761905  0.95714286</span>
+<span class="co">#&gt; Precision    0.86486486  0.85526316  0.83750000   0.89610390  0.90909091</span>
+<span class="co">#&gt; Recall       0.88888889  0.90277778  0.93055556   0.95833333  0.97222222</span>
+<span class="co">#&gt; Sensitivity  0.88888889  0.90277778  0.93055556   0.95833333  0.97222222</span>
+<span class="co">#&gt; Specificity  0.92753623  0.92028986  0.90579710   0.94202899  0.94927536</span>
+<span class="co">#&gt; F1_Score     0.87671233  0.87837838  0.88157895   0.92617450  0.93959732</span>
+<span class="co">#&gt; Fbeta_Score  0.87671233  0.87837838  0.88157895   0.92617450  0.93959732</span>
+<span class="co">#&gt; LogLoss      2.76028551  0.76993613  0.99432388   0.30364293  0.15156344</span>
+<span class="co">#&gt; AUC          0.91339573  0.92200081  0.94509863   0.98077697  0.98379630</span>
+<span class="co">#&gt; Gini         0.86714976  0.86090982  0.90438808   0.96095008  0.96759259</span>
+<span class="co">#&gt; PRAUC        0.10267867  0.76243464  0.71643789   0.60833221  0.74675595</span>
+<span class="co">#&gt; LiftAUC      1.14456141  1.91998633  1.85328656   1.71155373  1.83371476</span>
+<span class="co">#&gt; GainAUC      0.77166005  0.77731481  0.79249339   0.81593915  0.81792328</span>
+<span class="co">#&gt; KS_Stat     83.03140097 83.63526570 86.35265700  94.20289855 94.20289855</span>
+<span class="co">#&gt;                 xgboost</span>
+<span class="co">#&gt; ZeroOneLoss  0.06190476</span>
+<span class="co">#&gt; Accuracy     0.93809524</span>
+<span class="co">#&gt; Precision    0.89333333</span>
+<span class="co">#&gt; Recall       0.93055556</span>
+<span class="co">#&gt; Sensitivity  0.93055556</span>
+<span class="co">#&gt; Specificity  0.94202899</span>
+<span class="co">#&gt; F1_Score     0.91156463</span>
+<span class="co">#&gt; Fbeta_Score  0.91156463</span>
+<span class="co">#&gt; LogLoss      0.20105329</span>
+<span class="co">#&gt; AUC          0.97247383</span>
+<span class="co">#&gt; Gini         0.95249597</span>
+<span class="co">#&gt; PRAUC        0.42783593</span>
+<span class="co">#&gt; LiftAUC      1.57727936</span>
+<span class="co">#&gt; GainAUC      0.81048280</span>
+<span class="co">#&gt; KS_Stat     89.31159420</span></pre></div>
 <p><code><a href="reference/compare_performance.html">compare_performance()</a></code> return a list object(results of compared model performance). and list has the following components:</p>
 <ul>
 <li>recommend_model : character. The name of the model that is recommended as the best among the various models.</li>
@@ -1401,12 +1424,12 @@
 <span class="co">#&gt; [1] "ranger"</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $top_metric_count</span>
-<span class="co">#&gt;     logistic        rpart        ctree randomForest       ranger </span>
-<span class="co">#&gt;            0            2            0            4            8 </span>
+<span class="co">#&gt;     logistic        rpart        ctree randomForest       ranger      xgboost </span>
+<span class="co">#&gt;            0            2            0            1           11            0 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $mean_rank</span>
-<span class="co">#&gt;     logistic        rpart        ctree randomForest       ranger </span>
-<span class="co">#&gt;     3.961538     4.076923     3.615385     1.923077     1.423077 </span>
+<span class="co">#&gt;     logistic        rpart        ctree randomForest       ranger      xgboost </span>
+<span class="co">#&gt;     5.461538     4.384615     4.269231     2.384615     1.269231     3.230769 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $top_metric</span>
 <span class="co">#&gt; $top_metric$logistic</span>
@@ -1419,11 +1442,15 @@
 <span class="co">#&gt; NULL</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $top_metric$randomForest</span>
-<span class="co">#&gt; [1] "Recall"  "AUC"     "Gini"    "GainAUC"</span>
+<span class="co">#&gt; [1] "KS_Stat"</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $top_metric$ranger</span>
-<span class="co">#&gt; [1] "ZeroOneLoss" "Accuracy"    "Precision"   "Specificity" "F1_Score"   </span>
-<span class="co">#&gt; [6] "LogLoss"     "Gini"        "KS_Stat"</span></pre></div>
+<span class="co">#&gt;  [1] "ZeroOneLoss" "Accuracy"    "Precision"   "Recall"      "Specificity"</span>
+<span class="co">#&gt;  [6] "F1_Score"    "LogLoss"     "AUC"         "Gini"        "GainAUC"    </span>
+<span class="co">#&gt; [11] "KS_Stat"    </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $top_metric$xgboost</span>
+<span class="co">#&gt; NULL</span></pre></div>
 </div>
 <div id="plot-the-roc-curve-with-plot_performance" class="section level4">
 <h4 class="hasAnchor">
@@ -1449,17 +1476,17 @@
 <span class="no">cutoff</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/plot_cutoff.html">plot_cutoff</a></span>(<span class="no">pred_best</span>, <span class="no">test</span>$<span class="no">Class</span>, <span class="st">"malignant"</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"mcc"</span>)</pre></div>
 <p><img src="reference/figures/README-cutoff-1.png"><!-- --></p>
 <div class="sourceCode" id="cb42"><pre class="r"><span class="no">cutoff</span>
-<span class="co">#&gt; [1] 0.4</span>
+<span class="co">#&gt; [1] 0.36</span>
 
 <span class="no">cutoff2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/plot_cutoff.html">plot_cutoff</a></span>(<span class="no">pred_best</span>, <span class="no">test</span>$<span class="no">Class</span>, <span class="st">"malignant"</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"density"</span>)</pre></div>
 <p><img src="reference/figures/README-cutoff-2.png"><!-- --></p>
 <div class="sourceCode" id="cb43"><pre class="r"><span class="no">cutoff2</span>
-<span class="co">#&gt; [1] 0.9139</span>
+<span class="co">#&gt; [1] 0.8669</span>
 
 <span class="no">cutoff3</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/plot_cutoff.html">plot_cutoff</a></span>(<span class="no">pred_best</span>, <span class="no">test</span>$<span class="no">Class</span>, <span class="st">"malignant"</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"prob"</span>)</pre></div>
 <p><img src="reference/figures/README-cutoff-3.png"><!-- --></p>
 <div class="sourceCode" id="cb44"><pre class="r"><span class="no">cutoff3</span>
-<span class="co">#&gt; [1] 0.4</span></pre></div>
+<span class="co">#&gt; [1] 0.36</span></pre></div>
 </div>
 <div id="performance-comparison-between-prediction-and-tuned-cut-off-with-performance_metric" class="section level4">
 <h4 class="hasAnchor">
@@ -1483,78 +1510,78 @@
 
 <span class="co"># predicted probability</span>
 <span class="no">pred_prob</span>
-<span class="co">#&gt;   [1] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0205833333</span>
-<span class="co">#&gt;   [6] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000</span>
-<span class="co">#&gt;  [11] 0.6707753968 0.0006944444 0.6684047619 0.9756777778 0.9949785714</span>
-<span class="co">#&gt;  [16] 0.9990000000 0.6925880952 0.9037761905 0.5328198413 0.9166833333</span>
-<span class="co">#&gt;  [21] 0.0331595238 0.0147444444 0.0000000000 0.0521071429 0.9940896825</span>
-<span class="co">#&gt;  [26] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 1.0000000000</span>
-<span class="co">#&gt;  [31] 0.7108809524 0.6118476190 0.8382333333 0.9996666667 0.9298571429</span>
-<span class="co">#&gt;  [36] 1.0000000000 0.1262626984 0.0012190476 0.0027746032 0.8097222222</span>
-<span class="co">#&gt;  [41] 0.1313126984 0.8987753968 0.0000000000 0.0000000000 0.1115285714</span>
-<span class="co">#&gt;  [46] 0.9373230159 1.0000000000 0.0000000000 1.0000000000 0.0000000000</span>
-<span class="co">#&gt;  [51] 0.0479595238 0.0000000000 0.0000000000 0.0000000000 1.0000000000</span>
-<span class="co">#&gt;  [56] 0.9977166667 0.9947666667 0.0000000000 0.0000000000 0.0000000000</span>
-<span class="co">#&gt;  [61] 0.9998000000 0.0000000000 0.9502523810 0.9975920635 1.0000000000</span>
-<span class="co">#&gt;  [66] 0.9984444444 0.0000000000 0.0000000000 0.9685920635 0.0000000000</span>
-<span class="co">#&gt;  [71] 1.0000000000 1.0000000000 0.9997500000 0.9995000000 0.0000000000</span>
-<span class="co">#&gt;  [76] 0.9929277778 0.0160777778 0.0122246032 0.9988000000 1.0000000000</span>
-<span class="co">#&gt;  [81] 0.9987000000 0.9988277778 0.9918174603 0.2190603175 0.0043333333</span>
-<span class="co">#&gt;  [86] 0.0000000000 0.9037761905 0.0000000000 1.0000000000 0.9980952381</span>
-<span class="co">#&gt;  [91] 0.0000000000 0.9927277778 0.0000000000 0.0008666667 0.0000000000</span>
-<span class="co">#&gt;  [96] 0.0000000000 0.9517920635 0.0000000000 0.2981222222 0.8820182540</span>
-<span class="co">#&gt; [101] 0.0000000000 0.9956428571 0.5261833333 0.9724634921 0.9946500000</span>
-<span class="co">#&gt; [106] 0.0000000000 0.9869634921 0.0000000000 0.0000000000 0.0000000000</span>
-<span class="co">#&gt; [111] 0.1347230159 0.0296865079 0.4730571429 0.0000000000 0.9128222222</span>
-<span class="co">#&gt; [116] 0.5965928571 1.0000000000 0.9929666667 0.9420142857 1.0000000000</span>
-<span class="co">#&gt; [121] 0.0000000000 0.0000000000 0.1508253968 0.0000000000 0.0000000000</span>
-<span class="co">#&gt; [126] 0.9923833333 0.0000000000 0.0175500000 0.0030222222 0.0000000000</span>
-<span class="co">#&gt; [131] 0.0000000000 0.9995000000 0.0198722222 0.0138111111 1.0000000000</span>
-<span class="co">#&gt; [136] 0.0052142857 0.9744706349 0.9822666667 0.0095904762 0.0000000000</span>
-<span class="co">#&gt; [141] 0.9216746032 0.1468793651 0.0000000000 0.4026603175 0.9991000000</span>
-<span class="co">#&gt; [146] 0.9995000000 1.0000000000 0.0000000000 0.9941190476 1.0000000000</span>
-<span class="co">#&gt; [151] 0.0000000000 0.9972500000 0.0000000000 0.0000000000 0.0000000000</span>
-<span class="co">#&gt; [156] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000</span>
-<span class="co">#&gt; [161] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000</span>
-<span class="co">#&gt; [166] 0.0000000000 0.0000000000 0.0532007937 0.4910793651 0.0000000000</span>
-<span class="co">#&gt; [171] 0.0057079365 1.0000000000 0.0000000000 0.0000000000 0.0218484127</span>
-<span class="co">#&gt; [176] 1.0000000000 0.0000000000 0.9945523810 0.0117444444 0.0113055556</span>
-<span class="co">#&gt; [181] 0.0000000000 0.0000000000 0.7085634921 0.9912404762 0.9178690476</span>
-<span class="co">#&gt; [186] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000</span>
-<span class="co">#&gt; [191] 0.0000000000 0.0000000000 0.0000000000 0.9638690476 0.0000000000</span>
-<span class="co">#&gt; [196] 0.0000000000 0.0000000000 0.0000000000 0.0032944444 0.9911285714</span>
-<span class="co">#&gt; [201] 0.0000000000 0.0000000000 0.0000000000 1.0000000000 0.0000000000</span>
-<span class="co">#&gt; [206] 0.0303150794 0.0000000000 0.0017968254 0.9897047619 0.9862357143</span>
+<span class="co">#&gt;   [1] 8.619087e-01 4.318254e-03 3.248235e-01 0.000000e+00 9.890222e-01</span>
+<span class="co">#&gt;   [6] 5.703044e-01 0.000000e+00 0.000000e+00 7.558754e-01 6.041921e-01</span>
+<span class="co">#&gt;  [11] 9.784675e-01 9.928103e-01 9.863167e-01 6.878302e-01 6.188595e-01</span>
+<span class="co">#&gt;  [16] 9.981000e-01 6.000000e-04 8.481627e-01 5.007690e-01 8.994254e-01</span>
+<span class="co">#&gt;  [21] 1.899524e-02 1.220667e-01 9.770968e-01 0.000000e+00 0.000000e+00</span>
+<span class="co">#&gt;  [26] 9.996000e-01 9.305024e-01 1.000000e-03 2.631698e-01 9.895690e-01</span>
+<span class="co">#&gt;  [31] 9.161913e-01 6.396825e-03 9.515587e-01 0.000000e+00 1.753000e-01</span>
+<span class="co">#&gt;  [36] 9.834079e-01 0.000000e+00 0.000000e+00 0.000000e+00 8.086889e-01</span>
+<span class="co">#&gt;  [41] 4.612595e-01 9.347826e-05 1.000000e+00 1.133260e-01 0.000000e+00</span>
+<span class="co">#&gt;  [46] 9.938452e-01 0.000000e+00 8.430500e-01 9.990000e-01 9.976667e-01</span>
+<span class="co">#&gt;  [51] 9.934905e-01 9.993333e-01 1.041349e-02 0.000000e+00 0.000000e+00</span>
+<span class="co">#&gt;  [56] 1.000000e+00 9.898603e-01 9.347826e-05 1.778951e-02 1.000000e+00</span>
+<span class="co">#&gt;  [61] 0.000000e+00 0.000000e+00 9.347826e-05 0.000000e+00 2.634778e-01</span>
+<span class="co">#&gt;  [66] 1.000000e+00 5.000000e-04 9.297103e-01 9.895294e-01 8.653397e-01</span>
+<span class="co">#&gt;  [71] 1.000000e+00 3.402460e-02 9.898278e-01 0.000000e+00 9.098643e-01</span>
+<span class="co">#&gt;  [76] 4.701206e-01 0.000000e+00 0.000000e+00 0.000000e+00 9.124984e-01</span>
+<span class="co">#&gt;  [81] 9.886984e-01 9.653143e-01 1.000000e+00 9.942127e-01 0.000000e+00</span>
+<span class="co">#&gt;  [86] 8.887706e-01 9.990000e-01 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="co">#&gt;  [91] 8.874833e-01 1.000000e+00 0.000000e+00 3.188889e-03 0.000000e+00</span>
+<span class="co">#&gt;  [96] 0.000000e+00 0.000000e+00 6.046397e-01 0.000000e+00 7.028357e-01</span>
+<span class="co">#&gt; [101] 8.783000e-01 0.000000e+00 1.000000e+00 1.000000e+00 9.347826e-05</span>
+<span class="co">#&gt; [106] 0.000000e+00 0.000000e+00 9.347826e-05 2.824214e-01 1.000000e+00</span>
+<span class="co">#&gt; [111] 0.000000e+00 0.000000e+00 1.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="co">#&gt; [116] 9.868159e-01 0.000000e+00 0.000000e+00 0.000000e+00 9.347826e-05</span>
+<span class="co">#&gt; [121] 9.970667e-01 9.990000e-01 1.270381e-01 0.000000e+00 9.966952e-01</span>
+<span class="co">#&gt; [126] 5.000000e-04 9.973500e-01 9.800881e-01 0.000000e+00 9.781325e-01</span>
+<span class="co">#&gt; [131] 9.347826e-05 1.000000e+00 8.466014e-02 0.000000e+00 2.876190e-03</span>
+<span class="co">#&gt; [136] 0.000000e+00 9.988000e-01 9.993333e-01 1.285618e-02 0.000000e+00</span>
+<span class="co">#&gt; [141] 0.000000e+00 5.000000e-04 9.673270e-01 1.485618e-02 1.000000e+00</span>
+<span class="co">#&gt; [146] 0.000000e+00 7.958554e-02 8.228008e-01 3.602444e-01 0.000000e+00</span>
+<span class="co">#&gt; [151] 2.978951e-02 9.347826e-05 9.347826e-05 5.000000e-04 2.340476e-03</span>
+<span class="co">#&gt; [156] 0.000000e+00 0.000000e+00 8.836643e-01 9.347826e-05 9.347826e-05</span>
+<span class="co">#&gt; [161] 1.000000e+00 2.978951e-02 0.000000e+00 9.347826e-05 0.000000e+00</span>
+<span class="co">#&gt; [166] 2.498333e-02 0.000000e+00 0.000000e+00 0.000000e+00 1.401849e-01</span>
+<span class="co">#&gt; [171] 0.000000e+00 0.000000e+00 9.963373e-01 0.000000e+00 0.000000e+00</span>
+<span class="co">#&gt; [176] 0.000000e+00 9.773810e-01 0.000000e+00 0.000000e+00 9.347826e-05</span>
+<span class="co">#&gt; [181] 7.927944e-01 1.000000e+00 0.000000e+00 0.000000e+00 2.709524e-03</span>
+<span class="co">#&gt; [186] 9.347826e-05 8.845437e-01 1.098856e-02 0.000000e+00 4.488889e-03</span>
+<span class="co">#&gt; [191] 0.000000e+00 0.000000e+00 9.629365e-03 0.000000e+00 0.000000e+00</span>
+<span class="co">#&gt; [196] 0.000000e+00 5.000000e-04 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="co">#&gt; [201] 0.000000e+00 9.984127e-01 9.728571e-03 0.000000e+00 0.000000e+00</span>
+<span class="co">#&gt; [206] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 9.812944e-01</span>
 
 <span class="co"># compaire Accuracy</span>
 <span class="fu"><a href="reference/performance_metric.html">performance_metric</a></span>(<span class="no">pred_prob</span>, <span class="no">test</span>$<span class="no">Class</span>, <span class="st">"malignant"</span>, <span class="st">"Accuracy"</span>)
-<span class="co">#&gt; [1] 0.9761905</span>
+<span class="co">#&gt; [1] 0.9571429</span>
 <span class="fu"><a href="reference/performance_metric.html">performance_metric</a></span>(<span class="no">pred_prob</span>, <span class="no">test</span>$<span class="no">Class</span>, <span class="st">"malignant"</span>, <span class="st">"Accuracy"</span>,
                    <span class="kw">cutoff</span> <span class="kw">=</span> <span class="no">cutoff</span>)
-<span class="co">#&gt; [1] 0.9809524</span>
+<span class="co">#&gt; [1] 0.9619048</span>
 
 <span class="co"># compaire Confusion Matrix</span>
 <span class="fu"><a href="reference/performance_metric.html">performance_metric</a></span>(<span class="no">pred_prob</span>, <span class="no">test</span>$<span class="no">Class</span>, <span class="st">"malignant"</span>, <span class="st">"ConfusionMatrix"</span>)
 <span class="co">#&gt;            actual</span>
 <span class="co">#&gt; predict     benign malignant</span>
-<span class="co">#&gt;   benign       126         3</span>
-<span class="co">#&gt;   malignant      2        79</span>
+<span class="co">#&gt;   benign       131         2</span>
+<span class="co">#&gt;   malignant      7        70</span>
 <span class="fu"><a href="reference/performance_metric.html">performance_metric</a></span>(<span class="no">pred_prob</span>, <span class="no">test</span>$<span class="no">Class</span>, <span class="st">"malignant"</span>, <span class="st">"ConfusionMatrix"</span>,
                    <span class="kw">cutoff</span> <span class="kw">=</span> <span class="no">cutoff</span>)
 <span class="co">#&gt;            actual</span>
 <span class="co">#&gt; predict     benign malignant</span>
-<span class="co">#&gt;   benign       125         1</span>
-<span class="co">#&gt;   malignant      3        81</span>
+<span class="co">#&gt;   benign       130         0</span>
+<span class="co">#&gt;   malignant      8        72</span>
 
 <span class="co"># compaire F1 Score</span>
 <span class="fu"><a href="reference/performance_metric.html">performance_metric</a></span>(<span class="no">pred_prob</span>, <span class="no">test</span>$<span class="no">Class</span>, <span class="st">"malignant"</span>, <span class="st">"F1_Score"</span>)
-<span class="co">#&gt; [1] 0.9693252</span>
+<span class="co">#&gt; [1] 0.9395973</span>
 <span class="fu"><a href="reference/performance_metric.html">performance_metric</a></span>(<span class="no">pred_prob</span>, <span class="no">test</span>$<span class="no">Class</span>,  <span class="st">"malignant"</span>, <span class="st">"F1_Score"</span>,
                    <span class="kw">cutoff</span> <span class="kw">=</span> <span class="no">cutoff</span>)
-<span class="co">#&gt; [1] 0.9759036</span>
+<span class="co">#&gt; [1] 0.9473684</span>
 <span class="fu"><a href="reference/performance_metric.html">performance_metric</a></span>(<span class="no">pred_prob</span>, <span class="no">test</span>$<span class="no">Class</span>,  <span class="st">"malignant"</span>, <span class="st">"F1_Score"</span>,
                    <span class="kw">cutoff</span> <span class="kw">=</span> <span class="no">cutoff2</span>)
-<span class="co">#&gt; [1] 0.8707483</span></pre></div>
+<span class="co">#&gt; [1] 0.880597</span></pre></div>
 <p>If the performance of the tuned cut-off is good, use it as a cut-off to predict positives.</p>
 </div>
 </div>
@@ -1573,7 +1600,7 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── Checking unique rate ─────────────────────────────── high unique rate ──</span>
 <span class="co">#&gt; remove variables with high unique rate</span>
-<span class="co">#&gt; ● Id = 306(0.962264150943396)</span>
+<span class="co">#&gt; ● Id = 325(0.961538461538462)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── Checking character variables ─────────────────────── categorical data ──</span>
 <span class="co">#&gt; No character variables.</span>
@@ -1598,13 +1625,13 @@
   <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>()
 
 <span class="no">pred_actual</span>
-<span class="co">#&gt;  [1] malignant malignant benign    benign    benign    malignant malignant</span>
-<span class="co">#&gt;  [8] benign    malignant malignant benign    malignant malignant benign   </span>
-<span class="co">#&gt; [15] malignant benign    malignant malignant malignant benign    malignant</span>
-<span class="co">#&gt; [22] benign    benign    malignant malignant malignant malignant malignant</span>
-<span class="co">#&gt; [29] malignant malignant benign    benign    malignant malignant benign   </span>
-<span class="co">#&gt; [36] benign    benign    malignant malignant benign    benign    malignant</span>
-<span class="co">#&gt; [43] benign    benign    benign    malignant benign    benign    malignant</span>
+<span class="co">#&gt;  [1] malignant malignant benign    malignant malignant malignant benign   </span>
+<span class="co">#&gt;  [8] benign    benign    benign    malignant malignant malignant benign   </span>
+<span class="co">#&gt; [15] malignant benign    benign    malignant malignant malignant malignant</span>
+<span class="co">#&gt; [22] benign    malignant malignant benign    benign    malignant malignant</span>
+<span class="co">#&gt; [29] benign    malignant malignant malignant malignant benign    benign   </span>
+<span class="co">#&gt; [36] benign    malignant benign    malignant malignant benign    malignant</span>
+<span class="co">#&gt; [43] malignant malignant benign    benign    benign    malignant malignant</span>
 <span class="co">#&gt; [50] benign   </span>
 <span class="co">#&gt; Levels: benign malignant</span></pre></div>
 <p>If you want to predict by cut-off, specify the <code>cutoff</code> argument in the <code><a href="reference/run_predict.html">run_predict()</a></code> function as follows.:</p>
@@ -1618,13 +1645,13 @@
   <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>()
 
 <span class="no">pred_actual2</span>
-<span class="co">#&gt;  [1] malignant malignant benign    benign    benign    malignant malignant</span>
-<span class="co">#&gt;  [8] benign    malignant malignant benign    malignant malignant benign   </span>
-<span class="co">#&gt; [15] malignant benign    malignant malignant malignant benign    malignant</span>
-<span class="co">#&gt; [22] benign    benign    malignant malignant malignant malignant malignant</span>
-<span class="co">#&gt; [29] malignant malignant benign    benign    malignant malignant benign   </span>
-<span class="co">#&gt; [36] benign    benign    malignant malignant benign    benign    malignant</span>
-<span class="co">#&gt; [43] benign    benign    benign    malignant benign    benign    malignant</span>
+<span class="co">#&gt;  [1] malignant malignant benign    malignant malignant malignant benign   </span>
+<span class="co">#&gt;  [8] benign    benign    benign    malignant malignant malignant benign   </span>
+<span class="co">#&gt; [15] malignant benign    benign    malignant malignant malignant malignant</span>
+<span class="co">#&gt; [22] benign    malignant malignant benign    benign    malignant malignant</span>
+<span class="co">#&gt; [29] benign    malignant malignant malignant malignant benign    benign   </span>
+<span class="co">#&gt; [36] benign    malignant benign    malignant malignant benign    malignant</span>
+<span class="co">#&gt; [43] malignant malignant benign    benign    benign    malignant malignant</span>
 <span class="co">#&gt; [50] benign   </span>
 <span class="co">#&gt; Levels: benign malignant</span>
 

@@ -8,6 +8,8 @@ run_performance(model, actual = NULL)
 }
 \arguments{
 \item{model}{A model_df. results of predicted model that created by run_predict().}
+
+\item{actual}{factor. A data of target variable to evaluate the model. It supports factor that has binary class.}
 }
 \value{
 model_df. results of predicted model.

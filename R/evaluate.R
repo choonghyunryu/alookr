@@ -385,6 +385,7 @@ performance_metric <- function(pred, actual, positive,
 #'
 #' @description Apply calculate performance metrics for binary classification model evaluation.
 #' @param model A model_df. results of predicted model that created by run_predict().
+#' @param actual factor. A data of target variable to evaluate the model. It supports factor that has binary class.
 #'
 #' @return model_df. results of predicted model.
 #' model_df is composed of tbl_df and contains the following variables.:

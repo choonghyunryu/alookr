@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">alookr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
       </span>
     </div>
 
@@ -53,7 +53,7 @@
 </li>
 <li>
   <a href="https://github.com/choonghyunryu/alookr/">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -67,13 +67,13 @@
 
       
 
-      </header><script src="modeling_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="modeling_files/header-attrs-2.6.4/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Classification Modeling</h1>
                         <h4 class="author">Choonghyun Ryu</h4>
             
-            <h4 class="date">2020-08-07</h4>
+            <h4 class="date">2021-02-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/choonghyunryu/alookr/blob/master/vignettes/modeling.Rmd"><code>vignettes/modeling.Rmd</code></a></small>
       <div class="hidden name"><code>modeling.Rmd</code></div>
@@ -236,7 +236,7 @@ tmp &lt;- breastCancer %&gt;%
 <div class="sourceCode" id="cb4"><html><body><pre class="r"># summary() display the some information
 summary(sb)
 ** Split train/test set information **
- + random seed        :  70050 
+ + random seed        :  64404 
  + split data            
     - train set count :  489 
     - test set count  :  210 
@@ -247,7 +247,7 @@ summary(sb)
 # summary() display the some information
 summary(tmp)
 ** Split train/test set information **
- + random seed        :  96070 
+ + random seed        :  9860 
  + split data            
     - train set count :  419 
     - test set count  :  280 
@@ -312,7 +312,7 @@ prop.table(table(sb$Class))
 # using summary function - imbalanced classes data
 summary(sb)
 ** Split train/test set information **
- + random seed        :  70050 
+ + random seed        :  64404 
  + split data            
     - train set count :  489 
     - test set count  :  210 
@@ -339,7 +339,7 @@ train_over &lt;- sb %&gt;%
 table(train_over$Class)
 
    benign malignant 
-      326       326 </pre></body></html></div>
+      325       325 </pre></body></html></div>
 </div>
 <div id="resampling---undersample-majority-class" class="section level3">
 <h3 class="hasAnchor">
@@ -354,7 +354,7 @@ train_under &lt;- sb %&gt;%
 table(train_under$Class)
 
    benign malignant 
-      163       163 </pre></body></html></div>
+      164       164 </pre></body></html></div>
 </div>
 <div id="generate-synthetic-samples---smote" class="section level3">
 <h3 class="hasAnchor">
@@ -369,7 +369,7 @@ train_smote &lt;- sb %&gt;%
 table(train_smote$Class)
 
    benign malignant 
-      652       489 </pre></body></html></div>
+      656       492 </pre></body></html></div>
 </div>
 </div>
 <div id="cleansing-the-dataset-for-classification-modeling-with-cleanse" class="section level2">
@@ -396,7 +396,7 @@ No variables that unique value is one.
 
 ── Checking unique rate ─────────────────────────────── high unique rate ──
 remove variables with high unique rate
-● Id = 414(0.362839614373357)
+● Id = 428(0.372822299651568)
 
 ── Checking character variables ─────────────────────── categorical data ──
 No character variables.</pre></body></html></div>
@@ -422,6 +422,7 @@ No character variables.</pre></body></html></div>
 <li>ctree : Conditional Inference Trees using <code>party</code> package</li>
 <li>randomForest :Classification with Random Forest using <code>randomForest</code> package</li>
 <li>ranger : A Fast Implementation of Random Forests using <code>ranger</code> package</li>
+<li>xgboost : Extreme Gradient Boosting using <code>xgboost</code> package</li>
 </ul>
 <p><code><a href="../reference/run_models.html">run_models()</a></code> returns a <code>model_df</code> class object.</p>
 <p>The <code>model_df</code> class object contains the following variables.:</p>
@@ -439,14 +440,15 @@ No character variables.</pre></body></html></div>
 <div class="sourceCode" id="cb12"><html><body><pre class="r">result &lt;- train %&gt;% 
   run_models(target = "Class", positive = "malignant")
 result
-# A tibble: 5 x 5
-  step     model_id     target positive  fitted_model
-  &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;  &lt;chr&gt;     &lt;list&gt;      
-1 1.Fitted logistic     Class  malignant &lt;glm&gt;       
-2 1.Fitted rpart        Class  malignant &lt;rpart&gt;     
-3 1.Fitted ctree        Class  malignant &lt;BinaryTr&gt;  
-4 1.Fitted randomForest Class  malignant &lt;rndmFrs.&gt;  
-5 1.Fitted ranger       Class  malignant &lt;ranger&gt;    </pre></body></html></div>
+# A tibble: 6 x 7
+  step     model_id     target is_factor positive  negative fitted_model
+  &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;  &lt;lgl&gt;     &lt;chr&gt;     &lt;chr&gt;    &lt;list&gt;      
+1 1.Fitted logistic     Class  TRUE      malignant benign   &lt;glm&gt;       
+2 1.Fitted rpart        Class  TRUE      malignant benign   &lt;rpart&gt;     
+3 1.Fitted ctree        Class  TRUE      malignant benign   &lt;BinaryTr&gt;  
+4 1.Fitted randomForest Class  TRUE      malignant benign   &lt;rndmFrs.&gt;  
+5 1.Fitted ranger       Class  TRUE      malignant benign   &lt;ranger&gt;    
+6 1.Fitted xgboost      Class  TRUE      malignant benign   &lt;xgb.Bstr&gt;  </pre></body></html></div>
 </div>
 <div id="evaluate-the-model" class="section level2">
 <h2 class="hasAnchor">
@@ -474,14 +476,15 @@ result
 <div class="sourceCode" id="cb13"><html><body><pre class="r">pred &lt;- result %&gt;%
   run_predict(test)
 pred
-# A tibble: 5 x 6
-  step        model_id     target positive  fitted_model predicted  
-  &lt;chr&gt;       &lt;chr&gt;        &lt;chr&gt;  &lt;chr&gt;     &lt;list&gt;       &lt;list&gt;     
-1 2.Predicted logistic     Class  malignant &lt;glm&gt;        &lt;fct [210]&gt;
-2 2.Predicted rpart        Class  malignant &lt;rpart&gt;      &lt;fct [210]&gt;
-3 2.Predicted ctree        Class  malignant &lt;BinaryTr&gt;   &lt;fct [210]&gt;
-4 2.Predicted randomForest Class  malignant &lt;rndmFrs.&gt;   &lt;fct [210]&gt;
-5 2.Predicted ranger       Class  malignant &lt;ranger&gt;     &lt;fct [210]&gt;</pre></body></html></div>
+# A tibble: 6 x 8
+  step     model_id   target is_factor positive  negative fitted_model predicted
+  &lt;chr&gt;    &lt;chr&gt;      &lt;chr&gt;  &lt;lgl&gt;     &lt;chr&gt;     &lt;chr&gt;    &lt;list&gt;       &lt;list&gt;   
+1 2.Predi… logistic   Class  TRUE      malignant benign   &lt;glm&gt;        &lt;fct [21…
+2 2.Predi… rpart      Class  TRUE      malignant benign   &lt;rpart&gt;      &lt;fct [21…
+3 2.Predi… ctree      Class  TRUE      malignant benign   &lt;BinaryTr&gt;   &lt;fct [21…
+4 2.Predi… randomFor… Class  TRUE      malignant benign   &lt;rndmFrs.&gt;   &lt;fct [21…
+5 2.Predi… ranger     Class  TRUE      malignant benign   &lt;ranger&gt;     &lt;fct [21…
+6 2.Predi… xgboost    Class  TRUE      malignant benign   &lt;xgb.Bstr&gt;   &lt;fct [21…</pre></body></html></div>
 </div>
 <div id="calculate-the-performance-metric-with-run_performance" class="section level3">
 <h3 class="hasAnchor">
@@ -506,14 +509,15 @@ pred
 <div class="sourceCode" id="cb14"><html><body><pre class="r"># Calculate performace metrics.
 perf &lt;- run_performance(pred)
 perf
-# A tibble: 5 x 7
+# A tibble: 6 x 7
   step          model_id     target positive fitted_model predicted  performance
   &lt;chr&gt;         &lt;chr&gt;        &lt;chr&gt;  &lt;chr&gt;    &lt;list&gt;       &lt;list&gt;     &lt;list&gt;     
 1 3.Performanc… logistic     Class  maligna… &lt;glm&gt;        &lt;fct [210… &lt;dbl [15]&gt; 
 2 3.Performanc… rpart        Class  maligna… &lt;rpart&gt;      &lt;fct [210… &lt;dbl [15]&gt; 
 3 3.Performanc… ctree        Class  maligna… &lt;BinaryTr&gt;   &lt;fct [210… &lt;dbl [15]&gt; 
 4 3.Performanc… randomForest Class  maligna… &lt;rndmFrs.&gt;   &lt;fct [210… &lt;dbl [15]&gt; 
-5 3.Performanc… ranger       Class  maligna… &lt;ranger&gt;     &lt;fct [210… &lt;dbl [15]&gt; </pre></body></html></div>
+5 3.Performanc… ranger       Class  maligna… &lt;ranger&gt;     &lt;fct [210… &lt;dbl [15]&gt; 
+6 3.Performanc… xgboost      Class  maligna… &lt;xgb.Bstr&gt;   &lt;fct [210… &lt;dbl [15]&gt; </pre></body></html></div>
 <p>The performance variable contains a list object, which contains 15 performance metrics:</p>
 <ul>
 <li>ZeroOneLoss : Normalized Zero-One Loss(Classification Error Loss).</li>
@@ -538,62 +542,86 @@ names(performance) &lt;- perf$model_id
 performance
 $logistic
 ZeroOneLoss    Accuracy   Precision      Recall Sensitivity Specificity 
- 0.07142857  0.92857143  0.87951807  0.93589744  0.93589744  0.92424242 
+ 0.06666667  0.93333333  0.94366197  0.87012987  0.87012987  0.96992481 
    F1_Score Fbeta_Score     LogLoss         AUC        Gini       PRAUC 
- 0.90683230  0.90683230  2.27569631  0.94036519  0.91083916  0.08785815 
+ 0.90540541  0.90540541  1.81712706  0.94038668  0.93672493  0.11492261 
     LiftAUC     GainAUC     KS_Stat 
- 1.07604217  0.77680098 86.53846154 
+ 1.23133240  0.77891156 85.30416951 
 
 $rpart
 ZeroOneLoss    Accuracy   Precision      Recall Sensitivity Specificity 
- 0.06666667  0.93333333  0.87209302  0.96153846  0.96153846  0.91666667 
+ 0.06666667  0.93333333  0.87058824  0.96103896  0.96103896  0.91729323 
    F1_Score Fbeta_Score     LogLoss         AUC        Gini       PRAUC 
- 0.91463415  0.91463415  0.23371764  0.95391414  0.92812743  0.80890685 
+ 0.91358025  0.91358025  0.24117861  0.94463431  0.91407089  0.91286644 
     LiftAUC     GainAUC     KS_Stat 
- 1.87314793  0.78531746 90.32634033 
+ 1.98861751  0.78160173 88.38004101 
 
 $ctree
 ZeroOneLoss    Accuracy   Precision      Recall Sensitivity Specificity 
- 0.05714286  0.94285714  0.89285714  0.96153846  0.96153846  0.93181818 
+  0.0952381   0.9047619   0.8607595   0.8831169   0.8831169   0.9172932 
    F1_Score Fbeta_Score     LogLoss         AUC        Gini       PRAUC 
- 0.92592593  0.92592593  0.23438675  0.96207265  0.92501943  0.89859855 
+  0.8717949   0.8717949   1.3176530   0.9341373   0.8996192   0.7010453 
     LiftAUC     GainAUC     KS_Stat 
- 1.96427330  0.79044567 89.62703963 
+  1.7414323   0.7749536  80.6561859 
 
 $randomForest
 ZeroOneLoss    Accuracy   Precision      Recall Sensitivity Specificity 
- 0.02857143  0.97142857  0.93902439  0.98717949  0.98717949  0.96212121 
+ 0.03809524  0.96190476  0.91566265  0.98701299  0.98701299  0.94736842 
    F1_Score Fbeta_Score     LogLoss         AUC        Gini       PRAUC 
- 0.96250000  0.96250000  0.13450581  0.98713092  0.97455322  0.69273918 
+ 0.95000000  0.95000000  0.15656563  0.98252124  0.96484718  0.75098856 
     LiftAUC     GainAUC     KS_Stat 
- 1.73018476  0.80619658 95.68764569 
+ 1.78549834  0.80559678 93.98496241 
 
 $ranger
 ZeroOneLoss    Accuracy   Precision      Recall Sensitivity Specificity 
- 0.02857143  0.97142857  0.93902439  0.98717949  0.98717949  0.96212121 
+ 0.03809524  0.96190476  0.91566265  0.98701299  0.98701299  0.94736842 
    F1_Score Fbeta_Score     LogLoss         AUC        Gini       PRAUC 
- 0.96250000  0.96250000  0.12560570  0.98805361  0.97610723  0.88769424 
+ 0.95000000  0.95000000  0.12133005  0.98886827  0.97773655  0.87237251 
     LiftAUC     GainAUC     KS_Stat 
- 1.92129055  0.80677656 95.68764569 </pre></body></html></div>
+ 1.89198172  0.80961657 94.73684211 
+
+$xgboost
+ZeroOneLoss    Accuracy   Precision      Recall Sensitivity Specificity 
+ 0.04285714  0.95714286  0.92500000  0.96103896  0.96103896  0.95488722 
+   F1_Score Fbeta_Score     LogLoss         AUC        Gini       PRAUC 
+ 0.94267516  0.94267516  0.14537516  0.98750122  0.97480715  0.94957501 
+    LiftAUC     GainAUC     KS_Stat 
+ 1.98323764  0.80875077 92.34449761 </pre></body></html></div>
 <p>If you change the list object to tidy format, you’ll see the following at a glance:</p>
 <div class="sourceCode" id="cb16"><html><body><pre class="r"># Convert to matrix for compare performace.
 sapply(performance, "c")
-               logistic       rpart       ctree randomForest      ranger
-ZeroOneLoss  0.07142857  0.06666667  0.05714286   0.02857143  0.02857143
-Accuracy     0.92857143  0.93333333  0.94285714   0.97142857  0.97142857
-Precision    0.87951807  0.87209302  0.89285714   0.93902439  0.93902439
-Recall       0.93589744  0.96153846  0.96153846   0.98717949  0.98717949
-Sensitivity  0.93589744  0.96153846  0.96153846   0.98717949  0.98717949
-Specificity  0.92424242  0.91666667  0.93181818   0.96212121  0.96212121
-F1_Score     0.90683230  0.91463415  0.92592593   0.96250000  0.96250000
-Fbeta_Score  0.90683230  0.91463415  0.92592593   0.96250000  0.96250000
-LogLoss      2.27569631  0.23371764  0.23438675   0.13450581  0.12560570
-AUC          0.94036519  0.95391414  0.96207265   0.98713092  0.98805361
-Gini         0.91083916  0.92812743  0.92501943   0.97455322  0.97610723
-PRAUC        0.08785815  0.80890685  0.89859855   0.69273918  0.88769424
-LiftAUC      1.07604217  1.87314793  1.96427330   1.73018476  1.92129055
-GainAUC      0.77680098  0.78531746  0.79044567   0.80619658  0.80677656
-KS_Stat     86.53846154 90.32634033 89.62703963  95.68764569 95.68764569</pre></body></html></div>
+               logistic       rpart      ctree randomForest      ranger
+ZeroOneLoss  0.06666667  0.06666667  0.0952381   0.03809524  0.03809524
+Accuracy     0.93333333  0.93333333  0.9047619   0.96190476  0.96190476
+Precision    0.94366197  0.87058824  0.8607595   0.91566265  0.91566265
+Recall       0.87012987  0.96103896  0.8831169   0.98701299  0.98701299
+Sensitivity  0.87012987  0.96103896  0.8831169   0.98701299  0.98701299
+Specificity  0.96992481  0.91729323  0.9172932   0.94736842  0.94736842
+F1_Score     0.90540541  0.91358025  0.8717949   0.95000000  0.95000000
+Fbeta_Score  0.90540541  0.91358025  0.8717949   0.95000000  0.95000000
+LogLoss      1.81712706  0.24117861  1.3176530   0.15656563  0.12133005
+AUC          0.94038668  0.94463431  0.9341373   0.98252124  0.98886827
+Gini         0.93672493  0.91407089  0.8996192   0.96484718  0.97773655
+PRAUC        0.11492261  0.91286644  0.7010453   0.75098856  0.87237251
+LiftAUC      1.23133240  1.98861751  1.7414323   1.78549834  1.89198172
+GainAUC      0.77891156  0.78160173  0.7749536   0.80559678  0.80961657
+KS_Stat     85.30416951 88.38004101 80.6561859  93.98496241 94.73684211
+                xgboost
+ZeroOneLoss  0.04285714
+Accuracy     0.95714286
+Precision    0.92500000
+Recall       0.96103896
+Sensitivity  0.96103896
+Specificity  0.95488722
+F1_Score     0.94267516
+Fbeta_Score  0.94267516
+LogLoss      0.14537516
+AUC          0.98750122
+Gini         0.97480715
+PRAUC        0.94957501
+LiftAUC      1.98323764
+GainAUC      0.80875077
+KS_Stat     92.34449761</pre></body></html></div>
 <p><code><a href="../reference/compare_performance.html">compare_performance()</a></code> return a list object(results of compared model performance). and list has the following components:</p>
 <ul>
 <li>recommend_model : character. The name of the model that is recommended as the best among the various models.</li>
@@ -609,31 +637,32 @@ $recommend_model
 [1] "ranger"
 
 $top_metric_count
-    logistic        rpart        ctree randomForest       ranger 
-           0            0            2            7           11 
+    logistic        rpart        ctree randomForest       ranger      xgboost 
+           2            1            0            4            9            1 
 
 $mean_rank
-    logistic        rpart        ctree randomForest       ranger 
-    4.846154     3.730769     2.961538     2.038462     1.423077 
+    logistic        rpart        ctree randomForest       ranger      xgboost 
+    4.538462     3.923077     5.653846     2.692308     1.846154     2.346154 
 
 $top_metric
 $top_metric$logistic
-NULL
+[1] "Precision"   "Specificity"
 
 $top_metric$rpart
-NULL
+[1] "LiftAUC"
 
 $top_metric$ctree
-[1] "PRAUC"   "LiftAUC"
+NULL
 
 $top_metric$randomForest
-[1] "ZeroOneLoss" "Accuracy"    "Precision"   "Recall"      "Specificity"
-[6] "F1_Score"    "KS_Stat"    
+[1] "ZeroOneLoss" "Accuracy"    "Recall"      "F1_Score"   
 
 $top_metric$ranger
- [1] "ZeroOneLoss" "Accuracy"    "Precision"   "Recall"      "Specificity"
- [6] "F1_Score"    "LogLoss"     "AUC"         "Gini"        "GainAUC"    
-[11] "KS_Stat"    </pre></body></html></div>
+[1] "ZeroOneLoss" "Accuracy"    "Recall"      "F1_Score"    "LogLoss"    
+[6] "AUC"         "Gini"        "GainAUC"     "KS_Stat"    
+
+$top_metric$xgboost
+[1] "PRAUC"</pre></body></html></div>
 </div>
 <div id="plot-the-roc-curve-with-plot_performance" class="section level3">
 <h3 class="hasAnchor">
@@ -659,17 +688,17 @@ $top_metric$ranger
 <span class="no">cutoff</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/plot_cutoff.html">plot_cutoff</a></span>(<span class="no">pred_best</span>, <span class="no">test</span>$<span class="no">Class</span>, <span class="st">"malignant"</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"mcc"</span>)</pre></body></html></div>
 <p><img src="modeling_files/figure-html/cutoff-1.png" width="672"></p>
 <div class="sourceCode" id="cb20"><html><body><pre class="r">cutoff
-[1] 0.62
+[1] 0.46
 
 cutoff2 &lt;- plot_cutoff(pred_best, test$Class, "malignant", type = "density")</pre></body></html></div>
 <p><img src="modeling_files/figure-html/cutoff-2.png" width="672"></p>
 <div class="sourceCode" id="cb21"><html><body><pre class="r">cutoff2
-[1] 0.9765
+[1] 0.8239
 
 cutoff3 &lt;- plot_cutoff(pred_best, test$Class, "malignant", type = "prob")</pre></body></html></div>
 <p><img src="modeling_files/figure-html/cutoff-3.png" width="672"></p>
 <div class="sourceCode" id="cb22"><html><body><pre class="r">cutoff3
-[1] 0.62</pre></body></html></div>
+[1] 0.46</pre></body></html></div>
 </div>
 <div id="performance-comparison-between-prediction-and-tuned-cut-off-with-performance_metric" class="section level3">
 <h3 class="hasAnchor">
@@ -693,78 +722,78 @@ pred_prob &lt;- pred %&gt;%
 
 # predicted probability
 pred_prob  
-  [1] 0.9625912698 0.3832142857 0.0000000000 0.0000000000 0.6559928571
-  [6] 0.0023571429 0.9909293651 0.9677134921 0.0000000000 0.7702634921
- [11] 0.0000000000 0.0000000000 0.9996000000 0.7835341270 0.0000000000
- [16] 0.6255047619 0.9813888889 0.7988746032 0.9609301587 0.0000000000
- [21] 0.8554539683 0.9906158730 0.9323309524 0.0124928571 0.2229595238
- [26] 0.2062563492 0.9757166667 0.9866230159 0.0000000000 0.0000000000
- [31] 0.0000000000 0.9918444444 0.9489206349 0.9796571429 0.9704634921
- [36] 0.9817761905 0.0000000000 0.9598277778 0.2186293651 0.9268436508
- [41] 0.0000000000 0.0000000000 0.9974285714 0.0000000000 0.5494380952
- [46] 0.9997500000 0.9363706349 0.0000000000 0.0000000000 0.9964920635
- [51] 0.6225682540 0.0000000000 0.9990000000 0.0000000000 0.9992000000
- [56] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000
- [61] 0.0000000000 1.0000000000 0.0000000000 1.0000000000 0.9988000000
- [66] 0.0000000000 0.0000000000 0.0155746032 1.0000000000 0.0000000000
- [71] 0.9338492063 0.1465261905 0.2608380952 0.0000000000 0.2651531746
- [76] 0.0000000000 0.9036865079 0.9275246032 0.0000000000 0.0000000000
- [81] 0.9846873016 0.9925833333 0.9964857143 0.9601738095 1.0000000000
- [86] 0.6841587302 0.0000000000 0.8684642857 0.9777753968 0.9947666667
- [91] 0.9234444444 0.9735325397 0.9951238095 0.0000000000 0.9982666667
- [96] 0.2801976190 0.0000000000 0.9593682540 0.9997500000 0.0000000000
-[101] 0.0000000000 0.9800039683 0.9550015873 0.0004000000 0.9622134921
-[106] 0.9943611111 0.9828896825 0.9098087302 0.0000000000 0.9960873016
-[111] 0.0000000000 0.0924809524 0.0075134921 0.0000000000 0.8984031746
-[116] 0.0000000000 0.9990476190 0.0000000000 0.3909849206 0.0000000000
-[121] 0.1154809524 0.0144000000 0.0000000000 1.0000000000 0.0000000000
-[126] 0.0000000000 0.0002222222 0.0036746032 0.8932690476 0.0000000000
-[131] 0.0345032468 0.8875031746 0.0000000000 0.0000000000 0.8901095238
-[136] 0.0000000000 0.1233857143 0.0000000000 0.0000000000 0.0000000000
-[141] 0.0000000000 0.0000000000 0.9642984127 0.9972285714 0.0000000000
-[146] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000
-[151] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000
-[156] 0.0000000000 0.0000000000 0.9795341270 0.0000000000 0.9992000000
-[161] 0.2563103175 0.0000000000 0.9906952381 0.0000000000 0.0000000000
-[166] 1.0000000000 0.0000000000 0.9646476190 0.0000000000 0.0000000000
-[171] 0.0000000000 0.0000000000 0.0000000000 0.4048095238 0.0000000000
-[176] 0.0000000000 0.9951238095 0.9977420635 0.0000000000 0.0000000000
-[181] 0.0002857143 0.0000000000 0.9347023810 0.9463571429 0.9931857143
-[186] 1.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000
-[191] 0.1809944444 0.0000000000 0.0000000000 0.0000000000 0.0116682540
-[196] 0.9980000000 0.0220888889 0.0000000000 0.0000000000 0.0000000000
-[201] 0.0000000000 0.0000000000 0.0000000000 0.0219000000 0.0088349206
-[206] 0.0000000000 0.9989166667 0.0000000000 0.0000000000 0.9252198413
+  [1] 8.175675e-01 5.333333e-04 8.204278e-01 9.898659e-01 4.687683e-01
+  [6] 7.733556e-01 9.523635e-01 7.278444e-01 7.041270e-03 8.290135e-01
+ [11] 9.875468e-01 5.333333e-04 0.000000e+00 6.376302e-01 0.000000e+00
+ [16] 9.389992e-01 0.000000e+00 6.332754e-01 0.000000e+00 1.435349e-01
+ [21] 9.883016e-02 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00
+ [26] 5.855357e-01 9.939389e-01 9.368698e-01 9.867762e-01 9.984500e-01
+ [31] 8.119913e-03 7.823302e-01 5.010000e-02 0.000000e+00 0.000000e+00
+ [36] 8.573444e-01 1.142556e-01 9.419881e-01 9.445317e-02 0.000000e+00
+ [41] 0.000000e+00 8.751516e-01 2.381667e-02 3.714865e-01 9.781746e-01
+ [46] 3.484127e-03 9.218381e-01 0.000000e+00 0.000000e+00 9.961838e-02
+ [51] 8.134683e-01 0.000000e+00 0.000000e+00 9.890254e-01 9.858556e-01
+ [56] 0.000000e+00 2.631579e-05 0.000000e+00 9.837492e-01 2.631579e-05
+ [61] 0.000000e+00 9.965175e-01 0.000000e+00 2.631579e-05 1.000000e+00
+ [66] 9.985429e-01 9.957810e-01 9.811508e-01 9.051016e-01 9.979119e-01
+ [71] 9.987778e-01 9.958198e-01 9.982222e-01 3.309452e-01 0.000000e+00
+ [76] 9.944857e-01 0.000000e+00 1.000000e+00 9.962794e-01 9.809968e-01
+ [81] 9.878190e-01 9.769587e-01 7.316468e-01 0.000000e+00 9.595897e-01
+ [86] 9.996667e-01 0.000000e+00 0.000000e+00 0.000000e+00 2.589952e-01
+ [91] 2.612516e-01 0.000000e+00 0.000000e+00 2.631579e-05 9.927865e-01
+ [96] 9.943381e-01 2.751349e-02 0.000000e+00 9.604619e-01 9.627357e-01
+[101] 0.000000e+00 9.856627e-01 0.000000e+00 3.193968e-02 5.087190e-01
+[106] 7.886794e-01 0.000000e+00 7.619444e-02 9.886921e-01 2.631579e-05
+[111] 0.000000e+00 0.000000e+00 3.420444e-01 0.000000e+00 0.000000e+00
+[116] 0.000000e+00 9.640802e-01 2.749730e-01 4.483889e-02 1.000000e+00
+[121] 0.000000e+00 9.942111e-01 0.000000e+00 1.127960e-01 0.000000e+00
+[126] 3.481032e-02 0.000000e+00 1.000000e+00 0.000000e+00 0.000000e+00
+[131] 8.652619e-02 1.000000e+00 0.000000e+00 9.990952e-01 2.044651e-01
+[136] 9.490833e-01 8.885841e-01 9.825048e-01 0.000000e+00 9.796865e-01
+[141] 1.233333e-03 9.973952e-01 2.000000e-04 1.000000e+00 9.605738e-01
+[146] 9.806143e-01 2.631579e-05 0.000000e+00 9.962810e-01 2.631579e-05
+[151] 0.000000e+00 9.951873e-01 0.000000e+00 9.948183e-01 2.631579e-05
+[156] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 2.000000e-04
+[161] 2.625000e-02 0.000000e+00 4.000000e-04 2.631579e-05 0.000000e+00
+[166] 7.870476e-02 0.000000e+00 0.000000e+00 0.000000e+00 8.687365e-01
+[171] 9.910571e-01 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00
+[176] 1.235317e-02 0.000000e+00 9.348000e-01 9.942659e-01 5.974603e-03
+[181] 0.000000e+00 0.000000e+00 8.078373e-01 9.918444e-01 0.000000e+00
+[186] 9.993143e-01 6.666667e-04 0.000000e+00 7.826278e-01 0.000000e+00
+[191] 0.000000e+00 0.000000e+00 4.150000e-03 0.000000e+00 6.918975e-02
+[196] 0.000000e+00 0.000000e+00 0.000000e+00 6.418762e-01 0.000000e+00
+[201] 0.000000e+00 0.000000e+00 1.000000e+00 1.000000e+00 0.000000e+00
+[206] 6.185714e-03 9.206389e-01 2.381667e-02 0.000000e+00 9.744698e-01
 
 # compaire Accuracy
 performance_metric(pred_prob, test$Class, "malignant", "Accuracy")
-[1] 0.9714286
+[1] 0.9619048
 performance_metric(pred_prob, test$Class, "malignant", "Accuracy",
                    cutoff = cutoff)
-[1] 0.9761905
+[1] 0.9666667
 
 # compaire Confusion Matrix
 performance_metric(pred_prob, test$Class, "malignant", "ConfusionMatrix")
            actual
 predict     benign malignant
-  benign       127         1
-  malignant      5        77
+  benign       126         1
+  malignant      7        76
 performance_metric(pred_prob, test$Class, "malignant", "ConfusionMatrix", 
                    cutoff = cutoff)
            actual
 predict     benign malignant
-  benign       128         1
-  malignant      4        77
+  benign       126         0
+  malignant      7        77
 
 # compaire F1 Score
 performance_metric(pred_prob, test$Class, "malignant", "F1_Score")
-[1] 0.9625
+[1] 0.95
 performance_metric(pred_prob, test$Class,  "malignant", "F1_Score", 
                    cutoff = cutoff)
-[1] 0.9685535
+[1] 0.9565217
 performance_metric(pred_prob, test$Class,  "malignant", "F1_Score", 
                    cutoff = cutoff2)
-[1] 0.7107438</pre></body></html></div>
+[1] 0.9103448</pre></body></html></div>
 <p>If the performance of the tuned cut-off is good, use it as a cut-off to predict positives.</p>
 </div>
 </div>
@@ -783,7 +812,7 @@ No variables that unique value is one.
 
 ── Checking unique rate ─────────────────────────────── high unique rate ──
 remove variables with high unique rate
-● Id = 318(0.975460122699387)
+● Id = 322(0.981707317073171)
 
 ── Checking character variables ─────────────────────── categorical data ──
 No character variables.
@@ -808,13 +837,13 @@ data_pred &lt;- data_pred %&gt;%
   factor()
 
 pred_actual
- [1] malignant benign    malignant benign    malignant benign    benign   
- [8] malignant malignant benign    benign    benign    malignant malignant
-[15] malignant benign    benign    malignant malignant benign    malignant
-[22] malignant malignant benign    malignant malignant malignant malignant
-[29] benign    malignant malignant malignant malignant malignant malignant
-[36] malignant malignant malignant benign    malignant malignant benign   
-[43] benign    malignant benign    benign    benign    benign    malignant
+ [1] malignant benign    benign    benign    malignant malignant malignant
+ [8] benign    malignant malignant malignant benign    malignant benign   
+[15] malignant benign    benign    benign    malignant benign    malignant
+[22] malignant benign    benign    malignant malignant malignant malignant
+[29] benign    benign    malignant benign    malignant malignant malignant
+[36] benign    malignant benign    malignant benign    malignant benign   
+[43] benign    malignant malignant benign    benign    benign    benign   
 [50] benign   
 Levels: benign malignant</pre></body></html></div>
 <p>If you want to predict by cut-off, specify the <code>cutoff</code> argument in the <code><a href="../reference/run_predict.html">run_predict()</a></code> function as follows.:</p>
@@ -828,18 +857,18 @@ Levels: benign malignant</pre></body></html></div>
   factor()
 
 pred_actual2
- [1] malignant benign    malignant benign    malignant benign    benign   
- [8] malignant malignant benign    benign    benign    malignant malignant
-[15] malignant benign    benign    malignant malignant benign    malignant
-[22] malignant malignant benign    malignant malignant malignant malignant
-[29] benign    malignant malignant malignant malignant malignant malignant
-[36] malignant malignant malignant benign    malignant malignant benign   
-[43] benign    benign    benign    benign    benign    benign    malignant
+ [1] malignant benign    benign    benign    malignant malignant malignant
+ [8] benign    malignant malignant malignant benign    malignant benign   
+[15] malignant benign    benign    benign    malignant benign    malignant
+[22] malignant benign    benign    malignant malignant malignant malignant
+[29] benign    benign    malignant benign    malignant malignant malignant
+[36] benign    malignant benign    malignant benign    malignant benign   
+[43] benign    malignant malignant benign    benign    benign    benign   
 [50] benign   
 Levels: benign malignant
 
 sum(pred_actual != pred_actual2)
-[1] 1</pre></body></html></div>
+[1] 0</pre></body></html></div>
 </div>
 </div>
   </div>

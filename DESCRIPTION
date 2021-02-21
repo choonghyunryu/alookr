@@ -15,7 +15,7 @@ Depends:
     ggplot2,
     randomForest
 Imports: caTools,
-      cli,
+      cli (>= 1.1.0),
       dlookr,
       dplyr,
       future,
@@ -38,7 +38,7 @@ Imports: caTools,
 Suggests: 
     knitr,
     ISLR,
-    spelling,
+    mice,
     mlbench
 Author: Choonghyun Ryu [aut, cre]
 Maintainer: Choonghyun Ryu <choonghyun.ryu@gmail.com>

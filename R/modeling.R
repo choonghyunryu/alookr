@@ -50,8 +50,8 @@ classifier_xgboost <- function(.data, target, positive) {
     mutate(variable = ifelse(variable == positive, 1, 0)) %>% 
     pull 
   
-  xgboost::xgboost(data = train, label = label, max_depth = 2, eta = 1,
-                   nrounds = 2, objective = "binary:logistic", verbose = 0)
+  xgboost::xgboost(data = train, label = label, eta = 1,
+                   nrounds = 3, objective = "binary:logistic", verbose = 0)
 }
 
 #=======================================================
@@ -194,7 +194,7 @@ predictor <- function(model, .data, target, positive, negative, is_factor,
                                                 type = "prob")[, positive],
                  ranger = predict(model, data = .data)$predictions[, positive],
                  xgb.Booster = predict(model, newdata = .data %>% 
-                                         select(-target) %>% 
+                                         select(model$feature_names) %>% 
                                          data.matrix))
 
   names(pred) <- NULL

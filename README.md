@@ -13,10 +13,10 @@ Binary classification modeling with `alookr`.
 
 Features:
 
-  - Clean and split data sets to train and test.
-  - Create several representative models.
-  - Evaluate the performance of the model to select the best model.
-  - Support the entire process of developing a binary classification
+-   Clean and split data sets to train and test.
+-   Create several representative models.
+-   Evaluate the performance of the model to select the best model.
+-   Support the entire process of developing a binary classification
     model.
 
 The name `alookr` comes from `looking at the analytics process` in the
@@ -50,11 +50,9 @@ documentation.
 
 Provided vignettes is as follows.
 
-  - Cleansing the dataset
-  - Split the data into a train set and a test set
-  - Modeling and Evaluate, Predict
-
-<!-- end list -->
+-   Cleansing the dataset
+-   Split the data into a train set and a test set
+-   Modeling and Evaluate, Predict
 
 ``` r
 browseVignettes(package = "alookr")
@@ -69,13 +67,11 @@ with sample function. The `data_exam` dataset include 5 variables.
 
 variables are as follows.:
 
-  - `id` : character
-  - `year`: character
-  - `count`: numeric
-  - `alpha` : character
-  - `flag` : character
-
-<!-- end list -->
+-   `id` : character
+-   `year`: character
+-   `count`: numeric
+-   `alpha` : character
+-   `flag` : character
 
 ``` r
 # create sample dataset
@@ -99,10 +95,10 @@ data_exam <- data.frame(id, year, count, alpha, flag, stringsAsFactors = FALSE)
 # structure of dataset
 str(data_exam)
 #> 'data.frame':    1000 obs. of  5 variables:
-#>  $ id   : chr  "htjuw1" "bnvmk2" "ylqnc3" "xgbhu4" ...
+#>  $ id   : chr  "osncj1" "rvket2" "nvesi3" "chgji4" ...
 #>  $ year : chr  "2018" "2018" "2018" "2018" ...
-#>  $ count: int  3 8 5 9 10 1 6 9 6 5 ...
-#>  $ alpha: chr  "h" "u" "k" "w" ...
+#>  $ count: int  3 3 10 2 6 5 4 6 9 10 ...
+#>  $ alpha: chr  "o" "s" "n" "c" ...
 #>  $ flag : chr  "N" "N" "N" "N" ...
 
 # summary of dataset
@@ -110,8 +106,8 @@ summary(data_exam)
 #>       id                year               count           alpha          
 #>  Length:1000        Length:1000        Min.   : 1.000   Length:1000       
 #>  Class :character   Class :character   1st Qu.: 3.000   Class :character  
-#>  Mode  :character   Mode  :character   Median : 5.000   Mode  :character  
-#>                                        Mean   : 5.474                     
+#>  Mode  :character   Mode  :character   Median : 6.000   Mode  :character  
+#>                                        Mean   : 5.698                     
 #>                                        3rd Qu.: 8.000                     
 #>                                        Max.   :10.000                     
 #>      flag          
@@ -130,10 +126,10 @@ model.
 
 The function of cleanse() is as follows.:
 
-  - remove variables whose unique value is one
-  - remove variables with high unique rate
-  - converts character variables to factor
-  - remove variables with missing value
+-   remove variables whose unique value is one
+-   remove variables with high unique rate
+-   converts character variables to factor
+-   remove variables with missing value
 
 #### Cleanse dataset with `cleanse()`
 
@@ -169,26 +165,26 @@ newDat <- cleanse(data_exam)
 # structure of cleansing dataset
 str(newDat)
 #> 'data.frame':    1000 obs. of  3 variables:
-#>  $ count: int  3 8 5 9 10 1 6 9 6 5 ...
-#>  $ alpha: Factor w/ 26 levels "a","b","c","d",..: 8 21 11 23 25 2 14 24 15 12 ...
+#>  $ count: int  3 3 10 2 6 5 4 6 9 10 ...
+#>  $ alpha: Factor w/ 26 levels "a","b","c","d",..: 15 19 14 3 10 18 22 11 5 20 ...
 #>  $ flag : Factor w/ 2 levels "N","Y": 1 1 1 1 2 1 1 1 1 1 ...
 ```
 
-  - `remove variables whose unique value is one` : The year variable has
+-   `remove variables whose unique value is one` : The year variable has
     only one value, “2018”. Not needed when fitting the model. So it was
     removed.
-  - `remove variables with high unique rate` : If the number of levels
+-   `remove variables with high unique rate` : If the number of levels
     of categorical data is very large, it is not suitable for
     classification model. In this case, it is highly likely to be an
     identifier of the data. So, remove the categorical (or character)
     variable with a high value of the unique rate defined as “number of
     levels / number of observations”.
-      - The unique rate of the id variable with the number of levels of
+    -   The unique rate of the id variable with the number of levels of
         1000 is 1. This variable is the object of the removal by
         identifier.
-      - The unique rate of the alpha variable is 0.026 and this variable
+    -   The unique rate of the alpha variable is 0.026 and this variable
         is also removed.
-  - `converts character variables to factor` : The character type flag
+-   `converts character variables to factor` : The character type flag
     variable is converted to a factor type.
 
 For example, we can not remove the categorical data that is removed by
@@ -213,8 +209,8 @@ newDat <- cleanse(data_exam, uniq_thres = 0.03)
 # structure of cleansing dataset
 str(newDat)
 #> 'data.frame':    1000 obs. of  3 variables:
-#>  $ count: int  3 8 5 9 10 1 6 9 6 5 ...
-#>  $ alpha: Factor w/ 26 levels "a","b","c","d",..: 8 21 11 23 25 2 14 24 15 12 ...
+#>  $ count: int  3 3 10 2 6 5 4 6 9 10 ...
+#>  $ alpha: Factor w/ 26 levels "a","b","c","d",..: 15 19 14 3 10 18 22 11 5 20 ...
 #>  $ flag : Factor w/ 2 levels "N","Y": 1 1 1 1 2 1 1 1 1 1 ...
 ```
 
@@ -236,10 +232,10 @@ newDat <- cleanse(data_exam, uniq = FALSE)
 # structure of cleansing dataset
 str(newDat)
 #> 'data.frame':    1000 obs. of  5 variables:
-#>  $ id   : Factor w/ 1000 levels "abety794","abkoe306",..: 301 59 929 890 904 694 997 465 134 124 ...
+#>  $ id   : Factor w/ 1000 levels "ablnc282","abqym54",..: 594 715 558 94 727 270 499 882 930 515 ...
 #>  $ year : Factor w/ 1 level "2018": 1 1 1 1 1 1 1 1 1 1 ...
-#>  $ count: int  3 8 5 9 10 1 6 9 6 5 ...
-#>  $ alpha: Factor w/ 26 levels "a","b","c","d",..: 8 21 11 23 25 2 14 24 15 12 ...
+#>  $ count: int  3 3 10 2 6 5 4 6 9 10 ...
+#>  $ alpha: Factor w/ 26 levels "a","b","c","d",..: 15 19 14 3 10 18 22 11 5 20 ...
 #>  $ flag : Factor w/ 2 levels "N","Y": 1 1 1 1 2 1 1 1 1 1 ...
 ```
 
@@ -260,8 +256,8 @@ newDat <- cleanse(data_exam, char = FALSE)
 # structure of cleansing dataset
 str(newDat)
 #> 'data.frame':    1000 obs. of  3 variables:
-#>  $ count: int  3 8 5 9 10 1 6 9 6 5 ...
-#>  $ alpha: chr  "h" "u" "k" "w" ...
+#>  $ count: int  3 3 10 2 6 5 4 6 9 10 ...
+#>  $ alpha: chr  "o" "s" "n" "c" ...
 #>  $ flag : chr  "N" "N" "N" "N" ...
 ```
 
@@ -293,8 +289,8 @@ newDat <- cleanse(data_exam, missing = TRUE)
 # structure of cleansing dataset
 str(newDat)
 #> 'data.frame':    1000 obs. of  2 variables:
-#>  $ count: int  3 8 5 9 10 1 6 9 6 5 ...
-#>  $ alpha: Factor w/ 26 levels "a","b","c","d",..: 8 21 11 23 25 2 14 24 15 12 ...
+#>  $ count: int  3 3 10 2 6 5 4 6 9 10 ...
+#>  $ alpha: Factor w/ 26 levels "a","b","c","d",..: 15 19 14 3 10 18 22 11 5 20 ...
 ```
 
 ### Diagnosis and removal of highly correlated variables
@@ -340,72 +336,67 @@ exam <- data.frame(x1, x2, x3, x4, x5, x6, x7)
 str(exam)
 #> 'data.frame':    100 obs. of  7 variables:
 #>  $ x1: int  1 2 3 4 5 6 7 8 9 10 ...
-#>  $ x2: num  0.957 5.957 8.957 3.957 4.957 ...
-#>  $ x3: num  -0.806 2.194 4.194 6.194 8.194 ...
+#>  $ x2: num  2.55 4.55 9.55 12.55 10.55 ...
+#>  $ x3: num  0.194 2.194 4.194 6.194 3.194 ...
 #>  $ x4: Factor w/ 20 levels "a","b","c","d",..: 1 2 3 4 5 6 7 8 9 10 ...
-#>  $ x5: Factor w/ 17 levels "c","d","e","g",..: 1 2 4 3 5 6 8 7 9 8 ...
-#>  $ x6: Factor w/ 14 levels "c","d","e","g",..: 1 2 3 4 5 6 7 6 8 8 ...
-#>  $ x7: Factor w/ 5 levels "a","b","c","d",..: 5 4 5 4 4 1 4 3 3 5 ...
+#>  $ x5: Factor w/ 13 levels "c","e","f","g",..: 1 5 3 2 4 7 6 8 9 8 ...
+#>  $ x6: Factor w/ 15 levels "c","d","f","g",..: 1 2 3 4 3 5 6 7 8 9 ...
+#>  $ x7: Factor w/ 5 levels "a","b","c","d",..: 2 2 1 4 5 1 4 3 1 5 ...
 head(exam)
 #>   x1        x2         x3 x4 x5 x6 x7
-#> 1  1 0.9573151 -0.8060313  a  c  c  e
-#> 2  2 5.9573151  2.1939687  b  d  d  d
-#> 3  3 8.9573151  4.1939687  c  g  e  e
-#> 4  4 3.9573151  6.1939687  d  e  g  d
-#> 5  5 4.9573151  8.1939687  e  h  h  d
-#> 6  6 5.9573151 10.1939687  f  i  i  a
+#> 1  1  2.554297  0.1939687  a  c  c  b
+#> 2  2  4.554297  2.1939687  b  h  d  b
+#> 3  3  9.554297  4.1939687  c  f  f  a
+#> 4  4 12.554297  6.1939687  d  e  g  d
+#> 5  5 10.554297  3.1939687  e  g  f  e
+#> 6  6  6.554297 10.1939687  f  l  h  a
 
 # default case
 exam_01 <- treatment_corr(exam)
 #> * remove variables whose strong correlation (pearson >= 0.8)
-#>  - remove x1 : with x3 (0.8072)
-#> Warning: `as.tibble()` is deprecated as of tibble 2.0.0.
-#> Please use `as_tibble()` instead.
-#> The signature and semantics have changed, see `?as_tibble`.
-#> This warning is displayed once every 8 hours.
-#> Call `lifecycle::last_warnings()` to see where this warning was generated.
+#>  - remove x1 : with x3 (0.825)
 #> * remove variables whose strong correlation (spearman >= 0.8)
-#>  - remove x4 : with x5 (0.9823)
-#>  - remove x4 : with x6 (0.9955)
-#>  - remove x5 : with x6 (0.9853)
+#>  - remove x4 : with x5 (0.9649)
+#>  - remove x4 : with x6 (0.9928)
+#>  - remove x5 : with x6 (0.9485)
 head(exam_01)
 #>          x2         x3 x6 x7
-#> 1 0.9573151 -0.8060313  c  e
-#> 2 5.9573151  2.1939687  d  d
-#> 3 8.9573151  4.1939687  e  e
-#> 4 3.9573151  6.1939687  g  d
-#> 5 4.9573151  8.1939687  h  d
-#> 6 5.9573151 10.1939687  i  a
+#> 1  2.554297  0.1939687  c  b
+#> 2  4.554297  2.1939687  d  b
+#> 3  9.554297  4.1939687  f  a
+#> 4 12.554297  6.1939687  g  d
+#> 5 10.554297  3.1939687  f  e
+#> 6  6.554297 10.1939687  h  a
 
 # not removing variables
 treatment_corr(exam, treat = FALSE)
 #> * remove variables whose strong correlation (pearson >= 0.8)
-#>  - remove x1 : with x3 (0.8072)
+#>  - remove x1 : with x3 (0.825)
 #> * remove variables whose strong correlation (spearman >= 0.8)
-#>  - remove x4 : with x5 (0.9823)
-#>  - remove x4 : with x6 (0.9955)
-#>  - remove x5 : with x6 (0.9853)
+#>  - remove x4 : with x5 (0.9649)
+#>  - remove x4 : with x6 (0.9928)
+#>  - remove x5 : with x6 (0.9485)
 
 # Set a threshold to detecting variables when correlation greater then 0.9
 treatment_corr(exam, corr_thres = 0.9, treat = FALSE)
 #> * remove variables whose strong correlation (spearman >= 0.9)
-#>  - remove x4 : with x5 (0.9823)
-#>  - remove x4 : with x6 (0.9955)
-#>  - remove x5 : with x6 (0.9853)
+#>  - remove x4 : with x5 (0.9649)
+#>  - remove x4 : with x6 (0.9928)
+#>  - remove x5 : with x6 (0.9485)
 
 # not verbose mode
 exam_02 <- treatment_corr(exam, verbose = FALSE)
 head(exam_02)
 #>          x2         x3 x6 x7
-#> 1 0.9573151 -0.8060313  c  e
-#> 2 5.9573151  2.1939687  d  d
-#> 3 8.9573151  4.1939687  e  e
-#> 4 3.9573151  6.1939687  g  d
-#> 5 4.9573151  8.1939687  h  d
-#> 6 5.9573151 10.1939687  i  a
+#> 1  2.554297  0.1939687  c  b
+#> 2  4.554297  2.1939687  d  b
+#> 3  9.554297  4.1939687  f  a
+#> 4 12.554297  6.1939687  g  d
+#> 5 10.554297  3.1939687  f  e
+#> 6  6.554297 10.1939687  h  a
 ```
 
-  - `remove variables whose strong correlation` : x1, x4, x5 are
+-   `remove variables whose strong correlation` : x1, x4, x5 are
     removed.
 
 ## Split the data into a train set and a test set
@@ -418,15 +409,13 @@ customers will default on their credit card debt.
 
 A data frame with 10000 observations on the following 4 variables.:
 
-  - `default` : factor. A factor with levels No and Yes indicating
+-   `default` : factor. A factor with levels No and Yes indicating
     whether the customer defaulted on their debt
-  - `student`: factor. A factor with levels No and Yes indicating
+-   `student`: factor. A factor with levels No and Yes indicating
     whether the customer is a student
-  - `balance`: numeric. The average balance that the customer has
+-   `balance`: numeric. The average balance that the customer has
     remaining on their credit card after making their monthly payment
-  - `income` : numeric. Income of customer
-
-<!-- end list -->
+-   `income` : numeric. Income of customer
 
 ``` r
 # Credit Card Default Data
@@ -496,15 +485,13 @@ sb
 
 The attributes of the `split_df` class are as follows.:
 
-  - split\_seed : integer. random seed used for splitting
-  - target : character. the name of the target variable
-  - binary : logical. whether the target variable is binary class
-  - minority : character. the name of the minority class
-  - majority : character. the name of the majority class
-  - minority\_rate : numeric. the rate of the minority class
-  - majority\_rate : numeric. the rate of the majority class
-
-<!-- end list -->
+-   split\_seed : integer. random seed used for splitting
+-   target : character. the name of the target variable
+-   binary : logical. whether the target variable is binary class
+-   minority : character. the name of the minority class
+-   majority : character. the name of the majority class
+-   minority\_rate : numeric. the rate of the minority class
+-   majority\_rate : numeric. the rate of the majority class
 
 ``` r
 attr_names <- names(attributes(sb))
@@ -643,12 +630,12 @@ sb %>%
 compare\_target\_category() returns tbl\_df, where the variables have
 the following.:
 
-  - variable : character. categorical variable name
-  - level : factor. level of categorical variables
-  - train : numeric. the relative frequency of the level in the train
+-   variable : character. categorical variable name
+-   level : factor. level of categorical variables
+-   train : numeric. the relative frequency of the level in the train
     set
-  - test : numeric. the relative frequency of the level in the test set
-  - abs\_diff : numeric. the absolute value of the difference between
+-   test : numeric. the relative frequency of the level in the test set
+-   abs\_diff : numeric. the absolute value of the difference between
     two relative frequencies
 
 #### Comparison of numeric variables with `compare_target_numeric()`
@@ -677,14 +664,14 @@ sb %>%
 compare\_target\_numeric() returns tbl\_df, where the variables have the
 following.:
 
-  - variable : character. numeric variable name
-  - train\_mean : numeric. arithmetic mean of train set
-  - test\_mean : numeric. arithmetic mean of test set
-  - train\_sd : numeric. standard deviation of train set
-  - test\_sd : numeric. standard deviation of test set
-  - train\_z : numeric. the arithmetic mean of the train set divided by
+-   variable : character. numeric variable name
+-   train\_mean : numeric. arithmetic mean of train set
+-   test\_mean : numeric. arithmetic mean of test set
+-   train\_sd : numeric. standard deviation of train set
+-   test\_sd : numeric. standard deviation of test set
+-   train\_z : numeric. the arithmetic mean of the train set divided by
     the standard deviation
-  - test\_z : numeric. the arithmetic mean of the test set divided by
+-   test\_z : numeric. the arithmetic mean of the test set divided by
     the standard deviation
 
 #### Comparison plot with `compare_plot()`
@@ -701,7 +688,6 @@ sb %>%
 ![](man/figures/README-compare_plot-1.png)<!-- -->
 
 ``` r
-
 # all varibales
 sb %>%
   compare_plot()
@@ -731,15 +717,17 @@ sb_2 %>%
 #> * Detected diagnose missing value
 #>  - student
 #>  - balance
+#>  - balance
 #> 
 #> * Detected diagnose missing levels
 #>  - student
 #> $missing_value
-#> # A tibble: 2 x 4
+#> # A tibble: 3 x 4
 #>   variables train_misscount train_missrate test_missrate
 #>   <chr>               <int>          <dbl>         <dbl>
-#> 1 student                 3         0.0429        NA    
-#> 2 balance                 5         0.0714         0.167
+#> 1 student                 3         0.0429       NA     
+#> 2 balance                 8         0.114        NA     
+#> 3 balance                 2        NA             0.0667
 #> 
 #> $single_value
 #> # A tibble: 0 x 3
@@ -761,15 +749,17 @@ sb_2 %>%
 #> * Detected diagnose missing value
 #>  - student
 #>  - balance
+#>  - balance
 #> 
 #> * Detected diagnose missing levels
 #>  - student
 #> $missing_value
-#> # A tibble: 2 x 4
+#> # A tibble: 3 x 4
 #>   variables train_misscount train_missrate test_missrate
 #>   <chr>               <int>          <dbl>         <dbl>
-#> 1 student                 3         0.0429        NA    
-#> 2 balance                 5         0.0714         0.167
+#> 1 student                 3         0.0429       NA     
+#> 2 balance                 8         0.114        NA     
+#> 3 balance                 2        NA             0.0667
 #> 
 #> $single_value
 #> # A tibble: 0 x 3
@@ -791,6 +781,7 @@ sb_2 %>%
 #> * Detected diagnose missing value
 #>  - student
 #>  - balance
+#>  - balance
 #> 
 #> * Detected diagnose many unique value
 #>  - default
@@ -799,11 +790,12 @@ sb_2 %>%
 #> * Detected diagnose missing levels
 #>  - student
 #> $missing_value
-#> # A tibble: 2 x 4
+#> # A tibble: 3 x 4
 #>   variables train_misscount train_missrate test_missrate
 #>   <chr>               <int>          <dbl>         <dbl>
-#> 1 student                 3         0.0429        NA    
-#> 2 balance                 5         0.0714         0.167
+#> 1 student                 3         0.0429       NA     
+#> 2 balance                 8         0.114        NA     
+#> 3 balance                 2        NA             0.0667
 #> 
 #> $single_value
 #> # A tibble: 0 x 3
@@ -888,10 +880,6 @@ under40 %>%
 # over-sampling with random seed
 over <- sb %>%
   sampling_target(method = "ubOver", seed = 1234L)
-#> Warning: `as.tbl()` is deprecated as of dplyr 1.0.0.
-#> Please use `tibble::as_tibble()` instead.
-#> This warning is displayed once every 8 hours.
-#> Call `lifecycle::last_warnings()` to see where this warning was generated.
 
 over %>%
   count(default)
@@ -953,19 +941,17 @@ classes.
 A data frame with 699 observations on 11 variables, one being a
 character variable, 9 being ordered or nominal, and 1 target class.:
 
-  - `Id` : character. Sample code number
-  - `Cl.thickness` : ordered factor. Clump Thickness
-  - `Cell.size` : ordered factor. Uniformity of Cell Size
-  - `Cell.shape` : ordered factor. Uniformity of Cell Shape
-  - `Marg.adhesion` : ordered factor. Marginal Adhesion
-  - `Epith.c.size` : ordered factor. Single Epithelial Cell Size
-  - `Bare.nuclei` : factor. Bare Nuclei
-  - `Bl.cromatin` : factor. Bland Chromatin
-  - `Normal.nucleoli` : factor. Normal Nucleoli
-  - `Mitoses` : factor. Mitoses
-  - `Class` : factor. Class. level is `benign` and `malignant`.
-
-<!-- end list -->
+-   `Id` : character. Sample code number
+-   `Cl.thickness` : ordered factor. Clump Thickness
+-   `Cell.size` : ordered factor. Uniformity of Cell Size
+-   `Cell.shape` : ordered factor. Uniformity of Cell Shape
+-   `Marg.adhesion` : ordered factor. Marginal Adhesion
+-   `Epith.c.size` : ordered factor. Single Epithelial Cell Size
+-   `Bare.nuclei` : factor. Bare Nuclei
+-   `Bl.cromatin` : factor. Bland Chromatin
+-   `Normal.nucleoli` : factor. Normal Nucleoli
+-   `Mitoses` : factor. Mitoses
+-   `Class` : factor. Class. level is `benign` and `malignant`.
 
 ``` r
 library(mlbench)
@@ -985,11 +971,11 @@ sapply(BreastCancer, function(x) class(x)[1])
 
 Perform data preprocessing as follows.:
 
-  - Find and imputate variables that contain missing values.
-  - Split the data into a train set and a test set.
-  - To solve the imbalanced class, perform sampling in the train set of
+-   Find and imputate variables that contain missing values.
+-   Split the data into a train set and a test set.
+-   To solve the imbalanced class, perform sampling in the train set of
     raw data.
-  - Cleansing the dataset for classification modeling.
+-   Cleansing the dataset for classification modeling.
 
 #### Fix the missing value with `dlookr::imputate_na()`
 
@@ -1045,24 +1031,22 @@ tmp <- breastCancer %>%
 The `summary()` function displays the following useful information about
 the split\_df object:
 
-  - random seed : The random seed is the random seed used internally to
+-   random seed : The random seed is the random seed used internally to
     separate the data
-  - split data : Information of splited data
-      - train set count : number of train set
-      - test set count : number of test set
-  - target variable : Target variable name
-      - minority class : name and ratio(In parentheses) of minority
+-   split data : Information of splited data
+    -   train set count : number of train set
+    -   test set count : number of test set
+-   target variable : Target variable name
+    -   minority class : name and ratio(In parentheses) of minority
         class
-      - majority class : name and ratio(In parentheses) of majority
+    -   majority class : name and ratio(In parentheses) of majority
         class
-
-<!-- end list -->
 
 ``` r
 # summary() display the some information
 summary(sb)
 #> ** Split train/test set information **
-#>  + random seed        :  50785 
+#>  + random seed        :  2725 
 #>  + split data            
 #>     - train set count :  489 
 #>     - test set count  :  210 
@@ -1073,7 +1057,7 @@ summary(sb)
 # summary() display the some information
 summary(tmp)
 #> ** Split train/test set information **
-#>  + random seed        :  60620 
+#>  + random seed        :  16653 
 #>  + split data            
 #>     - train set count :  419 
 #>     - test set count  :  280 
@@ -1098,7 +1082,7 @@ that contains the missing levels in the train set.
 # list of categorical variables in the train set that contain missing levels
 nolevel_in_train <- sb %>%
   compare_target_category() %>% 
-  filter(train == 0) %>% 
+  filter(is.na(train)) %>% 
   select(variable) %>% 
   unique() %>% 
   pull
@@ -1114,7 +1098,7 @@ while (length(nolevel_in_train) > 0) {
 
   nolevel_in_train <- sb %>%
     compare_target_category() %>% 
-    filter(train == 0) %>% 
+    filter(is.na(train)) %>% 
     select(variable) %>% 
     unique() %>% 
     pull
@@ -1154,7 +1138,7 @@ prop.table(table(sb$Class))
 # using summary function - imbalanced classes data
 summary(sb)
 #> ** Split train/test set information **
-#>  + random seed        :  50785 
+#>  + random seed        :  2725 
 #>  + split data            
 #>     - train set count :  489 
 #>     - test set count  :  210 
@@ -1189,7 +1173,7 @@ train_over <- sb %>%
 table(train_over$Class)
 #> 
 #>    benign malignant 
-#>       330       330
+#>       320       320
 ```
 
 #### Resampling - undersample majority class
@@ -1209,7 +1193,7 @@ train_under <- sb %>%
 table(train_under$Class)
 #> 
 #>    benign malignant 
-#>       159       159
+#>       169       169
 ```
 
 #### Generate synthetic samples - SMOTE
@@ -1229,7 +1213,7 @@ train_smote <- sb %>%
 table(train_smote$Class)
 #> 
 #>    benign malignant 
-#>       636       477
+#>       676       507
 ```
 
 ### Cleansing the dataset for classification modeling with `cleanse()`
@@ -1239,12 +1223,12 @@ The `cleanse()` cleanse the dataset for classification modeling.
 This function is useful when fit the classification model. This function
 does the following.:
 
-  - Remove the variable with only one value.
-  - And remove variables that have a unique number of values relative to
+-   Remove the variable with only one value.
+-   And remove variables that have a unique number of values relative to
     the number of observations for a character or categorical variable.
-      - In this case, it is a variable that corresponds to an identifier
+    -   In this case, it is a variable that corresponds to an identifier
         or an identifier.
-  - And converts the character to factor.
+-   And converts the character to factor.
 
 In this example, The `cleanse()` function removed a variable ID with a
 high unique rate.
@@ -1258,7 +1242,7 @@ train <- train_smote %>%
 #> 
 #> ── Checking unique rate ─────────────────────────────── high unique rate ──
 #> remove variables with high unique rate
-#> ● Id = 416(0.373764600179695)
+#> ● Id = 425(0.359256128486898)
 #> 
 #> ── Checking character variables ─────────────────────── categorical data ──
 #> No character variables.
@@ -1283,41 +1267,40 @@ environment.
 
 Currently supported algorithms are as follows.:
 
-  - logistic : logistic regression using `stats` package
-  - rpart : Recursive Partitioning Trees using `rpart` package
-  - ctree : Conditional Inference Trees using `party` package
-  - randomForest :Classification with Random Forest using `randomForest`
+-   logistic : logistic regression using `stats` package
+-   rpart : Recursive Partitioning Trees using `rpart` package
+-   ctree : Conditional Inference Trees using `party` package
+-   randomForest :Classification with Random Forest using `randomForest`
     package
-  - ranger : A Fast Implementation of Random Forests using `ranger`
+-   ranger : A Fast Implementation of Random Forests using `ranger`
     package
 
 `run_models()` returns a `model_df` class object.
 
 The `model_df` class object contains the following variables.:
 
-  - step : character. The current stage in the classification modeling
+-   step : character. The current stage in the classification modeling
     process.
-      - For objects created with `run_models()`, the value of the
+    -   For objects created with `run_models()`, the value of the
         variable is “1.Fitted”.
-  - model\_id : model identifiers
-  - target : name of target variable
-  - positive : positive class in target variable
-  - fitted\_model : list. Fitted model object by model\_id’s algorithms
-
-<!-- end list -->
+-   model\_id : model identifiers
+-   target : name of target variable
+-   positive : positive class in target variable
+-   fitted\_model : list. Fitted model object by model\_id’s algorithms
 
 ``` r
 result <- train %>% 
   run_models(target = "Class", positive = "malignant")
 result
-#> # A tibble: 5 x 5
-#>   step     model_id     target positive  fitted_model
-#>   <chr>    <chr>        <chr>  <chr>     <list>      
-#> 1 1.Fitted logistic     Class  malignant <glm>       
-#> 2 1.Fitted rpart        Class  malignant <rpart>     
-#> 3 1.Fitted ctree        Class  malignant <BinaryTr>  
-#> 4 1.Fitted randomForest Class  malignant <rndmFrs.>  
-#> 5 1.Fitted ranger       Class  malignant <ranger>
+#> # A tibble: 6 x 7
+#>   step     model_id     target is_factor positive  negative fitted_model
+#>   <chr>    <chr>        <chr>  <lgl>     <chr>     <chr>    <list>      
+#> 1 1.Fitted logistic     Class  TRUE      malignant benign   <glm>       
+#> 2 1.Fitted rpart        Class  TRUE      malignant benign   <rpart>     
+#> 3 1.Fitted ctree        Class  TRUE      malignant benign   <BinaryTr>  
+#> 4 1.Fitted randomForest Class  TRUE      malignant benign   <rndmFrs.>  
+#> 5 1.Fitted ranger       Class  TRUE      malignant benign   <ranger>    
+#> 6 1.Fitted xgboost      Class  TRUE      malignant benign   <xgb.Bstr>
 ```
 
 ### Evaluate the model
@@ -1335,31 +1318,30 @@ environment.
 
 The `model_df` class object contains the following variables.:
 
-  - step : character. The current stage in the classification modeling
+-   step : character. The current stage in the classification modeling
     process.
-      - For objects created with `run_predict()`, the value of the
+    -   For objects created with `run_predict()`, the value of the
         variable is “2.Predicted”.
-  - model\_id : character. Type of fit model.
-  - target : character. Name of target variable.
-  - positive : character. Level of positive class of binary
+-   model\_id : character. Type of fit model.
+-   target : character. Name of target variable.
+-   positive : character. Level of positive class of binary
     classification.
-  - fitted\_model : list. Fitted model object by model\_id’s algorithms.
-  - predicted : result of predcit by each models
-
-<!-- end list -->
+-   fitted\_model : list. Fitted model object by model\_id’s algorithms.
+-   predicted : result of predcit by each models
 
 ``` r
 pred <- result %>%
   run_predict(test)
 pred
-#> # A tibble: 5 x 6
-#>   step        model_id     target positive  fitted_model predicted  
-#>   <chr>       <chr>        <chr>  <chr>     <list>       <list>     
-#> 1 2.Predicted logistic     Class  malignant <glm>        <fct [210]>
-#> 2 2.Predicted rpart        Class  malignant <rpart>      <fct [210]>
-#> 3 2.Predicted ctree        Class  malignant <BinaryTr>   <fct [210]>
-#> 4 2.Predicted randomForest Class  malignant <rndmFrs.>   <fct [210]>
-#> 5 2.Predicted ranger       Class  malignant <ranger>     <fct [210]>
+#> # A tibble: 6 x 8
+#>   step     model_id   target is_factor positive  negative fitted_model predicted
+#>   <chr>    <chr>      <chr>  <lgl>     <chr>     <chr>    <list>       <list>   
+#> 1 2.Predi… logistic   Class  TRUE      malignant benign   <glm>        <fct [21…
+#> 2 2.Predi… rpart      Class  TRUE      malignant benign   <rpart>      <fct [21…
+#> 3 2.Predi… ctree      Class  TRUE      malignant benign   <BinaryTr>   <fct [21…
+#> 4 2.Predi… randomFor… Class  TRUE      malignant benign   <rndmFrs.>   <fct [21…
+#> 5 2.Predi… ranger     Class  TRUE      malignant benign   <ranger>     <fct [21…
+#> 6 2.Predi… xgboost    Class  TRUE      malignant benign   <xgb.Bstr>   <fct [21…
 ```
 
 #### Calculate the performance metric with `run_performance()`
@@ -1373,57 +1355,54 @@ operating system and RStudio environment.
 
 The `model_df` class object contains the following variables.:
 
-  - step : character. The current stage in the classification modeling
+-   step : character. The current stage in the classification modeling
     process.
-      - For objects created with `run_performance()`, the value of the
+    -   For objects created with `run_performance()`, the value of the
         variable is “3.Performanced”.
-  - model\_id : character. Type of fit model.
-  - target : character. Name of target variable.
-  - positive : character. Level of positive class of binary
+-   model\_id : character. Type of fit model.
+-   target : character. Name of target variable.
+-   positive : character. Level of positive class of binary
     classification.
-  - fitted\_model : list. Fitted model object by model\_id’s algorithms
-  - predicted : list. Predicted value by individual model. Each value
+-   fitted\_model : list. Fitted model object by model\_id’s algorithms
+-   predicted : list. Predicted value by individual model. Each value
     has a predict\_class class object.
-  - performance : list. Calculate metrics by individual model. Each
+-   performance : list. Calculate metrics by individual model. Each
     value has a numeric vector.
-
-<!-- end list -->
 
 ``` r
 # Calculate performace metrics.
 perf <- run_performance(pred)
 perf
-#> # A tibble: 5 x 7
+#> # A tibble: 6 x 7
 #>   step          model_id     target positive fitted_model predicted  performance
 #>   <chr>         <chr>        <chr>  <chr>    <list>       <list>     <list>     
 #> 1 3.Performanc… logistic     Class  maligna… <glm>        <fct [210… <dbl [15]> 
 #> 2 3.Performanc… rpart        Class  maligna… <rpart>      <fct [210… <dbl [15]> 
 #> 3 3.Performanc… ctree        Class  maligna… <BinaryTr>   <fct [210… <dbl [15]> 
 #> 4 3.Performanc… randomForest Class  maligna… <rndmFrs.>   <fct [210… <dbl [15]> 
-#> 5 3.Performanc… ranger       Class  maligna… <ranger>     <fct [210… <dbl [15]>
+#> 5 3.Performanc… ranger       Class  maligna… <ranger>     <fct [210… <dbl [15]> 
+#> 6 3.Performanc… xgboost      Class  maligna… <xgb.Bstr>   <fct [210… <dbl [15]>
 ```
 
 The performance variable contains a list object, which contains 15
 performance metrics:
 
-  - ZeroOneLoss : Normalized Zero-One Loss(Classification Error Loss).
-  - Accuracy : Accuracy.
-  - Precision : Precision.
-  - Recall : Recall.
-  - Sensitivity : Sensitivity.
-  - Specificity : Specificity.
-  - F1\_Score : F1 Score.
-  - Fbeta\_Score : F-Beta Score.
-  - LogLoss : Log loss / Cross-Entropy Loss.
-  - AUC : Area Under the Receiver Operating Characteristic Curve (ROC
+-   ZeroOneLoss : Normalized Zero-One Loss(Classification Error Loss).
+-   Accuracy : Accuracy.
+-   Precision : Precision.
+-   Recall : Recall.
+-   Sensitivity : Sensitivity.
+-   Specificity : Specificity.
+-   F1\_Score : F1 Score.
+-   Fbeta\_Score : F-Beta Score.
+-   LogLoss : Log loss / Cross-Entropy Loss.
+-   AUC : Area Under the Receiver Operating Characteristic Curve (ROC
     AUC).
-  - Gini : Gini Coefficient.
-  - PRAUC : Area Under the Precision-Recall Curve (PR AUC).
-  - LiftAUC : Area Under the Lift Chart.
-  - GainAUC : Area Under the Gain Chart.
-  - KS\_Stat : Kolmogorov-Smirnov Statistic.
-
-<!-- end list -->
+-   Gini : Gini Coefficient.
+-   PRAUC : Area Under the Precision-Recall Curve (PR AUC).
+-   LiftAUC : Area Under the Lift Chart.
+-   GainAUC : Area Under the Gain Chart.
+-   KS\_Stat : Kolmogorov-Smirnov Statistic.
 
 ``` r
 # Performance by analytics models
@@ -1432,43 +1411,51 @@ names(performance) <- perf$model_id
 performance
 #> $logistic
 #> ZeroOneLoss    Accuracy   Precision      Recall Sensitivity Specificity 
-#>  0.04761905  0.95238095  0.95000000  0.92682927  0.92682927  0.96875000 
+#>  0.08571429  0.91428571  0.86486486  0.88888889  0.88888889  0.92753623 
 #>    F1_Score Fbeta_Score     LogLoss         AUC        Gini       PRAUC 
-#>  0.93827160  0.93827160  1.51027400  0.95126715  0.94702744  0.06077086 
+#>  0.87671233  0.87671233  2.76028551  0.91339573  0.86714976  0.10267867 
 #>     LiftAUC     GainAUC     KS_Stat 
-#>  1.08596033  0.77505807 90.33917683 
+#>  1.14456141  0.77166005 83.03140097 
 #> 
 #> $rpart
 #> ZeroOneLoss    Accuracy   Precision      Recall Sensitivity Specificity 
-#>  0.06190476  0.93809524  0.93670886  0.90243902  0.90243902  0.96093750 
+#>  0.08571429  0.91428571  0.85526316  0.90277778  0.90277778  0.92028986 
 #>    F1_Score Fbeta_Score     LogLoss         AUC        Gini       PRAUC 
-#>  0.91925466  0.91925466  0.41591455  0.92721037  0.89176829  0.80545712 
+#>  0.87837838  0.87837838  0.76993613  0.92200081  0.86090982  0.76243464 
 #>     LiftAUC     GainAUC     KS_Stat 
-#>  1.82146153  0.76039489 86.33765244 
+#>  1.91998633  0.77731481 83.63526570 
 #> 
 #> $ctree
 #> ZeroOneLoss    Accuracy   Precision      Recall Sensitivity Specificity 
-#>  0.04761905  0.95238095  0.92857143  0.95121951  0.95121951  0.95312500 
+#>  0.08571429  0.91428571  0.83750000  0.93055556  0.93055556  0.90579710 
 #>    F1_Score Fbeta_Score     LogLoss         AUC        Gini       PRAUC 
-#>  0.93975904  0.93975904  0.61176450  0.97170351  0.95865091  0.47903471 
+#>  0.88157895  0.88157895  0.99432388  0.94509863  0.90438808  0.71643789 
 #>     LiftAUC     GainAUC     KS_Stat 
-#>  1.49393413  0.78751452 90.43445122 
+#>  1.85328656  0.79249339 86.35265700 
 #> 
 #> $randomForest
 #> ZeroOneLoss    Accuracy   Precision      Recall Sensitivity Specificity 
-#>  0.02857143  0.97142857  0.95238095  0.97560976  0.97560976  0.96875000 
+#>  0.05238095  0.94761905  0.89610390  0.95833333  0.95833333  0.94202899 
 #>    F1_Score Fbeta_Score     LogLoss         AUC        Gini       PRAUC 
-#>  0.96385542  0.96385542  0.09943100  0.99328316  0.98647104  0.68540128 
+#>  0.92617450  0.92617450  0.30364293  0.98077697  0.96095008  0.60833221 
 #>     LiftAUC     GainAUC     KS_Stat 
-#>  1.65902776  0.80066783 95.99847561 
+#>  1.71155373  0.81593915 94.20289855 
 #> 
 #> $ranger
 #> ZeroOneLoss    Accuracy   Precision      Recall Sensitivity Specificity 
-#>  0.02380952  0.97619048  0.97530864  0.96341463  0.96341463  0.98437500 
+#>  0.04285714  0.95714286  0.90909091  0.97222222  0.97222222  0.94927536 
 #>    F1_Score Fbeta_Score     LogLoss         AUC        Gini       PRAUC 
-#>  0.96932515  0.96932515  0.09782736  0.99323552  0.98647104  0.76957551 
+#>  0.93959732  0.93959732  0.15156344  0.98379630  0.96759259  0.74675595 
 #>     LiftAUC     GainAUC     KS_Stat 
-#>  1.74052776  0.80063879 96.43673780
+#>  1.83371476  0.81792328 94.20289855 
+#> 
+#> $xgboost
+#> ZeroOneLoss    Accuracy   Precision      Recall Sensitivity Specificity 
+#>  0.06190476  0.93809524  0.89333333  0.93055556  0.93055556  0.94202899 
+#>    F1_Score Fbeta_Score     LogLoss         AUC        Gini       PRAUC 
+#>  0.91156463  0.91156463  0.20105329  0.97247383  0.95249597  0.42783593 
+#>     LiftAUC     GainAUC     KS_Stat 
+#>  1.57727936  0.81048280 89.31159420
 ```
 
 If you change the list object to tidy format, you’ll see the following
@@ -1478,33 +1465,49 @@ at a glance:
 # Convert to matrix for compare performace.
 sapply(performance, "c")
 #>                logistic       rpart       ctree randomForest      ranger
-#> ZeroOneLoss  0.04761905  0.06190476  0.04761905   0.02857143  0.02380952
-#> Accuracy     0.95238095  0.93809524  0.95238095   0.97142857  0.97619048
-#> Precision    0.95000000  0.93670886  0.92857143   0.95238095  0.97530864
-#> Recall       0.92682927  0.90243902  0.95121951   0.97560976  0.96341463
-#> Sensitivity  0.92682927  0.90243902  0.95121951   0.97560976  0.96341463
-#> Specificity  0.96875000  0.96093750  0.95312500   0.96875000  0.98437500
-#> F1_Score     0.93827160  0.91925466  0.93975904   0.96385542  0.96932515
-#> Fbeta_Score  0.93827160  0.91925466  0.93975904   0.96385542  0.96932515
-#> LogLoss      1.51027400  0.41591455  0.61176450   0.09943100  0.09782736
-#> AUC          0.95126715  0.92721037  0.97170351   0.99328316  0.99323552
-#> Gini         0.94702744  0.89176829  0.95865091   0.98647104  0.98647104
-#> PRAUC        0.06077086  0.80545712  0.47903471   0.68540128  0.76957551
-#> LiftAUC      1.08596033  1.82146153  1.49393413   1.65902776  1.74052776
-#> GainAUC      0.77505807  0.76039489  0.78751452   0.80066783  0.80063879
-#> KS_Stat     90.33917683 86.33765244 90.43445122  95.99847561 96.43673780
+#> ZeroOneLoss  0.08571429  0.08571429  0.08571429   0.05238095  0.04285714
+#> Accuracy     0.91428571  0.91428571  0.91428571   0.94761905  0.95714286
+#> Precision    0.86486486  0.85526316  0.83750000   0.89610390  0.90909091
+#> Recall       0.88888889  0.90277778  0.93055556   0.95833333  0.97222222
+#> Sensitivity  0.88888889  0.90277778  0.93055556   0.95833333  0.97222222
+#> Specificity  0.92753623  0.92028986  0.90579710   0.94202899  0.94927536
+#> F1_Score     0.87671233  0.87837838  0.88157895   0.92617450  0.93959732
+#> Fbeta_Score  0.87671233  0.87837838  0.88157895   0.92617450  0.93959732
+#> LogLoss      2.76028551  0.76993613  0.99432388   0.30364293  0.15156344
+#> AUC          0.91339573  0.92200081  0.94509863   0.98077697  0.98379630
+#> Gini         0.86714976  0.86090982  0.90438808   0.96095008  0.96759259
+#> PRAUC        0.10267867  0.76243464  0.71643789   0.60833221  0.74675595
+#> LiftAUC      1.14456141  1.91998633  1.85328656   1.71155373  1.83371476
+#> GainAUC      0.77166005  0.77731481  0.79249339   0.81593915  0.81792328
+#> KS_Stat     83.03140097 83.63526570 86.35265700  94.20289855 94.20289855
+#>                 xgboost
+#> ZeroOneLoss  0.06190476
+#> Accuracy     0.93809524
+#> Precision    0.89333333
+#> Recall       0.93055556
+#> Sensitivity  0.93055556
+#> Specificity  0.94202899
+#> F1_Score     0.91156463
+#> Fbeta_Score  0.91156463
+#> LogLoss      0.20105329
+#> AUC          0.97247383
+#> Gini         0.95249597
+#> PRAUC        0.42783593
+#> LiftAUC      1.57727936
+#> GainAUC      0.81048280
+#> KS_Stat     89.31159420
 ```
 
 `compare_performance()` return a list object(results of compared model
 performance). and list has the following components:
 
-  - recommend\_model : character. The name of the model that is
+-   recommend\_model : character. The name of the model that is
     recommended as the best among the various models.
-  - top\_count : numeric. The number of best performing performance
+-   top\_count : numeric. The number of best performing performance
     metrics by model.
-  - mean\_rank : numeric. Average of ranking individual performance
+-   mean\_rank : numeric. Average of ranking individual performance
     metrics by model.
-  - top\_metric : list. The name of the performance metric with the best
+-   top\_metric : list. The name of the performance metric with the best
     performance on individual performance metrics by model.
 
 In this example, `compare_performance()` recommend the **“ranger”**
@@ -1518,12 +1521,12 @@ comp_perf
 #> [1] "ranger"
 #> 
 #> $top_metric_count
-#>     logistic        rpart        ctree randomForest       ranger 
-#>            0            2            0            4            8 
+#>     logistic        rpart        ctree randomForest       ranger      xgboost 
+#>            0            2            0            1           11            0 
 #> 
 #> $mean_rank
-#>     logistic        rpart        ctree randomForest       ranger 
-#>     3.961538     4.076923     3.615385     1.923077     1.423077 
+#>     logistic        rpart        ctree randomForest       ranger      xgboost 
+#>     5.461538     4.384615     4.269231     2.384615     1.269231     3.230769 
 #> 
 #> $top_metric
 #> $top_metric$logistic
@@ -1536,11 +1539,15 @@ comp_perf
 #> NULL
 #> 
 #> $top_metric$randomForest
-#> [1] "Recall"  "AUC"     "Gini"    "GainAUC"
+#> [1] "KS_Stat"
 #> 
 #> $top_metric$ranger
-#> [1] "ZeroOneLoss" "Accuracy"    "Precision"   "Specificity" "F1_Score"   
-#> [6] "LogLoss"     "Gini"        "KS_Stat"
+#>  [1] "ZeroOneLoss" "Accuracy"    "Precision"   "Recall"      "Specificity"
+#>  [6] "F1_Score"    "LogLoss"     "AUC"         "Gini"        "GainAUC"    
+#> [11] "KS_Stat"    
+#> 
+#> $top_metric$xgboost
+#> NULL
 ```
 
 #### Plot the ROC curve with `plot_performance()`
@@ -1580,7 +1587,7 @@ cutoff <- plot_cutoff(pred_best, test$Class, "malignant", type = "mcc")
 
 ``` r
 cutoff
-#> [1] 0.4
+#> [1] 0.36
 
 cutoff2 <- plot_cutoff(pred_best, test$Class, "malignant", type = "density")
 ```
@@ -1589,7 +1596,7 @@ cutoff2 <- plot_cutoff(pred_best, test$Class, "malignant", type = "density")
 
 ``` r
 cutoff2
-#> [1] 0.9139
+#> [1] 0.8669
 
 cutoff3 <- plot_cutoff(pred_best, test$Class, "malignant", type = "prob")
 ```
@@ -1598,7 +1605,7 @@ cutoff3 <- plot_cutoff(pred_best, test$Class, "malignant", type = "prob")
 
 ``` r
 cutoff3
-#> [1] 0.4
+#> [1] 0.36
 ```
 
 #### Performance comparison between prediction and tuned cut-off with `performance_metric()`
@@ -1625,78 +1632,78 @@ pred_prob <- pred %>%
 
 # predicted probability
 pred_prob  
-#>   [1] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0205833333
-#>   [6] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000
-#>  [11] 0.6707753968 0.0006944444 0.6684047619 0.9756777778 0.9949785714
-#>  [16] 0.9990000000 0.6925880952 0.9037761905 0.5328198413 0.9166833333
-#>  [21] 0.0331595238 0.0147444444 0.0000000000 0.0521071429 0.9940896825
-#>  [26] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 1.0000000000
-#>  [31] 0.7108809524 0.6118476190 0.8382333333 0.9996666667 0.9298571429
-#>  [36] 1.0000000000 0.1262626984 0.0012190476 0.0027746032 0.8097222222
-#>  [41] 0.1313126984 0.8987753968 0.0000000000 0.0000000000 0.1115285714
-#>  [46] 0.9373230159 1.0000000000 0.0000000000 1.0000000000 0.0000000000
-#>  [51] 0.0479595238 0.0000000000 0.0000000000 0.0000000000 1.0000000000
-#>  [56] 0.9977166667 0.9947666667 0.0000000000 0.0000000000 0.0000000000
-#>  [61] 0.9998000000 0.0000000000 0.9502523810 0.9975920635 1.0000000000
-#>  [66] 0.9984444444 0.0000000000 0.0000000000 0.9685920635 0.0000000000
-#>  [71] 1.0000000000 1.0000000000 0.9997500000 0.9995000000 0.0000000000
-#>  [76] 0.9929277778 0.0160777778 0.0122246032 0.9988000000 1.0000000000
-#>  [81] 0.9987000000 0.9988277778 0.9918174603 0.2190603175 0.0043333333
-#>  [86] 0.0000000000 0.9037761905 0.0000000000 1.0000000000 0.9980952381
-#>  [91] 0.0000000000 0.9927277778 0.0000000000 0.0008666667 0.0000000000
-#>  [96] 0.0000000000 0.9517920635 0.0000000000 0.2981222222 0.8820182540
-#> [101] 0.0000000000 0.9956428571 0.5261833333 0.9724634921 0.9946500000
-#> [106] 0.0000000000 0.9869634921 0.0000000000 0.0000000000 0.0000000000
-#> [111] 0.1347230159 0.0296865079 0.4730571429 0.0000000000 0.9128222222
-#> [116] 0.5965928571 1.0000000000 0.9929666667 0.9420142857 1.0000000000
-#> [121] 0.0000000000 0.0000000000 0.1508253968 0.0000000000 0.0000000000
-#> [126] 0.9923833333 0.0000000000 0.0175500000 0.0030222222 0.0000000000
-#> [131] 0.0000000000 0.9995000000 0.0198722222 0.0138111111 1.0000000000
-#> [136] 0.0052142857 0.9744706349 0.9822666667 0.0095904762 0.0000000000
-#> [141] 0.9216746032 0.1468793651 0.0000000000 0.4026603175 0.9991000000
-#> [146] 0.9995000000 1.0000000000 0.0000000000 0.9941190476 1.0000000000
-#> [151] 0.0000000000 0.9972500000 0.0000000000 0.0000000000 0.0000000000
-#> [156] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000
-#> [161] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000
-#> [166] 0.0000000000 0.0000000000 0.0532007937 0.4910793651 0.0000000000
-#> [171] 0.0057079365 1.0000000000 0.0000000000 0.0000000000 0.0218484127
-#> [176] 1.0000000000 0.0000000000 0.9945523810 0.0117444444 0.0113055556
-#> [181] 0.0000000000 0.0000000000 0.7085634921 0.9912404762 0.9178690476
-#> [186] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000
-#> [191] 0.0000000000 0.0000000000 0.0000000000 0.9638690476 0.0000000000
-#> [196] 0.0000000000 0.0000000000 0.0000000000 0.0032944444 0.9911285714
-#> [201] 0.0000000000 0.0000000000 0.0000000000 1.0000000000 0.0000000000
-#> [206] 0.0303150794 0.0000000000 0.0017968254 0.9897047619 0.9862357143
+#>   [1] 8.619087e-01 4.318254e-03 3.248235e-01 0.000000e+00 9.890222e-01
+#>   [6] 5.703044e-01 0.000000e+00 0.000000e+00 7.558754e-01 6.041921e-01
+#>  [11] 9.784675e-01 9.928103e-01 9.863167e-01 6.878302e-01 6.188595e-01
+#>  [16] 9.981000e-01 6.000000e-04 8.481627e-01 5.007690e-01 8.994254e-01
+#>  [21] 1.899524e-02 1.220667e-01 9.770968e-01 0.000000e+00 0.000000e+00
+#>  [26] 9.996000e-01 9.305024e-01 1.000000e-03 2.631698e-01 9.895690e-01
+#>  [31] 9.161913e-01 6.396825e-03 9.515587e-01 0.000000e+00 1.753000e-01
+#>  [36] 9.834079e-01 0.000000e+00 0.000000e+00 0.000000e+00 8.086889e-01
+#>  [41] 4.612595e-01 9.347826e-05 1.000000e+00 1.133260e-01 0.000000e+00
+#>  [46] 9.938452e-01 0.000000e+00 8.430500e-01 9.990000e-01 9.976667e-01
+#>  [51] 9.934905e-01 9.993333e-01 1.041349e-02 0.000000e+00 0.000000e+00
+#>  [56] 1.000000e+00 9.898603e-01 9.347826e-05 1.778951e-02 1.000000e+00
+#>  [61] 0.000000e+00 0.000000e+00 9.347826e-05 0.000000e+00 2.634778e-01
+#>  [66] 1.000000e+00 5.000000e-04 9.297103e-01 9.895294e-01 8.653397e-01
+#>  [71] 1.000000e+00 3.402460e-02 9.898278e-01 0.000000e+00 9.098643e-01
+#>  [76] 4.701206e-01 0.000000e+00 0.000000e+00 0.000000e+00 9.124984e-01
+#>  [81] 9.886984e-01 9.653143e-01 1.000000e+00 9.942127e-01 0.000000e+00
+#>  [86] 8.887706e-01 9.990000e-01 0.000000e+00 0.000000e+00 0.000000e+00
+#>  [91] 8.874833e-01 1.000000e+00 0.000000e+00 3.188889e-03 0.000000e+00
+#>  [96] 0.000000e+00 0.000000e+00 6.046397e-01 0.000000e+00 7.028357e-01
+#> [101] 8.783000e-01 0.000000e+00 1.000000e+00 1.000000e+00 9.347826e-05
+#> [106] 0.000000e+00 0.000000e+00 9.347826e-05 2.824214e-01 1.000000e+00
+#> [111] 0.000000e+00 0.000000e+00 1.000000e+00 0.000000e+00 0.000000e+00
+#> [116] 9.868159e-01 0.000000e+00 0.000000e+00 0.000000e+00 9.347826e-05
+#> [121] 9.970667e-01 9.990000e-01 1.270381e-01 0.000000e+00 9.966952e-01
+#> [126] 5.000000e-04 9.973500e-01 9.800881e-01 0.000000e+00 9.781325e-01
+#> [131] 9.347826e-05 1.000000e+00 8.466014e-02 0.000000e+00 2.876190e-03
+#> [136] 0.000000e+00 9.988000e-01 9.993333e-01 1.285618e-02 0.000000e+00
+#> [141] 0.000000e+00 5.000000e-04 9.673270e-01 1.485618e-02 1.000000e+00
+#> [146] 0.000000e+00 7.958554e-02 8.228008e-01 3.602444e-01 0.000000e+00
+#> [151] 2.978951e-02 9.347826e-05 9.347826e-05 5.000000e-04 2.340476e-03
+#> [156] 0.000000e+00 0.000000e+00 8.836643e-01 9.347826e-05 9.347826e-05
+#> [161] 1.000000e+00 2.978951e-02 0.000000e+00 9.347826e-05 0.000000e+00
+#> [166] 2.498333e-02 0.000000e+00 0.000000e+00 0.000000e+00 1.401849e-01
+#> [171] 0.000000e+00 0.000000e+00 9.963373e-01 0.000000e+00 0.000000e+00
+#> [176] 0.000000e+00 9.773810e-01 0.000000e+00 0.000000e+00 9.347826e-05
+#> [181] 7.927944e-01 1.000000e+00 0.000000e+00 0.000000e+00 2.709524e-03
+#> [186] 9.347826e-05 8.845437e-01 1.098856e-02 0.000000e+00 4.488889e-03
+#> [191] 0.000000e+00 0.000000e+00 9.629365e-03 0.000000e+00 0.000000e+00
+#> [196] 0.000000e+00 5.000000e-04 0.000000e+00 0.000000e+00 0.000000e+00
+#> [201] 0.000000e+00 9.984127e-01 9.728571e-03 0.000000e+00 0.000000e+00
+#> [206] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 9.812944e-01
 
 # compaire Accuracy
 performance_metric(pred_prob, test$Class, "malignant", "Accuracy")
-#> [1] 0.9761905
+#> [1] 0.9571429
 performance_metric(pred_prob, test$Class, "malignant", "Accuracy",
                    cutoff = cutoff)
-#> [1] 0.9809524
+#> [1] 0.9619048
 
 # compaire Confusion Matrix
 performance_metric(pred_prob, test$Class, "malignant", "ConfusionMatrix")
 #>            actual
 #> predict     benign malignant
-#>   benign       126         3
-#>   malignant      2        79
+#>   benign       131         2
+#>   malignant      7        70
 performance_metric(pred_prob, test$Class, "malignant", "ConfusionMatrix", 
                    cutoff = cutoff)
 #>            actual
 #> predict     benign malignant
-#>   benign       125         1
-#>   malignant      3        81
+#>   benign       130         0
+#>   malignant      8        72
 
 # compaire F1 Score
 performance_metric(pred_prob, test$Class, "malignant", "F1_Score")
-#> [1] 0.9693252
+#> [1] 0.9395973
 performance_metric(pred_prob, test$Class,  "malignant", "F1_Score", 
                    cutoff = cutoff)
-#> [1] 0.9759036
+#> [1] 0.9473684
 performance_metric(pred_prob, test$Class,  "malignant", "F1_Score", 
                    cutoff = cutoff2)
-#> [1] 0.8707483
+#> [1] 0.880597
 ```
 
 If the performance of the tuned cut-off is good, use it as a cut-off to
@@ -1720,7 +1727,7 @@ data_pred <- train_under %>%
 #> 
 #> ── Checking unique rate ─────────────────────────────── high unique rate ──
 #> remove variables with high unique rate
-#> ● Id = 306(0.962264150943396)
+#> ● Id = 325(0.961538461538462)
 #> 
 #> ── Checking character variables ─────────────────────── categorical data ──
 #> No character variables.
@@ -1748,13 +1755,13 @@ pred_actual <- pred %>%
   factor()
 
 pred_actual
-#>  [1] malignant malignant benign    benign    benign    malignant malignant
-#>  [8] benign    malignant malignant benign    malignant malignant benign   
-#> [15] malignant benign    malignant malignant malignant benign    malignant
-#> [22] benign    benign    malignant malignant malignant malignant malignant
-#> [29] malignant malignant benign    benign    malignant malignant benign   
-#> [36] benign    benign    malignant malignant benign    benign    malignant
-#> [43] benign    benign    benign    malignant benign    benign    malignant
+#>  [1] malignant malignant benign    malignant malignant malignant benign   
+#>  [8] benign    benign    benign    malignant malignant malignant benign   
+#> [15] malignant benign    benign    malignant malignant malignant malignant
+#> [22] benign    malignant malignant benign    benign    malignant malignant
+#> [29] benign    malignant malignant malignant malignant benign    benign   
+#> [36] benign    malignant benign    malignant malignant benign    malignant
+#> [43] malignant malignant benign    benign    benign    malignant malignant
 #> [50] benign   
 #> Levels: benign malignant
 ```
@@ -1775,13 +1782,13 @@ pred_actual2 <- pred %>%
   factor()
 
 pred_actual2
-#>  [1] malignant malignant benign    benign    benign    malignant malignant
-#>  [8] benign    malignant malignant benign    malignant malignant benign   
-#> [15] malignant benign    malignant malignant malignant benign    malignant
-#> [22] benign    benign    malignant malignant malignant malignant malignant
-#> [29] malignant malignant benign    benign    malignant malignant benign   
-#> [36] benign    benign    malignant malignant benign    benign    malignant
-#> [43] benign    benign    benign    malignant benign    benign    malignant
+#>  [1] malignant malignant benign    malignant malignant malignant benign   
+#>  [8] benign    benign    benign    malignant malignant malignant benign   
+#> [15] malignant benign    benign    malignant malignant malignant malignant
+#> [22] benign    malignant malignant benign    benign    malignant malignant
+#> [29] benign    malignant malignant malignant malignant benign    benign   
+#> [36] benign    malignant benign    malignant malignant benign    malignant
+#> [43] malignant malignant benign    benign    benign    malignant malignant
 #> [50] benign   
 #> Levels: benign malignant
 

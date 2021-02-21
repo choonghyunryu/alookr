@@ -269,6 +269,7 @@ Currently supported algorithms are as follows.:
 * ctree : Conditional Inference Trees using `party` package
 * randomForest :Classification with Random Forest using `randomForest` package
 * ranger : A Fast Implementation of Random Forests using `ranger` package
+* xgboost : Extreme Gradient Boosting using `xgboost` package
 
 `run_models()` returns a `model_df` class object.
 
