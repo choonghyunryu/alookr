@@ -12,12 +12,12 @@ Description: A collection of tools that support data splitting, predictive model
     helping to select the best model. 
 Depends:
     R (>= 3.2.0),
-    ggplot2,
+    ggplot2 (>= 3.0.0),
     randomForest
 Imports: caTools,
       cli (>= 1.1.0),
       dlookr,
-      dplyr,
+      dplyr (>= 0.7.6),
       future,
       ggmosaic,
       MASS,

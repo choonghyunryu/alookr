@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">alookr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
       </span>
     </div>
 
@@ -94,7 +94,7 @@
 </li>
 <li>
   <a href="https://github.com/choonghyunryu/alookr/">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -128,6 +128,10 @@
     <tr>
       <th>model</th>
       <td><p>A model_df. results of predicted model that created by run_predict().</p></td>
+    </tr>
+    <tr>
+      <th>actual</th>
+      <td><p>factor. A data of target variable to evaluate the model. It supports factor that has binary class.</p></td>
     </tr>
     </table>
 
@@ -166,8 +170,14 @@ model_df is composed of tbl_df and contains the following variables.:</p><ul>
 However, it is not supported in MS-Windows operating system and RStudio environment.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
-
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘dplyr’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:randomForest’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    combine</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'>
 <span class='co'># Divide the train data set and the test data set.</span>
 <span class='no'>sb</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rpart</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/rpart/man/kyphosis.html'>kyphosis</a></span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='split_by.data.frame.html'>split_by</a></span>(<span class='no'>Kyphosis</span>)
@@ -198,36 +208,36 @@ However, it is not supported in MS-Windows operating system and RStudio environm
 #&gt; </span><span></div><div class='input'>
 <span class='co'># Run the model fitting.</span>
 <span class='no'>result</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='run_models.html'>run_models</a></span>(<span class='kw'>.data</span> <span class='kw'>=</span> <span class='no'>train</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='st'>"Kyphosis"</span>, <span class='kw'>positive</span> <span class='kw'>=</span> <span class='st'>"present"</span>)
-<span class='no'>result</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 5 x 7</span><span>
+<span class='no'>result</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 6 x 7</span><span>
 #&gt;   step     model_id     target   is_factor positive negative fitted_model
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;lgl&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;list&gt;</span><span>      
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> 1.Fitted logistic     Kyphosis TRUE      present  absent   </span><span style='color: #949494;'>&lt;glm&gt;</span><span>       
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> 1.Fitted rpart        Kyphosis TRUE      present  absent   </span><span style='color: #949494;'>&lt;rpart&gt;</span><span>     
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> 1.Fitted ctree        Kyphosis TRUE      present  absent   </span><span style='color: #949494;'>&lt;BinaryTr&gt;</span><span>  
-#&gt; </span><span style='color: #BCBCBC;'>4</span><span> 1.Fitted randomForest Kyphosis TRUE      present  absent   </span><span style='color: #949494;'>&lt;rndmFrs.&gt;</span><span>  
-#&gt; </span><span style='color: #BCBCBC;'>5</span><span> 1.Fitted ranger       Kyphosis TRUE      present  absent   </span><span style='color: #949494;'>&lt;ranger&gt;</span><span>    </div><div class='input'>
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;lgl&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;list&gt;</span><span>      
+#&gt; </span><span style='color: #555555;'>1</span><span> 1.Fitted logistic     Kyphosis TRUE      present  absent   </span><span style='color: #555555;'>&lt;glm&gt;</span><span>       
+#&gt; </span><span style='color: #555555;'>2</span><span> 1.Fitted rpart        Kyphosis TRUE      present  absent   </span><span style='color: #555555;'>&lt;rpart&gt;</span><span>     
+#&gt; </span><span style='color: #555555;'>3</span><span> 1.Fitted ctree        Kyphosis TRUE      present  absent   </span><span style='color: #555555;'>&lt;BinaryTr&gt;</span><span>  
+#&gt; </span><span style='color: #555555;'>4</span><span> 1.Fitted randomForest Kyphosis TRUE      present  absent   </span><span style='color: #555555;'>&lt;rndmFrs.&gt;</span><span>  
+#&gt; </span><span style='color: #555555;'># … with 2 more rows</span><span></div><div class='input'>
 <span class='co'># Predict the model. (Case 1)</span>
 <span class='no'>pred</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='run_predict.html'>run_predict</a></span>(<span class='no'>result</span>, <span class='no'>test</span>)
-<span class='no'>pred</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 5 x 8</span><span>
+<span class='no'>pred</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 6 x 8</span><span>
 #&gt;   step     model_id   target  is_factor positive negative fitted_model predicted
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;lgl&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;list&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;list&gt;</span><span>   
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> 2.Predi… logistic   Kyphos… TRUE      present  absent   </span><span style='color: #949494;'>&lt;glm&gt;</span><span>        </span><span style='color: #949494;'>&lt;fct [24</span><span>…
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> 2.Predi… rpart      Kyphos… TRUE      present  absent   </span><span style='color: #949494;'>&lt;rpart&gt;</span><span>      </span><span style='color: #949494;'>&lt;fct [24</span><span>…
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> 2.Predi… ctree      Kyphos… TRUE      present  absent   </span><span style='color: #949494;'>&lt;BinaryTr&gt;</span><span>   </span><span style='color: #949494;'>&lt;fct [24</span><span>…
-#&gt; </span><span style='color: #BCBCBC;'>4</span><span> 2.Predi… randomFor… Kyphos… TRUE      present  absent   </span><span style='color: #949494;'>&lt;rndmFrs.&gt;</span><span>   </span><span style='color: #949494;'>&lt;fct [24</span><span>…
-#&gt; </span><span style='color: #BCBCBC;'>5</span><span> 2.Predi… ranger     Kyphos… TRUE      present  absent   </span><span style='color: #949494;'>&lt;ranger&gt;</span><span>     </span><span style='color: #949494;'>&lt;fct [24</span><span>…</div><div class='input'>
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;lgl&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;list&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;list&gt;</span><span>   
+#&gt; </span><span style='color: #555555;'>1</span><span> 2.Predi… logistic   Kyphos… TRUE      present  absent   </span><span style='color: #555555;'>&lt;glm&gt;</span><span>        </span><span style='color: #555555;'>&lt;fct [24</span><span>…
+#&gt; </span><span style='color: #555555;'>2</span><span> 2.Predi… rpart      Kyphos… TRUE      present  absent   </span><span style='color: #555555;'>&lt;rpart&gt;</span><span>      </span><span style='color: #555555;'>&lt;fct [24</span><span>…
+#&gt; </span><span style='color: #555555;'>3</span><span> 2.Predi… ctree      Kyphos… TRUE      present  absent   </span><span style='color: #555555;'>&lt;BinaryTr&gt;</span><span>   </span><span style='color: #555555;'>&lt;fct [24</span><span>…
+#&gt; </span><span style='color: #555555;'>4</span><span> 2.Predi… randomFor… Kyphos… TRUE      present  absent   </span><span style='color: #555555;'>&lt;rndmFrs.&gt;</span><span>   </span><span style='color: #555555;'>&lt;fct [24</span><span>…
+#&gt; </span><span style='color: #555555;'># … with 2 more rows</span><span></div><div class='input'>
 <span class='co'># Calculate performace metrics. (Case 1)</span>
 <span class='no'>perf</span> <span class='kw'>&lt;-</span> <span class='fu'>run_performance</span>(<span class='no'>pred</span>)</div><div class='output co'>#&gt; <span class='error'>Error in levels(actual): object 'pred' not found</span></div><div class='input'><span class='no'>perf</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'perf' not found</span></div><div class='input'><span class='no'>perf</span>$<span class='no'>performance</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'perf' not found</span></div><div class='input'>
 <span class='co'># Predict the model. (Case 2)</span>
 <span class='no'>pred</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='run_predict.html'>run_predict</a></span>(<span class='no'>result</span>, <span class='no'>test</span>[, -<span class='fl'>1</span>])
-<span class='no'>pred</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 5 x 8</span><span>
+<span class='no'>pred</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 6 x 8</span><span>
 #&gt;   step     model_id   target  is_factor positive negative fitted_model predicted
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;lgl&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;list&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;list&gt;</span><span>   
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> 2.Predi… logistic   Kyphos… TRUE      present  absent   </span><span style='color: #949494;'>&lt;glm&gt;</span><span>        </span><span style='color: #949494;'>&lt;fct [24</span><span>…
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> 2.Predi… rpart      Kyphos… TRUE      present  absent   </span><span style='color: #949494;'>&lt;rpart&gt;</span><span>      </span><span style='color: #949494;'>&lt;fct [24</span><span>…
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> 2.Predi… ctree      Kyphos… TRUE      present  absent   </span><span style='color: #949494;'>&lt;BinaryTr&gt;</span><span>   </span><span style='color: #949494;'>&lt;fct [24</span><span>…
-#&gt; </span><span style='color: #BCBCBC;'>4</span><span> 2.Predi… randomFor… Kyphos… TRUE      present  absent   </span><span style='color: #949494;'>&lt;rndmFrs.&gt;</span><span>   </span><span style='color: #949494;'>&lt;fct [24</span><span>…
-#&gt; </span><span style='color: #BCBCBC;'>5</span><span> 2.Predi… ranger     Kyphos… TRUE      present  absent   </span><span style='color: #949494;'>&lt;ranger&gt;</span><span>     </span><span style='color: #949494;'>&lt;fct [24</span><span>…</div><div class='input'>
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;lgl&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;list&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;list&gt;</span><span>   
+#&gt; </span><span style='color: #555555;'>1</span><span> 2.Predi… logistic   Kyphos… TRUE      present  absent   </span><span style='color: #555555;'>&lt;glm&gt;</span><span>        </span><span style='color: #555555;'>&lt;fct [24</span><span>…
+#&gt; </span><span style='color: #555555;'>2</span><span> 2.Predi… rpart      Kyphos… TRUE      present  absent   </span><span style='color: #555555;'>&lt;rpart&gt;</span><span>      </span><span style='color: #555555;'>&lt;fct [24</span><span>…
+#&gt; </span><span style='color: #555555;'>3</span><span> 2.Predi… ctree      Kyphos… TRUE      present  absent   </span><span style='color: #555555;'>&lt;BinaryTr&gt;</span><span>   </span><span style='color: #555555;'>&lt;fct [24</span><span>…
+#&gt; </span><span style='color: #555555;'>4</span><span> 2.Predi… randomFor… Kyphos… TRUE      present  absent   </span><span style='color: #555555;'>&lt;rndmFrs.&gt;</span><span>   </span><span style='color: #555555;'>&lt;fct [24</span><span>…
+#&gt; </span><span style='color: #555555;'># … with 2 more rows</span><span></div><div class='input'>
 <span class='co'># Calculate performace metrics. (Case 2)</span>
 <span class='no'>perf</span> <span class='kw'>&lt;-</span> <span class='fu'>run_performance</span>(<span class='no'>pred</span>, <span class='fu'><a href='https://dplyr.tidyverse.org/reference/pull.html'>pull</a></span>(<span class='no'>test</span>[, <span class='fl'>1</span>]))</div><div class='output co'>#&gt; <span class='error'>Error in ifelse(pred &lt; cutoff, setdiff(level, positive), positive): object 'pred' not found</span></div><div class='input'><span class='no'>perf</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'perf' not found</span></div><div class='input'><span class='no'>perf</span>$<span class='no'>performance</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'perf' not found</span></div><div class='input'>
 <span class='co'># Convert to matrix for compare performace.</span>
