@@ -43,6 +43,7 @@ classifier_ranger <- function(.data, target, positive) {
 classifier_xgboost <- function(.data, target, positive) {
   train <- .data %>% 
     select(-target) %>% 
+    mutate_all(as.numeric) %>% 
     data.matrix
   
   label <- .data %>% 
@@ -54,11 +55,27 @@ classifier_xgboost <- function(.data, target, positive) {
                    nrounds = 3, objective = "binary:logistic", verbose = 0)
 }
 
+
+#' @importFrom glmnet glmnet
+classifier_lasso <- function(.data, target, positive) {
+  train <- .data %>% 
+    select(-target) %>% 
+    data.matrix 
+  
+  label <- .data %>% 
+    select(variable = target) %>% 
+    mutate(variable = ifelse(variable == positive, 1, 0)) %>% 
+    pull 
+  
+  glmnet::glmnet(x = train, y = label, family = "binomial")
+}
+
 #=======================================================
 # dispatcher fit models
 #=======================================================
 classifier_dispatch <- function(model = c("logistic", "rpart", "ctree", 
-                                          "randomForest", "ranger", "xgboost"),
+                                          "randomForest", "ranger", "xgboost",
+                                          "lasso"),
                                 .data, target, positive) {
 
   model <- paste("classifier", match.arg(model), sep = "_")
@@ -75,7 +92,7 @@ classifier_dispatch <- function(model = c("logistic", "rpart", "ctree",
 #' @param target character. Name of target variable.
 #' @param positive character. Level of positive class of binary classification.
 #' @param models character. Algorithm types of model to fit. See details. 
-#' default value is c("logistic", "rpart", "ctree", "randomForest", "ranger").
+#' default value is c("logistic", "rpart", "ctree", "randomForest", "ranger", "lasso").
 #'
 #' @details Supported models are functions supported by the representative 
 #' model package used in R environment.
@@ -88,6 +105,7 @@ classifier_dispatch <- function(model = c("logistic", "rpart", "ctree",
 #' randomForest package.
 #' \item "ranger" : random forest model by ranger() in ranger package.
 #' \item "xgboost" : XGBoosting model by xgboost() in xgboost package.
+#' \item "lasso" : lasso model by glmnet() in glmnet package.
 #' }
 #' 
 #' run_models() executes the process in parallel when fitting the model. 
@@ -145,7 +163,7 @@ classifier_dispatch <- function(model = c("logistic", "rpart", "ctree",
 #' @export
 run_models <- function(.data, target, positive,
                        models = c("logistic", "rpart", "ctree", "randomForest", 
-                                  "ranger", "xgboost")) {
+                                  "ranger", "xgboost", "lasso")) {
   if (dlookr::get_os() == "windows" || .Platform$GUI == "RStudio") {
     future::plan(future::sequential)
   } else {
@@ -194,8 +212,13 @@ predictor <- function(model, .data, target, positive, negative, is_factor,
                                                 type = "prob")[, positive],
                  ranger = predict(model, data = .data)$predictions[, positive],
                  xgb.Booster = predict(model, newdata = .data %>% 
-                                         select(model$feature_names) %>% 
-                                         data.matrix))
+                                         select(model$feature_names) %>%
+                                         data.matrix),
+                 lognet = {pred <- predict(model, newx = .data %>% 
+                                             select(!matches(target)) %>% 
+                                    as.matrix(), type = "response")
+                 pred[, ncol(pred)]}
+                 )
 
   names(pred) <- NULL
 

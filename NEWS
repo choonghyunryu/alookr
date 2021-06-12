@@ -3,9 +3,11 @@ CHANGES IN R VERSION 0.3.4:
   MAJOR CHANGES:
   
     * add xgboosting methodlogy for binary classifier.
+
+    * add lasso regression model for binary classifier.      
       
-      
-      
+     
+ 
 CHANGES IN R VERSION 0.3.3:
       
   BUG FIXES:
