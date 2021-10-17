@@ -197,7 +197,7 @@ run_models <- function(.data, target, positive,
 #' @rawNamespace import(randomForest, except = c(margin, combine, importance))
 #' @import ranger
 #' @rawNamespace import(xgboost, except = c(slice))
-#'
+#' 
 predictor <- function(model, .data, target, positive, negative, is_factor, 
                       cutoff = 0.5) {
   model_class <- is(model)[1]
@@ -214,9 +214,10 @@ predictor <- function(model, .data, target, positive, negative, is_factor,
                  xgb.Booster = predict(model, newdata = .data %>% 
                                          select(model$feature_names) %>%
                                          data.matrix),
-                 lognet = {pred <- predict(model, newx = .data %>% 
-                                             select(!matches(target)) %>% 
-                                    as.matrix(), type = "response")
+                 lognet = {pred <- predict(
+                   model, newx = .data %>% 
+                     select(matches(model$beta %>% row.names())) %>% 
+                     data.matrix(), type = "response")
                  pred[, ncol(pred)]}
                  )
 

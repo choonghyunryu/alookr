@@ -1,3 +1,12 @@
+CHANGES IN R VERSION 0.3.5:
+      
+  BUG FIXES:
+
+    * Fix error in glmnet when run_predict() is performed with 
+      test data that has more variables than train data.
+    
+    
+    
 CHANGES IN R VERSION 0.3.4:
       
   MAJOR CHANGES:

@@ -8,7 +8,8 @@ run_models(
   .data,
   target,
   positive,
-  models = c("logistic", "rpart", "ctree", "randomForest", "ranger", "xgboost")
+  models = c("logistic", "rpart", "ctree", "randomForest", "ranger", "xgboost",
+    "lasso")
 )
 }
 \arguments{
@@ -20,7 +21,7 @@ tbl, and data.frame objects.}
 \item{positive}{character. Level of positive class of binary classification.}
 
 \item{models}{character. Algorithm types of model to fit. See details. 
-default value is c("logistic", "rpart", "ctree", "randomForest", "ranger").}
+default value is c("logistic", "rpart", "ctree", "randomForest", "ranger", "lasso").}
 }
 \value{
 model_df. results of fitted model.
@@ -51,6 +52,7 @@ The following binary classifications are supported:
 randomForest package.
 \item "ranger" : random forest model by ranger() in ranger package.
 \item "xgboost" : XGBoosting model by xgboost() in xgboost package.
+\item "lasso" : lasso model by glmnet() in glmnet package.
 }
 
 run_models() executes the process in parallel when fitting the model. 
