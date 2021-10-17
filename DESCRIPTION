@@ -34,7 +34,8 @@ Imports: caTools,
       tidyr,
       tidyselect,
       unbalanced,
-      xgboost
+      xgboost,
+      glmnet
 Suggests: 
     knitr,
     ISLR,

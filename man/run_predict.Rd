@@ -39,6 +39,8 @@ The following binary classifications are supported:
 \item "ctree" : conditional inference tree model by predict() in stats package.
 \item "randomForest" : random forest model by predict.randomForest() in randomForest package.
 \item "ranger" : random forest model by predict.ranger() in ranger package.
+\item "xgboost" : random forest model by predict.xgb.Booster() in xgboost package.
+\item "lasso" : random forest model by predict.glmnet() in glmnet package.
 }
 
 run_predict() is executed in parallel when predicting by model. 
