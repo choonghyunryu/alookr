@@ -50,6 +50,7 @@ run_performance() is performed in parallel when calculating the performance eval
 However, it is not supported in MS-Windows operating system and RStudio environment.
 }
 \examples{
+\donttest{
 library(dplyr)
 
 # Divide the train data set and the test data set.
@@ -96,5 +97,6 @@ perf$performance
 
 # Convert to matrix for compare performace.
 sapply(perf$performance, "c")
+}
 
 }

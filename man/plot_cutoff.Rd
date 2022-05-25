@@ -41,6 +41,7 @@ is less than 100. If the observation is greater than 100, draw a line plot.
 In this case, the speed of visualization can be slow.
 }
 \examples{
+\donttest{
 library(ggplot2)
 library(rpart)
 data(kyphosis)
@@ -60,5 +61,6 @@ plot_cutoff(pred, kyphosis$Kyphosis, "present", type = "density", measure = "hal
 plot_cutoff(pred, kyphosis$Kyphosis, "present", type = "prob", measure = "mcc")
 plot_cutoff(pred, kyphosis$Kyphosis, "present", type = "prob", measure = "cross")
 plot_cutoff(pred, kyphosis$Kyphosis, "present", type = "prob", measure = "half")
+}
 
 }

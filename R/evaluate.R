@@ -110,6 +110,7 @@ get_cross <- function(predicted, y, positive) {
 #' In this case, the speed of visualization can be slow.
 #'
 #' @examples
+#' \donttest{
 #' library(ggplot2)
 #' library(rpart)
 #' data(kyphosis)
@@ -129,7 +130,8 @@ get_cross <- function(predicted, y, positive) {
 #' plot_cutoff(pred, kyphosis$Kyphosis, "present", type = "prob", measure = "mcc")
 #' plot_cutoff(pred, kyphosis$Kyphosis, "present", type = "prob", measure = "cross")
 #' plot_cutoff(pred, kyphosis$Kyphosis, "present", type = "prob", measure = "half")
-#'
+#' }
+#' 
 #' @import dplyr
 #' @import ggplot2
 #' @export
@@ -284,6 +286,7 @@ plot_cutoff <- function(predicted, y, positive, type = c("mcc", "density", "prob
 #' }
 #'
 #' @examples
+#' \donttest{
 #' library(dplyr)
 #'
 #' # Divide the train data set and the test data set.
@@ -323,6 +326,8 @@ plot_cutoff <- function(predicted, y, positive, type = c("mcc", "density", "prob
 #' # Calculate Confusion Matrix by cutoff = 0.55.
 #' performance_metric(attr(pred$predicted[[1]], "pred_prob"), test$Kyphosis,
 #'   "present", "ConfusionMatrix", cutoff = 0.55)
+#' }
+#'    
 #' @importFrom stats density
 #' @export
 
@@ -421,6 +426,7 @@ performance_metric <- function(pred, actual, positive,
 #' run_performance() is performed in parallel when calculating the performance evaluation index. 
 #' However, it is not supported in MS-Windows operating system and RStudio environment.
 #' @examples
+#' \donttest{
 #' library(dplyr)
 #'
 #' # Divide the train data set and the test data set.
@@ -467,7 +473,8 @@ performance_metric <- function(pred, actual, positive,
 #' 
 #' # Convert to matrix for compare performace.
 #' sapply(perf$performance, "c")
-#'
+#' }
+#' 
 #' @importFrom stats density
 #' @export
 run_performance <- function(model, actual = NULL) {
@@ -631,6 +638,7 @@ compare_performance <- function(model) {
 #' @details The ROC curve is output for each model included in the model_df class object specified as a model argument.
 #' @return There is no return value. Only the plot is drawn.
 #' @examples
+#' \donttest{
 #' library(dplyr)
 #'
 #' # Divide the train data set and the test data set.
@@ -661,7 +669,8 @@ compare_performance <- function(model) {
 #'
 #' # Plot ROC curve
 #' plot_performance(pred)
-#'
+#' }
+#' 
 #' @import ggplot2
 #' @export
 plot_performance <- function(model) {

@@ -1,7 +1,7 @@
 Package: alookr
 Type: Package
 Title: Model Classifier for Binary Classification
-Version: 0.3.5
+Version: 0.3.6.9000
 Authors@R: c(
   person("Choonghyun", "Ryu",, "choonghyun.ryu@gmail.com", role = c("aut", "cre"))
   )
@@ -33,7 +33,6 @@ Imports: caTools,
       tibble,
       tidyr,
       tidyselect,
-      unbalanced,
       xgboost,
       glmnet
 Suggests: 
@@ -41,12 +40,13 @@ Suggests:
     ISLR,
     mice,
     mlbench,
-    rmarkdown
+    rmarkdown,
+    stringi
 Author: Choonghyun Ryu [aut, cre]
 Maintainer: Choonghyun Ryu <choonghyun.ryu@gmail.com>
 BugReports: https://github.com/choonghyunryu/alookr/issues
 License: GPL-2 | file LICENSE
 Encoding: UTF-8
 VignetteBuilder: knitr
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Language: en-US

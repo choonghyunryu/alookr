@@ -1,3 +1,12 @@
+CHANGES IN R VERSION 0.3.6:
+      
+  MINOR CHANGES:
+    * Implemented a function to replace the unbalanced package used 
+      in the process of performing split data. This is because unbalanced 
+      packages have been removed from CRAN. (#3)
+      
+      
+
 CHANGES IN R VERSION 0.3.5:
       
   BUG FIXES:

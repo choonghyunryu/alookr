@@ -59,6 +59,7 @@ The cutoff argument applies only if the metric argument is "ZeroOneLoss", "Accur
 "Sensitivity", "Specificity", "F1_Score", "Fbeta_Score", "ConfusionMatrix".
 }
 \examples{
+\donttest{
 library(dplyr)
 
 # Divide the train data set and the test data set.
@@ -98,4 +99,6 @@ performance_metric(attr(pred$predicted[[1]], "pred_prob"), test$Kyphosis,
 # Calculate Confusion Matrix by cutoff = 0.55.
 performance_metric(attr(pred$predicted[[1]], "pred_prob"), test$Kyphosis,
   "present", "ConfusionMatrix", cutoff = 0.55)
+}
+   
 }

@@ -19,6 +19,7 @@ plot_performance() visualizes a plot to ROC curve that separates model algorithm
 The ROC curve is output for each model included in the model_df class object specified as a model argument.
 }
 \examples{
+\donttest{
 library(dplyr)
 
 # Divide the train data set and the test data set.
@@ -49,5 +50,6 @@ pred <- run_predict(result, test)
 
 # Plot ROC curve
 plot_performance(pred)
+}
 
 }
