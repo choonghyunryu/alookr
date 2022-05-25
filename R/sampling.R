@@ -84,7 +84,7 @@ ubOver <- function (X, Y, k = 0, verbose = TRUE) {
   return(list(X = X, Y = Y))
 }
 
-
+#' @importFrom stats runif
 ubSmoteExs <- function (data, N = 200, k = 5) {
   nomatr <- c()
   
@@ -137,7 +137,7 @@ ubSmoteExs <- function (data, N = 200, k = 5) {
       neig <- sample(1:k, 1)
       ex <- vector(length = ncol(mat))
       difs <- mat[kNNs[neig], ] - mat[i, ]
-      new[(i - 1) * nexs + n, ] <- mat[i, ] + runif(1) * difs
+      new[(i - 1) * nexs + n, ] <- mat[i, ] + stats::runif(1) * difs
       
       for (a in nomatr) {
         new[(i - 1) * nexs + n, a] <- c(mat[kNNs[neig], a], mat[i, a])[1 + round(runif(1), 0)]
