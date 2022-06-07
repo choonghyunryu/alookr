@@ -52,7 +52,8 @@ classifier_xgboost <- function(.data, target, positive) {
     pull 
   
   xgboost::xgboost(data = train, label = label, eta = 1,
-                   nrounds = 3, objective = "binary:logistic", verbose = 0)
+                   nrounds = 3, objective = "binary:logistic", verbose = 0,
+                   eval_metric = 'error')
 }
 
 
@@ -160,6 +161,8 @@ classifier_dispatch <- function(model = c("logistic", "rpart", "ctree",
 #' train %>%
 #'   run_models(target = "Kyphosis", positive = "present", models = "logistic")
 #' @importFrom stats density
+#' @importFrom future plan
+#' @importFrom parallelly supportsMulticore
 #' @export
 run_models <- function(.data, target, positive,
                        models = c("logistic", "rpart", "ctree", "randomForest", 
@@ -167,7 +170,12 @@ run_models <- function(.data, target, positive,
   if (dlookr::get_os() == "windows" || .Platform$GUI == "RStudio") {
     future::plan(future::sequential)
   } else {
-    future::plan(future::multiprocess)
+    if (parallelly::supportsMulticore()) {
+      oplan <- future::plan(future::multicore)
+    } else {
+      oplan <- future::plan(future::multisession)
+    }
+    on.exit(future::plan(oplan))
   }
 
   actual_target <- pull(.data, target)
@@ -178,7 +186,8 @@ run_models <- function(.data, target, positive,
   
   negative <- setdiff(level, positive)
   
-  result <- purrr::map(models, ~future::future(classifier_dispatch(.x, .data, target, positive))) %>%
+  result <- purrr::map(models, ~future::future(classifier_dispatch(.x, .data, target, positive), 
+                                               seed = TRUE)) %>%
     tibble::tibble(step = "1.Fitted", model_id = models, target = target, is_factor = flag_factor,
                    positive = positive, negative = negative,  
                    fitted_model = purrr::map(., ~future::value(.x)))
@@ -313,12 +322,19 @@ predictor <- function(model, .data, target, positive, negative, is_factor,
 #'   run_predict(test)
 #'
 #' @importFrom stats density
+#' @importFrom future plan
+#' @importFrom parallelly supportsMulticore
 #' @export
 run_predict <- function(model, .data, cutoff = 0.5) {
   if (dlookr::get_os() == "windows" || .Platform$GUI == "RStudio") {
     future::plan(future::sequential)
   } else {
-    future::plan(future::multiprocess)
+    if (parallelly::supportsMulticore()) {
+      oplan <- future::plan(future::multicore)
+    } else {
+      oplan <- future::plan(future::multisession)
+    }
+    on.exit(future::plan(oplan))
   }
 
   result <- purrr::map(seq(NROW(model)),
@@ -327,7 +343,7 @@ run_predict <- function(model, .data, cutoff = 0.5) {
                                                  model$positive[[.x]],
                                                  model$negative[[.x]],
                                                  model$is_factor[[.x]],
-                                                 cutoff))) %>%
+                                                 cutoff), seed = TRUE)) %>%
     tibble::tibble(step = "2.Predicted", model_id = model$model_id, target = model$target,
                    is_factor = model$is_factor, positive = model$positive, negative = model$negative, 
                    fitted_model = model$fitted_model, predicted = purrr::map(., ~future::value(.x)))

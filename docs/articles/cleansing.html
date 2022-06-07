@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">alookr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.7</span>
       </span>
     </div>
 
@@ -52,7 +54,7 @@
   <a href="../reference/index.html">Function reference</a>
 </li>
 <li>
-  <a href="https://github.com/choonghyunryu/alookr/">
+  <a href="https://github.com/choonghyunryu/alookr/" class="external-link">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -67,34 +69,40 @@
 
       
 
-      </header><script src="cleansing_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Cleansing the dataset</h1>
-                        <h4 class="author">Choonghyun Ryu</h4>
+                        <h4 data-toc-skip class="author">Choonghyun
+Ryu</h4>
             
-            <h4 class="date">2020-08-07</h4>
+            <h4 data-toc-skip class="date">2022-06-08</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/choonghyunryu/alookr/blob/master/vignettes/cleansing.Rmd"><code>vignettes/cleansing.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/choonghyunryu/alookr/blob/HEAD/vignettes/cleansing.Rmd" class="external-link"><code>vignettes/cleansing.Rmd</code></a></small>
       <div class="hidden name"><code>cleansing.Rmd</code></div>
 
     </div>
 
     
     
-<div id="preface" class="section level2">
-<h2 class="hasAnchor">
-<a href="#preface" class="anchor"></a>Preface</h2>
-<p>If you created a dataset to create a classification model, you must perform cleansing of the data. After you create the dataset, you should do the following:</p>
+<div class="section level2">
+<h2 id="preface">Preface<a class="anchor" aria-label="anchor" href="#preface"></a>
+</h2>
+<p>If you created a dataset to create a classification model, you must
+perform cleansing of the data. After you create the dataset, you should
+do the following:</p>
 <ul>
 <li>
 <strong>Cleansing the dataset</strong>
 <ul>
-<li><strong>Optional removal of variables including missing values</strong></li>
+<li><strong>Optional removal of variables including missing
+values</strong></li>
 <li><strong>Remove a variable with one unique number</strong></li>
-<li><strong>Remove categorical variables with a large number of levels</strong></li>
+<li><strong>Remove categorical variables with a large number of
+levels</strong></li>
 <li>
-<strong>Convert a character variable to a categorical variable</strong><br>
+<strong>Convert a character variable to a categorical
+variable</strong><br>
 </li>
 </ul>
 </li>
@@ -103,303 +111,14 @@
 </ul>
 <p>The alookr package makes these steps fast and easy:</p>
 </div>
-<div id="data-create-example-dataset" class="section level2">
-<h2 class="hasAnchor">
-<a href="#data-create-example-dataset" class="anchor"></a>Data: create example dataset</h2>
-<p>To illustrate basic use of the alookr package, create the <code>data_exam</code> with sample function. The <code>data_exam</code> dataset include 5 variables.</p>
-<p>variables are as follows.:</p>
+<div class="section level2">
+<h2 id="how-to-perform-cleansing-the-dataset">How to perform cleansing the dataset<a class="anchor" aria-label="anchor" href="#how-to-perform-cleansing-the-dataset"></a>
+</h2>
+<p>For information on how to perform cleansing the dataset, refer to the
+following website.</p>
 <ul>
-<li>
-<code>id</code> : character</li>
-<li>
-<code>year</code>: character</li>
-<li>
-<code>count</code>: numeric</li>
-<li>
-<code>alpha</code> : character</li>
-<li>
-<code>flag</code> : character</li>
+<li><a href="https://choonghyunryu.github.io/alookr_vignette/cleansing.html" class="external-link"><code>Cleansing the dataset</code></a></li>
 </ul>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"># create sample dataset
-set.seed(123L)
-id &lt;- sapply(1:1000, function(x)
-  paste(c(sample(letters, 5), x), collapse = ""))
-
-year &lt;- "2018"
-
-set.seed(123L)
-count &lt;- sample(1:10, size = 1000, replace = TRUE)
-
-set.seed(123L)
-alpha &lt;- sample(letters, size = 1000, replace = TRUE)
-
-set.seed(123L)
-flag &lt;- sample(c("Y", "N"), size = 1000, prob = c(0.1, 0.9), replace = TRUE)
-
-data_exam &lt;- data.frame(id, year, count, alpha, flag, stringsAsFactors = FALSE)
-
-# structure of dataset
-str(data_exam)
-'data.frame':   1000 obs. of  5 variables:
- $ id   : chr  "osncj1" "rvket2" "nvesi3" "chgji4" ...
- $ year : chr  "2018" "2018" "2018" "2018" ...
- $ count: int  3 3 10 2 6 5 4 6 9 10 ...
- $ alpha: chr  "o" "s" "n" "c" ...
- $ flag : chr  "N" "N" "N" "N" ...
-
-# summary of dataset
-summary(data_exam)
-      id                year               count           alpha          
- Length:1000        Length:1000        Min.   : 1.000   Length:1000       
- Class :character   Class :character   1st Qu.: 3.000   Class :character  
- Mode  :character   Mode  :character   Median : 6.000   Mode  :character  
-                                       Mean   : 5.698                     
-                                       3rd Qu.: 8.000                     
-                                       Max.   :10.000                     
-     flag          
- Length:1000       
- Class :character  
- Mode  :character  
-                   
-                   
-                   </pre></body></html></div>
-</div>
-<div id="clean-dataset" class="section level2">
-<h2 class="hasAnchor">
-<a href="#clean-dataset" class="anchor"></a>Clean dataset</h2>
-<p><code><a href="../reference/cleanse.data.frame.html">cleanse()</a></code> cleans up the dataset before fitting the classification model.</p>
-<p>The function of cleanse() is as follows.:</p>
-<ul>
-<li>remove variables whose unique value is one</li>
-<li>remove variables with high unique rate</li>
-<li>converts character variables to factor</li>
-<li>remove variables with missing value</li>
-</ul>
-<div id="cleanse-dataset-with-cleanse" class="section level3">
-<h3 class="hasAnchor">
-<a href="#cleanse-dataset-with-cleanse" class="anchor"></a>Cleanse dataset with <code>cleanse()</code>
-</h3>
-<p>For example, we can cleanse all variables in <code>data_exam</code>:</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"># cleansing dataset
-newDat &lt;- cleanse(data_exam)
-── Checking unique value ─────────────────────────── unique value is one ──
-remove variables that unique value is one
-● year
-
-── Checking unique rate ─────────────────────────────── high unique rate ──
-remove variables with high unique rate
-● id = 1000(1)
-
-── Checking character variables ─────────────────────── categorical data ──
-converts character variables to factor
-● alpha
-● flag
-
-# structure of cleansing dataset
-str(newDat)
-'data.frame':   1000 obs. of  3 variables:
- $ count: int  3 3 10 2 6 5 4 6 9 10 ...
- $ alpha: Factor w/ 26 levels "a","b","c","d",..: 15 19 14 3 10 18 22 11 5 20 ...
- $ flag : Factor w/ 2 levels "N","Y": 1 1 1 1 2 1 1 1 1 1 ...</pre></body></html></div>
-<ul>
-<li>
-<code>remove variables whose unique value is one</code> : The year variable has only one value, “2018”. Not needed when fitting the model. So it was removed.</li>
-<li>
-<code>remove variables with high unique rate</code> : If the number of levels of categorical data is very large, it is not suitable for classification model. In this case, it is highly likely to be an identifier of the data. So, remove the categorical (or character) variable with a high value of the unique rate defined as “number of levels / number of observations”.
-<ul>
-<li>The unique rate of the id variable with the number of levels of 1000 is 1. This variable is the object of the removal by identifier.</li>
-<li>The unique rate of the alpha variable is 0.026 and this variable is also removed.</li>
-</ul>
-</li>
-<li>
-<code>converts character variables to factor</code> : The character type flag variable is converted to a factor type.</li>
-</ul>
-<p>For example, we can not remove the categorical data that is removed by changing the threshold of the <code>unique rate</code>:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"># cleansing dataset
-newDat &lt;- cleanse(data_exam, uniq_thres = 0.03)
-── Checking unique value ─────────────────────────── unique value is one ──
-remove variables that unique value is one
-● year
-
-── Checking unique rate ─────────────────────────────── high unique rate ──
-remove variables with high unique rate
-● id = 1000(1)
-
-── Checking character variables ─────────────────────── categorical data ──
-converts character variables to factor
-● alpha
-● flag
-
-# structure of cleansing dataset
-str(newDat)
-'data.frame':   1000 obs. of  3 variables:
- $ count: int  3 3 10 2 6 5 4 6 9 10 ...
- $ alpha: Factor w/ 26 levels "a","b","c","d",..: 15 19 14 3 10 18 22 11 5 20 ...
- $ flag : Factor w/ 2 levels "N","Y": 1 1 1 1 2 1 1 1 1 1 ...</pre></body></html></div>
-<p>The <code>alpha</code> variable was not removed.</p>
-<p>If you do not want to apply a unique rate, you can set the value of the <code>uniq</code> argument to FALSE.:</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"># cleansing dataset
-newDat &lt;- cleanse(data_exam, uniq = FALSE)
-── Checking character variables ─────────────────────── categorical data ──
-converts character variables to factor
-● id
-● year
-● alpha
-● flag
-
-# structure of cleansing dataset
-str(newDat)
-'data.frame':   1000 obs. of  5 variables:
- $ id   : Factor w/ 1000 levels "ablnc282","abqym54",..: 594 715 558 94 727 270 499 882 930 515 ...
- $ year : Factor w/ 1 level "2018": 1 1 1 1 1 1 1 1 1 1 ...
- $ count: int  3 3 10 2 6 5 4 6 9 10 ...
- $ alpha: Factor w/ 26 levels "a","b","c","d",..: 15 19 14 3 10 18 22 11 5 20 ...
- $ flag : Factor w/ 2 levels "N","Y": 1 1 1 1 2 1 1 1 1 1 ...</pre></body></html></div>
-<p>If you do not want to force type conversion of a character variable to factor, you can set the value of the <code>char</code> argument to FALSE.:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"># cleansing dataset
-newDat &lt;- cleanse(data_exam, char = FALSE)
-── Checking unique value ─────────────────────────── unique value is one ──
-remove variables that unique value is one
-● year
-
-── Checking unique rate ─────────────────────────────── high unique rate ──
-remove variables with high unique rate
-● id = 1000(1)
-
-# structure of cleansing dataset
-str(newDat)
-'data.frame':   1000 obs. of  3 variables:
- $ count: int  3 3 10 2 6 5 4 6 9 10 ...
- $ alpha: chr  "o" "s" "n" "c" ...
- $ flag : chr  "N" "N" "N" "N" ...</pre></body></html></div>
-<p>If you want to remove a variable that contains missing values, specify the value of the <code>missing</code> argument as TRUE. The following example <strong>removes the flag variable</strong> that contains the missing value.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r">data_exam$flag[1] &lt;- NA 
-
-# cleansing dataset
-newDat &lt;- cleanse(data_exam, missing = TRUE)
-── Checking missing value ────────────────────────────────── included NA ──
-remove variables whose included NA
-● flag
-
-── Checking unique value ─────────────────────────── unique value is one ──
-remove variables that unique value is one
-● year
-
-── Checking unique rate ─────────────────────────────── high unique rate ──
-remove variables with high unique rate
-● id = 1000(1)
-
-── Checking character variables ─────────────────────── categorical data ──
-converts character variables to factor
-● alpha
-
-# structure of cleansing dataset
-str(newDat)
-'data.frame':   1000 obs. of  2 variables:
- $ count: int  3 3 10 2 6 5 4 6 9 10 ...
- $ alpha: Factor w/ 26 levels "a","b","c","d",..: 15 19 14 3 10 18 22 11 5 20 ...</pre></body></html></div>
-</div>
-</div>
-<div id="diagnosis-and-removal-of-highly-correlated-variables" class="section level2">
-<h2 class="hasAnchor">
-<a href="#diagnosis-and-removal-of-highly-correlated-variables" class="anchor"></a>Diagnosis and removal of highly correlated variables</h2>
-<p>In the linear model, there is a multicollinearity if there is a strong correlation between independent variables. So it is better to remove one variable from a pair of variables where the correlation exists.</p>
-<p>Even if it is not a linear model, removing one variable from a strongly correlated pair of variables can also reduce the overhead of the operation. It is also easy to interpret the model.</p>
-<div id="cleanse-dataset-with-treatment_corr" class="section level3">
-<h3 class="hasAnchor">
-<a href="#cleanse-dataset-with-treatment_corr" class="anchor"></a>Cleanse dataset with <code>treatment_corr()</code>
-</h3>
-<p><code><a href="../reference/treatment_corr.html">treatment_corr()</a></code> diagnose pairs of highly correlated variables or remove on of them.</p>
-<p><code><a href="../reference/treatment_corr.html">treatment_corr()</a></code> calculates correlation coefficient of pearson for numerical variable, and correlation coefficient of spearman for categorical variable.</p>
-<p>For example, we can diagnosis and removal of highly correlated variables:</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"># numerical variable
-x1 &lt;- 1:100
-set.seed(12L)
-x2 &lt;- sample(1:3, size = 100, replace = TRUE) * x1 + rnorm(1)
-set.seed(1234L)
-x3 &lt;- sample(1:2, size = 100, replace = TRUE) * x1 + rnorm(1)
-
-# categorical variable
-x4 &lt;- factor(rep(letters[1:20], time = 5))
-set.seed(100L)
-x5 &lt;- factor(rep(letters[1:20 + sample(1:6, size = 20, replace = TRUE)], time = 5))
-set.seed(200L)
-x6 &lt;- factor(rep(letters[1:20 + sample(1:3, size = 20, replace = TRUE)], time = 5))
-set.seed(300L)
-x7 &lt;- factor(sample(letters[1:5], size = 100, replace = TRUE))
-
-exam &lt;- data.frame(x1, x2, x3, x4, x5, x6, x7)
-str(exam)
-'data.frame':   100 obs. of  7 variables:
- $ x1: int  1 2 3 4 5 6 7 8 9 10 ...
- $ x2: num  2.55 4.55 9.55 12.55 10.55 ...
- $ x3: num  0.194 2.194 4.194 6.194 3.194 ...
- $ x4: Factor w/ 20 levels "a","b","c","d",..: 1 2 3 4 5 6 7 8 9 10 ...
- $ x5: Factor w/ 13 levels "c","e","f","g",..: 1 5 3 2 4 7 6 8 9 8 ...
- $ x6: Factor w/ 15 levels "c","d","f","g",..: 1 2 3 4 3 5 6 7 8 9 ...
- $ x7: Factor w/ 5 levels "a","b","c","d",..: 2 2 1 4 5 1 4 3 1 5 ...
-head(exam)
-  x1        x2         x3 x4 x5 x6 x7
-1  1  2.554297  0.1939687  a  c  c  b
-2  2  4.554297  2.1939687  b  h  d  b
-3  3  9.554297  4.1939687  c  f  f  a
-4  4 12.554297  6.1939687  d  e  g  d
-5  5 10.554297  3.1939687  e  g  f  e
-6  6  6.554297 10.1939687  f  l  h  a
-
-# default case
-exam_01 &lt;- treatment_corr(exam)
-* remove variables whose strong correlation (pearson &gt;= 0.8)
- - remove x1 : with x3 (0.825)
-Warning: `as.tibble()` is deprecated as of tibble 2.0.0.
-Please use `as_tibble()` instead.
-The signature and semantics have changed, see `?as_tibble`.
-This warning is displayed once every 8 hours.
-Call `lifecycle::last_warnings()` to see where this warning was generated.
-* remove variables whose strong correlation (spearman &gt;= 0.8)
- - remove x4 : with x5 (0.9649)
- - remove x4 : with x6 (0.9928)
- - remove x5 : with x6 (0.9485)
-head(exam_01)
-         x2         x3 x6 x7
-1  2.554297  0.1939687  c  b
-2  4.554297  2.1939687  d  b
-3  9.554297  4.1939687  f  a
-4 12.554297  6.1939687  g  d
-5 10.554297  3.1939687  f  e
-6  6.554297 10.1939687  h  a
-
-# not removing variables
-treatment_corr(exam, treat = FALSE)
-* remove variables whose strong correlation (pearson &gt;= 0.8)
- - remove x1 : with x3 (0.825)
-* remove variables whose strong correlation (spearman &gt;= 0.8)
- - remove x4 : with x5 (0.9649)
- - remove x4 : with x6 (0.9928)
- - remove x5 : with x6 (0.9485)
-
-# Set a threshold to detecting variables when correlation greater then 0.9
-treatment_corr(exam, corr_thres = 0.9, treat = FALSE)
-* remove variables whose strong correlation (spearman &gt;= 0.9)
- - remove x4 : with x5 (0.9649)
- - remove x4 : with x6 (0.9928)
- - remove x5 : with x6 (0.9485)
-
-# not verbose mode
-exam_02 &lt;- treatment_corr(exam, verbose = FALSE)
-head(exam_02)
-         x2         x3 x6 x7
-1  2.554297  0.1939687  c  b
-2  4.554297  2.1939687  d  b
-3  9.554297  4.1939687  f  a
-4 12.554297  6.1939687  g  d
-5 10.554297  3.1939687  f  e
-6  6.554297 10.1939687  h  a</pre></body></html></div>
-<ul>
-<li>
-<code>remove variables whose strong correlation</code> : x1, x4, x5 are removed.</li>
-</ul>
-</div>
 </div>
   </div>
 
@@ -414,11 +133,14 @@ head(exam_02)
 
 
       <footer><div class="copyright">
-  <p>Developed by Choonghyun Ryu.</p>
+  <p></p>
+<p>Developed by Choonghyun Ryu.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer>
@@ -426,6 +148,8 @@ head(exam_02)
 
   
 
+
+  
 
   </body>
 </html>

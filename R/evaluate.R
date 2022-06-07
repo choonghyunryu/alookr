@@ -476,6 +476,8 @@ performance_metric <- function(pred, actual, positive,
 #' }
 #' 
 #' @importFrom stats density
+#' @importFrom parallelly supportsMulticore
+#' @importFrom future plan
 #' @export
 run_performance <- function(model, actual = NULL) {
   metric <- list("ZeroOneLoss", "Accuracy", "Precision", "Recall",
@@ -492,14 +494,20 @@ run_performance <- function(model, actual = NULL) {
   if (dlookr::get_os() == "windows" || .Platform$GUI == "RStudio") {
     future::plan(future::sequential)
   } else {
-    future::plan(future::multiprocess)
+    if (parallelly::supportsMulticore()) {
+      oplan <- future::plan(future::multicore)
+    } else {
+      oplan <- future::plan(future::multisession)
+    }
+    on.exit(future::plan(oplan))
   }
   
   if (is.null(actual)) {
     result <- purrr::map(seq(NROW(model)),
                          ~future::future(performance(attr(pred$predicted[[.x]], "pred_prob"),
                                                      attr(pred$predicted[[.x]], "actual"),
-                                                     attr(pred$predicted[[.x]], "positive")))) %>%
+                                                     attr(pred$predicted[[.x]], "positive")),
+                                         seed = TRUE)) %>%
       tibble::tibble(step = "3.Performanced", model_id = model$model_id, target = model$target,
                      positive = model$positive, fitted_model = model$fitted_model,
                      predicted = model$predicted,
@@ -508,7 +516,8 @@ run_performance <- function(model, actual = NULL) {
     result <- purrr::map(seq(NROW(model)),
                          ~future::future(performance(attr(pred$predicted[[.x]], "pred_prob"),
                                                      actual,
-                                                     attr(pred$predicted[[.x]], "positive")))) %>%
+                                                     attr(pred$predicted[[.x]], "positive")),
+                                         seed = TRUE)) %>%
       tibble::tibble(step = "3.Performanced", model_id = model$model_id, target = model$target,
                      positive = model$positive, fitted_model = model$fitted_model,
                      predicted = model$predicted,

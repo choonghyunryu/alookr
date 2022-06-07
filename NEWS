@@ -1,3 +1,14 @@
+CHANGES IN R VERSION 0.3.7:
+      
+  MAJOR CHANGES:
+    * Removed plan(multiprocess) from logic for parallel processing. Because, 
+      plan(multiprocess) of future is deprecated. (#2, thanks to Henrik Bengtsson)
+      
+  MINOR CHANGES:
+    * Remove the waring of "UNRELIABLE VALUE" with seed = TRUE in future function. 
+      
+      
+      
 CHANGES IN R VERSION 0.3.6:
       
   MINOR CHANGES:
