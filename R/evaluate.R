@@ -346,7 +346,7 @@ performance_metric <- function(pred, actual, positive,
   metric_0_1 <- c("LogLoss", "AUC", "Gini", "PRAUC", "LiftAUC", "GainAUC", "KS_Stat")
 
   if (metric %in% metric_factor) {
-    level <- levels(actual)
+    level <- levels(factor(actual))
     pred_factor <- ifelse(pred < cutoff, setdiff(level, positive), positive)
 
     ZeroOneLoss <- mean(pred_factor != actual)
