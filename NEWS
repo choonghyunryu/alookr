@@ -7,6 +7,11 @@ CHANGES IN R VERSION 0.3.7:
   MINOR CHANGES:
     * Remove the waring of "UNRELIABLE VALUE" with seed = TRUE in future function. 
       
+  BUG FIXES:
+
+    * Fix error in run_performance() that is "replacement has length zero" error.
+      (#5, thanks to Muhammad Fawad)
+      
       
       
 CHANGES IN R VERSION 0.3.6:
