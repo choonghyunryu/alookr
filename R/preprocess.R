@@ -251,30 +251,44 @@ cleanse.data.frame <- function(.data, uniq = TRUE, uniq_thres = 0.1, char = TRUE
 #' @import dplyr
 #' @export
 treatment_corr <- function(.data, corr_thres = 0.8, treat = TRUE, verbose = TRUE) {
-  ## Pearson correlation for numaric variables
-  corr <- .data %>%
-    dlookr::correlate() %>%
-    filter(abs(coef_corr) > corr_thres) %>%
-    filter(as.integer(var1) > as.integer(var2))
-
-  vars <- corr %>%
-    distinct(var2) %>%
-    pull %>%
-    as.character
-
-  if (nrow(corr) > 0) {
-    if (verbose) {
-      message(sprintf("* remove variables whose strong correlation (pearson >= %s)",
-        corr_thres))
-      message(paste(" - remove ", format(corr$var2), " : with ", corr$var1,
-        " (", round(corr$coef_corr, 4), ")\n", sep = ""))
-    }
-
-    if (treat) {
-      .data <- .data %>%
-        dplyr::select(-vars)
-    }
-  }
+  ## Pearson correlation for numerical variables
+  n_numeric <- .data %>%
+    diagnose() %>%
+    filter(types %in% c("integer", "numeric")) %>%
+    filter(!variables %in% "TARGET") %>%
+    select(variables) %>%
+    pull() %>% 
+    length()
+  
+  if (n_numeric > 2) {
+    corr <- .data %>%
+      dlookr::correlate() %>%
+      filter(abs(coef_corr) > corr_thres) %>%
+      filter(as.integer(var1) > as.integer(var2))
+    
+    vars <- corr %>%
+      distinct(var2) %>%
+      pull %>%
+      as.character
+    
+    if (nrow(corr) > 0) {
+      if (verbose) {
+        message(sprintf("* remove variables whose strong correlation (pearson >= %s)",
+                        corr_thres))
+        message(paste(" - remove ", format(corr$var2), " : with ", corr$var1,
+                      " (", round(corr$coef_corr, 4), ")\n", sep = ""))
+      }
+      
+      if (treat) {
+        .data <- .data %>%
+          dplyr::select(-vars)
+      }
+    }    
+    
+    n_corr <- nrow(corr)
+  } else {
+    n_corr <- 0
+  }  
 
   ## Spearman correlation for categorical variables
   vars <- .data %>%
@@ -284,43 +298,49 @@ treatment_corr <- function(.data, corr_thres = 0.8, treat = TRUE, verbose = TRUE
     select(variables) %>%
     pull
 
-  M <- .data %>%
-    select(vars) %>%
-    mutate_all(as.integer) %>%
-    cor(method = "spearman")
+  if (length(vars) > 2) {
+    M <- .data %>%
+      select(vars) %>%
+      mutate_all(as.integer) %>%
+      cor(method = "spearman")
+    
+    m <- as.vector(M)
+    tab <- tibble::as_tibble(expand.grid(var1 = row.names(M),
+                                         var2 = row.names(M)))
+    corr2 <- tibble::add_column(tab, coef_corr = m) %>%
+      filter(var1 != var2) %>%
+      filter(var1 %in% vars) %>%
+      filter(abs(coef_corr) > corr_thres) %>%
+      filter(as.integer(var1) > as.integer(var2))
+    
+    vars <- corr2 %>%
+      distinct(var2) %>%
+      pull %>%
+      as.character
+    
+    if (nrow(corr2) > 0) {
+      if (verbose) {
+        message(sprintf("* remove variables whose strong correlation (spearman >= %s)",
+                        corr_thres))
+        message(paste(" - remove ", format(corr2$var2), " : with ", corr2$var1,
+                      " (", round(corr2$coef_corr, 4), ")\n", sep = ""))
+      }
+      
+      if (treat) {
+        .data <- .data %>%
+          dplyr::select(-vars)
+      }
+    }  
+    
+    n_corr2 <- nrow(corr2)
+  } else {
+    n_corr2 <- 0
+  }  
 
-  m <- as.vector(M)
-  tab <- tibble::as_tibble(expand.grid(var1 = row.names(M),
-    var2 = row.names(M)))
-  corr2 <- tibble::add_column(tab, coef_corr = m) %>%
-    filter(var1 != var2) %>%
-    filter(var1 %in% vars) %>%
-    filter(abs(coef_corr) > corr_thres) %>%
-    filter(as.integer(var1) > as.integer(var2))
-
-  vars <- corr2 %>%
-    distinct(var2) %>%
-    pull %>%
-    as.character
-
-  if (nrow(corr2) > 0) {
-    if (verbose) {
-      message(sprintf("* remove variables whose strong correlation (spearman >= %s)",
-        corr_thres))
-      message(paste(" - remove ", format(corr2$var2), " : with ", corr2$var1,
-        " (", round(corr2$coef_corr, 4), ")\n", sep = ""))
-    }
-
-    if (treat) {
-      .data <- .data %>%
-        dplyr::select(-vars)
-    }
-  }
-
-  if ((nrow(corr) + nrow(corr2)) == 0 & verbose) {
+  if ((n_corr + n_corr2) == 0 & verbose) {
     message("All correlation coefficient is below threshold")
-  }
-
+  }  
+  
   if (treat) {
     .data
   }
