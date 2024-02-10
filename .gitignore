@@ -9,3 +9,5 @@ alookr.Rproj
 doc
 Meta
 _pkgdown.yml
+/doc/
+/Meta/

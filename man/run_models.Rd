@@ -8,8 +8,7 @@ run_models(
   .data,
   target,
   positive,
-  models = c("logistic", "rpart", "ctree", "randomForest", "ranger", "xgboost",
-    "lasso")
+  models = c("logistic", "rpart", "ctree", "randomForest", "ranger", "xgboost", "lasso")
 )
 }
 \arguments{
@@ -90,7 +89,4 @@ result
 train \%>\%
   run_models(target = "Kyphosis", positive = "present")
 
-# Run the logistic model fitting by dplyr
-train \%>\%
-  run_models(target = "Kyphosis", positive = "present", models = "logistic")
 }

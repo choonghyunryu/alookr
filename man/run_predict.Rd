@@ -73,10 +73,6 @@ train <- train \%>\%
 result <- run_models(.data = train, target = "Kyphosis", positive = "present")
 result
 
-# Predict the model.
-pred <- run_predict(result, test)
-pred
-
 # Run the several kinds model predict by dplyr
 result \%>\%
   run_predict(test)

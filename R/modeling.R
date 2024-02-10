@@ -156,10 +156,7 @@ classifier_dispatch <- function(model = c("logistic", "rpart", "ctree",
 #' # Run the several kinds model fitting by dplyr
 #' train %>%
 #'   run_models(target = "Kyphosis", positive = "present")
-#'
-#' # Run the logistic model fitting by dplyr
-#' train %>%
-#'   run_models(target = "Kyphosis", positive = "present", models = "logistic")
+#' 
 #' @importFrom stats density
 #' @importFrom future plan
 #' @importFrom parallelly supportsMulticore
@@ -313,14 +310,10 @@ predictor <- function(model, .data, target, positive, negative, is_factor,
 #' result <- run_models(.data = train, target = "Kyphosis", positive = "present")
 #' result
 #'
-#' # Predict the model.
-#' pred <- run_predict(result, test)
-#' pred
-#'
 #' # Run the several kinds model predict by dplyr
 #' result %>%
 #'   run_predict(test)
-#'
+#' 
 #' @importFrom stats density
 #' @importFrom future plan
 #' @importFrom parallelly supportsMulticore

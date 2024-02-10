@@ -110,7 +110,6 @@ get_cross <- function(predicted, y, positive) {
 #' In this case, the speed of visualization can be slow.
 #'
 #' @examples
-#' \donttest{
 #' library(ggplot2)
 #' library(rpart)
 #' data(kyphosis)
@@ -130,7 +129,6 @@ get_cross <- function(predicted, y, positive) {
 #' plot_cutoff(pred, kyphosis$Kyphosis, "present", type = "prob", measure = "mcc")
 #' plot_cutoff(pred, kyphosis$Kyphosis, "present", type = "prob", measure = "cross")
 #' plot_cutoff(pred, kyphosis$Kyphosis, "present", type = "prob", measure = "half")
-#' }
 #' 
 #' @import dplyr
 #' @import ggplot2
@@ -286,7 +284,6 @@ plot_cutoff <- function(predicted, y, positive, type = c("mcc", "density", "prob
 #' }
 #'
 #' @examples
-#' \donttest{
 #' library(dplyr)
 #'
 #' # Divide the train data set and the test data set.
@@ -326,7 +323,6 @@ plot_cutoff <- function(predicted, y, positive, type = c("mcc", "density", "prob
 #' # Calculate Confusion Matrix by cutoff = 0.55.
 #' performance_metric(attr(pred$predicted[[1]], "pred_prob"), test$Kyphosis,
 #'   "present", "ConfusionMatrix", cutoff = 0.55)
-#' }
 #'    
 #' @importFrom stats density
 #' @export
