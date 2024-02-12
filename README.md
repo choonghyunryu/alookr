@@ -1,11 +1,14 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# alookr <img src="man/figures/alookr.png" align="right" height="120" width="103.6"/>
+# alookr <img src="man/figures/logo.png" align="right" height="120" width="103.6"/>
 
+<!-- badges: start -->
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/alookr)](https://cran.r-project.org/package=alookr)
 [![Total
 Downloads](https://cranlogs.r-pkg.org/badges/grand-total/alookr)](https://cran.r-project.org/package=alookr)
+<!-- badges: end -->
+
 
 ## Overview
 
