@@ -1,0 +1,52 @@
+pandoc: '2.8'
+pkgdown: 1.5.1
+pkgdown_sha: ~
+
+title: alookr
+
+template:
+  params:
+    bootswatch: united
+
+reference:
+- title: Model Classifier for Binary Classification
+  desc:  A collection of tools that support data cleansing  and splitting, predictive modeling, and model evaluation.
+#  contents:
+#  - alookr-package
+- subtitle: Cleansing the dataset
+  contents:
+  - starts_with("cleanse")
+  - cleanse.split_df
+  - treatment_corr
+- subtitle: Splitting the dataset
+  contents:
+  - split_by
+  - summary.split_df
+  - starts_with("compare_")    
+  - extract_set
+  - sampling_target
+- subtitle: Classification Modeling
+  contents:
+  - starts_with("run_") 
+  - plot_performance
+  - plot_cutoff
+  - performance_metric
+  - matthews
+  
+navbar:
+  title: dlookr
+  type: default
+  left:
+  - text: Cleansing the dataset
+    href: articles/cleansing.html
+  - text: Splitting the dataset
+    href: articles/split.html
+  - text: Classification Modeling
+    href: articles/modeling.html
+  right:
+  - text: Function reference
+    href: reference/index.html
+  - icon: fa-github fa-lg
+    href: https://github.com/choonghyunryu/alookr/ 
+last_built: 2020-08-02T11:20Z
+
