@@ -1,5 +1,5 @@
 ---
-title: "Splitting the dataset"
+title: "Splitting the data set"
 author: "Choonghyun Ryu"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -14,16 +14,16 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "")
 ```
 
 ## Preface
-To develop a classification model, the original data must be divided into train data set and test data set. You should do the following:
+The original data must be divided into train and test data sets to develop a classification model. You should do the following:
 
-* Cleansing the dataset
+* Cleansing the data set
 * **Split the data into a train set and a test set**
     + **Split the data.frame or tbl_df into a train set and a test set**
-    + **Compare dataset**
+    + **Compare data set**
         + **Comparison of categorical variables**
         + **Comparison of numeric variables**
         + **Diagnosis of train set and test set**
-    + **Extract train/test dataset**  
+    + **Extract train/test data set**  
         + **Extract train set or test set**
         + **Extract the data to fit the model**
 * Modeling and Evaluate, Predict
@@ -32,6 +32,6 @@ The alookr package makes these steps fast and easy:
 
 ## How to perform split the data
 
-For information on how to perform split the data into a train set and a test set, refer to the following website.
+Refer to the following website for information on splitting the data into a train and test set.
 
 - [`Splitting the dataset`](https://choonghyunryu.github.io/alookr_vignette/split.html)

@@ -1,10 +1,10 @@
 ---
-title: "Cleansing the dataset"
+title: "Cleansing the data set"
 author: "Choonghyun Ryu"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Cleansing the dataset}
+  %\VignetteIndexEntry{Cleansing the data set}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,11 +14,11 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "")
 ```
 
 ## Preface
-If you created a dataset to create a classification model, you must perform cleansing of the data.
-After you create the dataset, you should do the following:
+If you created a data set to develop a classification model, you must perform a cleansing of the data.
+After you create the data set, you should do the following:
 
-* **Cleansing the dataset**
-    + **Optional removal of variables including missing values**
+* **Cleansing the data set**
+    + **Optional removal of variables, including missing values**
     + **Remove a variable with one unique number**
     + **Remove categorical variables with a large number of levels**
     + **Convert a character variable to a categorical variable**    
@@ -28,11 +28,11 @@ After you create the dataset, you should do the following:
 The alookr package makes these steps fast and easy:
 
 
-## How to perform cleansing the dataset
+## How to perform cleansing the data set
 
-For information on how to perform cleansing the dataset, refer to the following website.
+Refer to the following website for information on how to perform cleansing the data set.
 
-- [`Cleansing the dataset`](https://choonghyunryu.github.io/alookr_vignette/cleansing.html)
+- [`Cleansing the data set`](https://choonghyunryu.github.io/alookr_vignette/cleansing.html)
 
 
 

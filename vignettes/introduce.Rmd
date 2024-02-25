@@ -29,7 +29,7 @@ The name `alookr` comes from `looking at the analytics process` in the data anal
 
 ## Install alookr
 
-The released version is available on CRAN. but not yet.
+The released version is available on CRAN.
 
 ```{r eval = FALSE}
 install.packages("alookr")
@@ -52,9 +52,9 @@ devtools::install_github("choonghyunryu/alookr", build_vignettes = TRUE)
 
 alookr includes several vignette files, which we use throughout the documentation.
 
-Provided vignettes is as follows.
+The provided vignettes are as follows.
 
-* Cleansing the dataset
+* Cleansing the data set
 * Split the data into a train set and a test set
 * Modeling and Evaluate, Predict
 
@@ -62,8 +62,8 @@ Provided vignettes is as follows.
 browseVignettes(package = "alookr")
 ```
 
-## How to use dlookr package
+## How to use alookr package
 
-For information on how to use dlookr package, refer to the following website.
+For information on using the alookr package, refer to the following website.
 
 - [`Introduce alookr`](https://choonghyunryu.github.io/alookr_vignette/)
