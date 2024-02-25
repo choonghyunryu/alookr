@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cleansing the dataset • alookr</title>
+<title>Cleansing the data set • alookr</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Cleansing the dataset">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Cleansing the data set">
 <meta property="og:description" content="alookr">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -47,22 +47,37 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../articles/cleansing.html">Cleansing the dataset</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../articles/introduce.html">Introduce alookr</a>
+    </li>
+    <li>
+      <a href="../articles/cleansing.html">Cleansing the data set</a>
+    </li>
+    <li>
+      <a href="../articles/split.html">Splitting the data set</a>
+    </li>
+    <li>
+      <a href="../articles/modeling.html">Classification Modeling</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="../articles/split.html">Splitting the dataset</a>
-</li>
-<li>
-  <a href="../articles/modeling.html">Classification Modeling</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="../reference/index.html">Function reference</a>
-</li>
-<li>
   <a href="https://github.com/choonghyunryu/alookr/" class="external-link">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -79,11 +94,11 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Cleansing the dataset</h1>
+      <h1 data-toc-skip>Cleansing the data set</h1>
                         <h4 data-toc-skip class="author">Choonghyun
 Ryu</h4>
             
-            <h4 data-toc-skip class="date">2024-02-13</h4>
+            <h4 data-toc-skip class="date">2024-02-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/choonghyunryu/alookr/blob/HEAD/vignettes/cleansing.Rmd" class="external-link"><code>vignettes/cleansing.Rmd</code></a></small>
       <div class="hidden name"><code>cleansing.Rmd</code></div>
@@ -95,14 +110,14 @@ Ryu</h4>
 <div class="section level2">
 <h2 id="preface">Preface<a class="anchor" aria-label="anchor" href="#preface"></a>
 </h2>
-<p>If you created a dataset to create a classification model, you must
-perform cleansing of the data. After you create the dataset, you should
-do the following:</p>
+<p>If you created a data set to develop a classification model, you must
+perform a cleansing of the data. After you create the data set, you
+should do the following:</p>
 <ul>
 <li>
-<strong>Cleansing the dataset</strong>
+<strong>Cleansing the data set</strong>
 <ul>
-<li><strong>Optional removal of variables including missing
+<li><strong>Optional removal of variables, including missing
 values</strong></li>
 <li><strong>Remove a variable with one unique number</strong></li>
 <li><strong>Remove categorical variables with a large number of
@@ -119,12 +134,12 @@ variable</strong><br>
 <p>The alookr package makes these steps fast and easy:</p>
 </div>
 <div class="section level2">
-<h2 id="how-to-perform-cleansing-the-dataset">How to perform cleansing the dataset<a class="anchor" aria-label="anchor" href="#how-to-perform-cleansing-the-dataset"></a>
+<h2 id="how-to-perform-cleansing-the-data-set">How to perform cleansing the data set<a class="anchor" aria-label="anchor" href="#how-to-perform-cleansing-the-data-set"></a>
 </h2>
-<p>For information on how to perform cleansing the dataset, refer to the
-following website.</p>
+<p>Refer to the following website for information on how to perform
+cleansing the data set.</p>
 <ul>
-<li><a href="https://choonghyunryu.github.io/alookr_vignette/cleansing.html" class="external-link"><code>Cleansing the dataset</code></a></li>
+<li><a href="https://choonghyunryu.github.io/alookr_vignette/cleansing.html" class="external-link"><code>Cleansing the data set</code></a></li>
 </ul>
 </div>
   </div>
