@@ -2,7 +2,7 @@
 
 ## MINOR CHANGES
   
-* Fix error in treatment_corr() that is "All columns in a tibble must be vectors." error. 
+* Fix error in `treatment_corr()` that is "All columns in a tibble must be vectors." error. 
     - (#6, thanks to Cathy Tomson)
     
     
@@ -11,7 +11,7 @@
 
 ## BUG FIXES
   
-* Fix error in treatment_corr() that is "All columns in a tibble must be vectors." error. 
+* Fix error in `treatment_corr()` that is "All columns in a tibble must be vectors." error. 
     - (#6, thanks to Cathy Tomson)
 
 
@@ -20,16 +20,16 @@
       
 ## MAJOR CHANGES
   
-* Removed plan(multiprocess) from logic for parallel processing. 
-    - Because, plan(multiprocess) of future is deprecated. (#2, thanks to Henrik Bengtsson)
+* Removed `plan(multiprocess)` from logic for parallel processing. 
+    - Because, `plan(multiprocess)` of future is deprecated. (#2, thanks to Henrik Bengtsson)
       
 ## MINOR CHANGES
   
-* Remove the waring of "UNRELIABLE VALUE" with seed = TRUE in future function. 
+* Remove the warning of "UNRELIABLE VALUE" with `seed = TRUE` in future function. 
       
 ## BUG FIXES
   
-* Fix error in run_performance() that is "replacement has length zero" error.
+* Fix error in `run_performance()` that is "replacement has length zero" error.
     - (#5, thanks to Muhammad Fawad)
       
       
@@ -47,7 +47,7 @@
       
 ## BUG FIXES
   
-* Fix error in glmnet when run_predict() is performed with test data that has more variables than train data.
+* Fix error in glmnet when `run_predict()` is performed with test data that has more variables than train data.
     
     
     
@@ -64,12 +64,12 @@
       
 ## BUG FIXES
   
-* run_predict() fixed error when try to predict on dataset without the response variable 
+* `run_predict()` fixed error when try to predict on dataset without the response variable 
     - (thanks @shivakhanal, #1).
     
 ## MINOR CHANGES
   
-* run_models(), run_predict(), run_performance() not support future::multiprocess when running R from RStudio. 
+* `run_models()`, `run_predict()`, `run_performance()` not support future::multiprocess when running R from RStudio. 
 
 
 
@@ -81,13 +81,13 @@
     
 ## MINOR CHANGES
 
-* Renamed compare_category() to compare_target_category(). 
+* Renamed `compare_category()` to `compare_target_category()`. 
     - This is because it overlaps the function name of the dlookr package.
-* Renamed compare_numeric() to compare_target_numeric(). 
+* Renamed `compare_numeric()` to `compare_target_numeric()`. 
     - This is because it overlaps the function name of the dlookr package.
-* compare_target_category() modified from is.tibble(), as.tibble() to is_tibble(), as_tibble().  
-* compare_diag() modified from is.tibble(), as.tibble() to is_tibble(), as_tibble().  
-* sampling_target() modified from as.tbl() to tibble::as_tibble().
+* `compare_target_category()` modified from `is.tibble()`, `as.tibble()` to `is_tibble()`, `as_tibble()`.  
+* `compare_diag()` modified from is.tibble(), as.tibble() to is_tibble(), as_tibble().  
+* `sampling_target()` modified from as.tbl() to tibble::as_tibble().
     
     
 

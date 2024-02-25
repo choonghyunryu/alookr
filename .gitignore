@@ -2,12 +2,9 @@
 .Rhistory
 .RData
 .Ruserdata
-README.Rmd
-alookr.Rproj
 #.Rbuildignore
 .DS_Store
 doc
 Meta
-_pkgdown.yml
 /doc/
 /Meta/
