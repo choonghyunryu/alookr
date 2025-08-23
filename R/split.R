@@ -24,7 +24,7 @@ split_by <- function(.data, ...) {
 #' \item majority_rate : numeric. the rate of the majority class
 #' }
 #'
-#' @param .data a data.frame or a \code{\link{tbl_df}}.
+#' @param .data a data.frame or a \code{\link[tibble]{tbl_df}}.
 #' @param target unquoted expression or variable name. the name of the target variable
 #' @param ratio numeric. the ratio of the train dataset. default is 0.7
 #' @param seed random seed used for splitting

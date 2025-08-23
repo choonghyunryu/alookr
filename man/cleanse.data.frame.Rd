@@ -18,7 +18,7 @@
 cleanse(.data, ...)
 }
 \arguments{
-\item{.data}{a data.frame or a \code{\link{tbl_df}}.}
+\item{.data}{a data.frame or a \code{\link[tibble]{tbl_df}}.}
 
 \item{uniq}{logical. Set whether to remove the variables whose unique value is one.}
 

@@ -10,7 +10,7 @@ split_by(.data, ...)
 \method{split_by}{data.frame}(.data, target, ratio = 0.7, seed = NULL, ...)
 }
 \arguments{
-\item{.data}{a data.frame or a \code{\link{tbl_df}}.}
+\item{.data}{a data.frame or a \code{\link[tibble]{tbl_df}}.}
 
 \item{...}{further arguments passed to or from other methods.}
 
