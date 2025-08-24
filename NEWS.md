@@ -1,3 +1,14 @@
+# alookr 0.3.91
+
+## MINOR CHANGES
+
+* fixed Rd file(s) with Rd \link{} targets missing package #8
+    - cleanse.data.frame.Rd: tbl_df
+    - split_by.data.frame.Rd: tbl_df
+    - treatment_corr.Rd: tbl_df
+
+
+
 # alookr 0.3.9
 
 ## MINOR CHANGES
