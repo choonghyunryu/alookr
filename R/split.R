@@ -420,23 +420,23 @@ compare_plot <- function(.data, ...) {
 
   plot_category <- function(df, var) {
     # Step 1: Divide the x-axis area by class ratio
-    df_class <- df |> 
-      ungroup() |> 
-      count(split_flag) |> 
-      mutate(prop = n / sum(n)) |> 
+    df_class <- df %>% 
+      ungroup() %>% 
+      count(split_flag) %>% 
+      mutate(prop = n / sum(n)) %>% 
       mutate(xmin = lag(cumsum(prop), default = 0),
              xmax = cumsum(prop),
              xmid = (xmin + xmax) / 2)  
     
     # Step 2: Split the y-axis by the Survived ratio within each Class.
-    df_mosaic <- df |> 
-      dplyr::select(split_flag, variable = var) |>       
-      count(split_flag, variable) |> 
-      group_by(split_flag) |>
+    df_mosaic <- df %>% 
+      dplyr::select(split_flag, variable = var) %>%       
+      count(split_flag, variable) %>% 
+      group_by(split_flag) %>%
       mutate(prop = n / sum(n),
              ymin = lag(cumsum(prop), default = 0),
-             ymax = cumsum(prop)) |> 
-      left_join(df_class |> select(split_flag, xmin, xmax, xmid), by = "split_flag")
+             ymax = cumsum(prop)) %>% 
+      left_join(df_class %>% select(split_flag, xmin, xmax, xmid), by = "split_flag")
     
     # Step 3: Draw a mosaic plot with geom_rect() + categorical x-axis labels
     ggplot(df_mosaic) +
