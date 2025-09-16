@@ -1,3 +1,12 @@
+# alookr 0.4.0
+
+## MINOR CHANGES
+  
+* Fix logic in `compare_plot()` that is "using ggmosaic package.". 
+    - (#9)
+    
+    
+    
 # alookr 0.3.9
 
 ## MINOR CHANGES

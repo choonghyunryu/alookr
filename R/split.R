@@ -404,7 +404,6 @@ compare_target_category <- function(.data, ..., add_character = FALSE, margin = 
 #' @importFrom rlang quos
 #' @import dplyr
 #' @import ggplot2
-#' @import ggmosaic
 #' @export
 compare_plot <- function(.data, ...) {
   vars <- tidyselect::vars_select(names(.data), ...)
@@ -420,15 +419,42 @@ compare_plot <- function(.data, ...) {
   }
 
   plot_category <- function(df, var) {
-    df %>%
-      dplyr::select(split_flag, variable = var) %>%
-      ungroup() %>%
-      mutate(split_flag = ordered(split_flag, levels = c("train", "test"))) %>%
-      ggplot() +
-      ggmosaic::geom_mosaic(aes(x = ggmosaic::product(split_flag), fill = variable)) +
-      ggmosaic::scale_x_productlist("dataset class", labels = c("Training set", "Test set")) +
-      ggtitle(label = "Frequency of Train Set vs Test Set",
-        subtitle = paste("variable", var, sep = ":"))
+    # Step 1: Divide the x-axis area by class ratio
+    df_class <- df |> 
+      ungroup() |> 
+      count(split_flag) |> 
+      mutate(prop = n / sum(n)) |> 
+      mutate(xmin = lag(cumsum(prop), default = 0),
+             xmax = cumsum(prop),
+             xmid = (xmin + xmax) / 2)  
+    
+    # Step 2: Split the y-axis by the Survived ratio within each Class.
+    df_mosaic <- df |> 
+      dplyr::select(split_flag, variable = var) |>       
+      count(split_flag, variable) |> 
+      group_by(split_flag) |>
+      mutate(prop = n / sum(n),
+             ymin = lag(cumsum(prop), default = 0),
+             ymax = cumsum(prop)) |> 
+      left_join(df_class |> select(split_flag, xmin, xmax, xmid), by = "split_flag")
+    
+    # Step 3: Draw a mosaic plot with geom_rect() + categorical x-axis labels
+    ggplot(df_mosaic) +
+      geom_rect(aes(xmin = xmin, xmax = xmax,
+                    ymin = ymin, ymax = ymax,
+                    fill = variable),
+                color = "white") +
+      scale_y_continuous(expand = c(0, 0)) +
+      scale_x_continuous(
+        expand = c(0, 0),
+        breaks = df_class$xmid,      # Tick mark position in the middle
+        labels = df_class$split_flag      # Tickmark name
+      ) +
+      coord_equal() +
+      labs(title = "Frequency of Train Set vs Test Set",
+           fill = var,
+           subtitle = paste("variable", var, sep = ":"), 
+           x = "dataset class", y = paste("Proportion within", var))    
   }
 
   plot_compare <- function(df, var) {
