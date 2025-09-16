@@ -7,7 +7,7 @@
 treatment_corr(.data, corr_thres = 0.8, treat = TRUE, verbose = TRUE)
 }
 \arguments{
-\item{.data}{a data.frame or a \code{\link{tbl_df}}.}
+\item{.data}{a data.frame or a \code{\link[tibble]{tbl_df}}.}
 
 \item{corr_thres}{numeric. Set a threshold to detecting variables when correlation greater then threshold.}
 

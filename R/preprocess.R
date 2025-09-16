@@ -1,7 +1,7 @@
 #' Cleansing the dataset for classification modeling
 #'
 #' @description The cleanse() cleanse the dataset for classification modeling
-#' @param .data a data.frame or a \code{\link{tbl_df}}.
+#' @param .data a data.frame or a \code{\link[tibble]{tbl_df}}.
 #' @param uniq logical. Set whether to remove the variables whose unique value is one.
 #' @param uniq_thres numeric. Set a threshold to removing variables when the ratio of unique values(number of unique values / number of observation) is greater than the set value.
 #' @param char logical. Set the change the character to factor.
@@ -205,7 +205,7 @@ cleanse.data.frame <- function(.data, uniq = TRUE, uniq_thres = 0.1, char = TRUE
 #' Diagnosis and removal of highly correlated variables
 #'
 #' @description The treatment_corr() diagnose pairs of highly correlated variables or remove on of them.
-#' @param .data a data.frame or a \code{\link{tbl_df}}.
+#' @param .data a data.frame or a \code{\link[tibble]{tbl_df}}.
 #' @param corr_thres numeric. Set a threshold to detecting variables when correlation greater then threshold.
 #' @param treat logical. Set whether to removing variables
 #' @param verbose logical. Set whether to echo information to the console at runtime.
