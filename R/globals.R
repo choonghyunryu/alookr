@@ -7,4 +7,5 @@ utils::globalVariables(c("missing_count", "variables", "unique_count", "types",
                          "test_missing_nlevel", "value", "temp", "metric",
                          "train_mean", "test_mean", "train_sd", "test_sd",
                          "train_z", "test_z", "pred", "sb", "prob", "actually",
-                         "setNames", "x", "y", ".", "coef_corr", "var1", "var2"))
+                         "setNames", "x", "y", ".", "coef_corr", "var1", "var2",
+                         "prop", "xmin", "xmax", "ymin", "ymax", "xmid"))
