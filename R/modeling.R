@@ -52,8 +52,8 @@ classifier_xgboost <- function(.data, target, positive) {
     pull %>% 
     as.factor()
   
-  xgboost::xgboost(x = train, y = label, eta = 1,
-                   nrounds = 3, objective = "binary:logistic", verbose = 0,
+  xgboost::xgboost(x = train, y = label, learning_rate = 1,
+                   nrounds = 3, objective = "binary:logistic", verbosity = 0,
                    eval_metric = 'error')
 }
 
