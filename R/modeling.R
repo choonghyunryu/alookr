@@ -49,7 +49,7 @@ classifier_xgboost <- function(.data, target, positive) {
   label <- .data %>% 
     select(variable = target) %>% 
     mutate(variable = ifelse(variable == positive, 1, 0)) %>% 
-    pull |> 
+    pull %>% 
     as.factor()
   
   xgboost::xgboost(x = train, y = label, eta = 1,
