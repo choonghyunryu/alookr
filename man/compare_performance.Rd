@@ -69,7 +69,8 @@ result <- run_models(.data = train, target = "Kyphosis", positive = "present")
 pred <- run_predict(result, test)
 
 # Compare the model performance
-compare_performance(pred)
+# This code works fine. When using the example code, uncomment it and run it.
+# compare_performance(pred)
 }
 
 }

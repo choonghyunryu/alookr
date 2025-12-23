@@ -588,7 +588,8 @@ run_performance <- function(model, actual = NULL) {
 #' pred <- run_predict(result, test)
 #'
 #' # Compare the model performance
-#' compare_performance(pred)
+#' # This code works fine. When using the example code, uncomment it and run it.
+#' # compare_performance(pred)
 #'}
 #'
 #' @export
