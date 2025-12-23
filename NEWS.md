@@ -1,3 +1,12 @@
+# alookr 0.5.0
+
+## MINOR CHANGES
+  
+* Fix logic in `predictor()` and `classifier_xgboost` that is realted new xgboost package. 
+    - (#10)
+    
+    
+    
 # alookr 0.4.0
 
 ## MINOR CHANGES

@@ -49,9 +49,10 @@ classifier_xgboost <- function(.data, target, positive) {
   label <- .data %>% 
     select(variable = target) %>% 
     mutate(variable = ifelse(variable == positive, 1, 0)) %>% 
-    pull 
+    pull |> 
+    as.factor()
   
-  xgboost::xgboost(data = train, label = label, eta = 1,
+  xgboost::xgboost(x = train, y = label, eta = 1,
                    nrounds = 3, objective = "binary:logistic", verbose = 0,
                    eval_metric = 'error')
 }
@@ -217,9 +218,9 @@ predictor <- function(model, .data, target, positive, negative, is_factor,
                  randomForest.formula = predict(model, newdata = .data, 
                                                 type = "prob")[, positive],
                  ranger = predict(model, data = .data)$predictions[, positive],
-                 xgb.Booster = predict(model, newdata = .data %>% 
-                                         select(model$feature_names) %>%
-                                         data.matrix),
+                 xgboost = predict(model, newdata = .data %>% 
+                                     select(where(is.numeric)) %>%
+                                     data.matrix),
                  lognet = {pred <- predict(
                    model, newx = .data %>% 
                      select(matches(model$beta %>% row.names())) %>% 
