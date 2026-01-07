@@ -188,8 +188,9 @@ run_models <- function(.data, target, positive,
                                                seed = TRUE)) %>%
     tibble::tibble(step = "1.Fitted", model_id = models, target = target, is_factor = flag_factor,
                    positive = positive, negative = negative,  
-                   fitted_model = purrr::map(., ~future::value(.x)))
-
+                   fitted_model = future::value(.))
+                   # https://github.com/choonghyunryu/alookr/issues/11
+                   # fitted_model = purrr::map(., ~future::value(.x)))
   result <- result[, -1]
 
   class(result) <- append("model_df", class(result))
@@ -340,7 +341,9 @@ run_predict <- function(model, .data, cutoff = 0.5) {
                                                  cutoff), seed = TRUE)) %>%
     tibble::tibble(step = "2.Predicted", model_id = model$model_id, target = model$target,
                    is_factor = model$is_factor, positive = model$positive, negative = model$negative, 
-                   fitted_model = model$fitted_model, predicted = purrr::map(., ~future::value(.x)))
+                   fitted_model = model$fitted_model, predicted = future::value(.))
+                   # https://github.com/choonghyunryu/alookr/issues/11
+                   # fitted_model = model$fitted_model, predicted = purrr::map(., ~future::value(.x)))
 
   result <- result[, -1]
 

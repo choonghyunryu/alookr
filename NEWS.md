@@ -4,6 +4,9 @@
   
 * Fix logic in `predictor()` and `classifier_xgboost` that is realted new xgboost package. 
     - (#10)
+
+* Change from map(fs, future::value) to future::value(fs) in run_models() and run_performance(). 
+    - (thanks to Henrik Bengtsson, #11)
     
     
     

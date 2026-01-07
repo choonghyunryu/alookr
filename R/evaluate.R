@@ -499,15 +499,17 @@ run_performance <- function(model, actual = NULL) {
   }
   
   if (is.null(actual)) {
-    result <- purrr::map(seq(NROW(model)),
-                         ~future::future(performance(attr(pred$predicted[[.x]], "pred_prob"),
-                                                     attr(pred$predicted[[.x]], "actual"),
-                                                     attr(pred$predicted[[.x]], "positive")),
-                                         seed = TRUE)) %>%
+      result <- purrr::map(seq(NROW(model)),
+                           ~future::future(performance(attr(pred$predicted[[.x]], "pred_prob"),
+                                                       attr(pred$predicted[[.x]], "actual"),
+                                                       attr(pred$predicted[[.x]], "positive")),
+                                           seed = TRUE)) %>%
       tibble::tibble(step = "3.Performanced", model_id = model$model_id, target = model$target,
                      positive = model$positive, fitted_model = model$fitted_model,
                      predicted = model$predicted,
-                     performance = purrr::map(., ~future::value(.x)))
+                     performance = future::value(.))
+    # https://github.com/choonghyunryu/alookr/issues/11
+    # performance = purrr::map(., ~future::value(.x))) 
   } else {
     result <- purrr::map(seq(NROW(model)),
                          ~future::future(performance(attr(pred$predicted[[.x]], "pred_prob"),
@@ -517,7 +519,9 @@ run_performance <- function(model, actual = NULL) {
       tibble::tibble(step = "3.Performanced", model_id = model$model_id, target = model$target,
                      positive = model$positive, fitted_model = model$fitted_model,
                      predicted = model$predicted,
-                     performance = purrr::map(., ~future::value(.x)))
+                     performance = future::value(.))
+    # https://github.com/choonghyunryu/alookr/issues/11
+    # performance = purrr::map(., ~future::value(.x))) 
   }
 
   result <- result[, -1]
